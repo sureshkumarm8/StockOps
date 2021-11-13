@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/wood"
+    android:layout_width="match_parent"
+    android:layout_height="100dp">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        app:cardCornerRadius="5dp"
+        android:background="@drawable/wood"
+        app:cardElevation="20dp"
+        android:layout_margin="10dp">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutRV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvStrikePrice"
+                android:layout_width="158dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="117dp"
+                android:layout_marginRight="117dp"
+                android:layout_marginBottom="3dp"
+                android:text="tvStrikePrice" />
+
+            <TextView
+                android:id="@+id/tvBidQuantity"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="9dp"
+                android:layout_marginBottom="3dp"
+                android:text="tvBidQuantity" />
+
+            <TextView
+                android:id="@+id/tvAskQuantity"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="9dp"
+                android:layout_marginRight="9dp"
+                android:layout_marginBottom="3dp"
+                android:text="tvAskQuantity" />
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>
