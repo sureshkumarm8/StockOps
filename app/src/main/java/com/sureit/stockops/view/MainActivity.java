@@ -9,12 +9,17 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -59,11 +64,55 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String URL_BankNifty = "https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY";
     public static final String URL_NSE = "https://www.nseindia.com/";
+    private int ceTotalTradedVolume;
+    private int peTotalTradedVolume;
+    private int ceTotalBuyQuantity;
+    private int ceTotalSellQuantity;
+    private int peTotalBuyQuantity;
+    private int peTotalSellQuantity;
+    private int ceOpenInterest;
+    private int peOpenInterest;
+    RelativeLayout relativeLayoutMain;
+    TextView strikePriceTVMain;
+    TextView totalVolumeCEMain;
+    TextView totalVolumePEMain;
+    TextView totalBuyQuantityCEMain;
+    TextView totalAskQuantityCEMain;
+    TextView totalBuyQuantityPEMain;
+    TextView totalAskQuantityPEMain;
+    TextView ceOpenInterestMain;
+    TextView peOpenInterestMain;
+    TextView timeStampMain;
+    private Double underlyingValue;
+    private String timeStampValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // initialize the View objects
+        relativeLayoutMain = findViewById(R.id.relativeLayoutRVmain);
+        strikePriceTVMain = findViewById(R.id.tvStrikePriceMain);
+        totalVolumeCEMain = findViewById(R.id.tvVolumeCEmain);
+        totalVolumePEMain = findViewById(R.id.tvVolumePEmain);
+        totalBuyQuantityCEMain = findViewById(R.id.tvBuyQuantityCEmain);
+        totalAskQuantityCEMain = findViewById(R.id.tvASKQuantityCEmain);
+        totalBuyQuantityPEMain = findViewById(R.id.tvBuyQuantityPEmain);
+        totalAskQuantityPEMain = findViewById(R.id.tvASKQuantityPEmain);
+        ceOpenInterestMain = findViewById(R.id.tvStrikePrice2main);
+        peOpenInterestMain = findViewById(R.id.tvStrikePrice3main);
+        timeStampMain = findViewById(R.id.textViewTimeStamp);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Refreshing latest data....", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                checkNseUrl(URL_NSE);
+            }
+        });
 
         recyclerView = findViewById(R.id.recyclerViewMovie);
         recyclerView.setHasFixedSize(true);
@@ -98,8 +147,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.sort_settings,menu);
-    return true;
+        getMenuInflater().inflate(R.menu.sort_settings,menu);
+        return true;
     }
 
     @Override
@@ -162,26 +211,80 @@ public class MainActivity extends AppCompatActivity {
                 try {
 
                     JSONObject jsonObject = new JSONObject(response);
-//                    JSONObject recordDetails = jsonObject.getJSONObject("records");
+
+                    JSONObject recordDetails = jsonObject.getJSONObject("records");
 //                    JSONArray expiryDatesArray = recordDetails.getJSONArray("expiryDates");
+//                    String curExpiry = expiryDatesArray.get(0).toString();
+                    String underlyingValueMain = recordDetails.getString("underlyingValue");
+//                    long roundOffValue = Math.round(Double.parseDouble(underlyingValue) / 100) * 100;
 //                    JSONArray dataArray = recordDetails.getJSONArray("data");
-//                    JSONArray strikePricesArray = recordDetails.getJSONArray("strikePrices");
-//                    JSONArray indexArray = recordDetails.getJSONArray("index");
+//                    for (int i = 0; i < dataArray.length(); i++) {
+//                        JSONObject jo = dataArray.getJSONObject(i);
+//                        JSONObject expiryDate = jo.getJSONObject("expiryDate");
+//                        if (expiryDate.has(curExpiry)){
+//                            JSONObject peBody= jo.getJSONObject("PE");
+//                            JSONObject ceBody= jo.getJSONObject("CE");
+//                            MovieList movieList = new MovieList(jo.getLong("strikePrice"), peBody.get("totalTradedVolume").toString(), ceBody.get("totalTradedVolume").toString(), null, null, null);
+//                            movieLists.add(movieList);
+//                        }
+//
+//                    }
 
                     JSONObject filteredDetails = jsonObject.getJSONObject("filtered");
                     JSONArray filteredDataArray = filteredDetails.getJSONArray("data");
-
-                    for (int i = 0; i < filteredDataArray.length(); i++){
-
+                    timeStampValue = recordDetails.get("timestamp").toString();
+                    underlyingValue = recordDetails.getDouble("underlyingValue");
+                    int ulValue = underlyingValue.intValue();
+                    for (int i = 52; i < 72; i++){
                         JSONObject jo = filteredDataArray.getJSONObject(i);
-                        JSONObject peBody= jo.getJSONObject("PE");
-                        JSONObject ceBody= jo.getJSONObject("CE");
-//                        MovieList movieList = new MovieList(jo.getLong("strikePrice"),jo.getString("expiryDate"), jo.getString("openInterest"),
-//                                jo.getString("totalTradedVolume"),jo.getString("bidQty"),jo.getString("askQty"));
-                        MovieList movieList = new MovieList(jo.getLong("strikePrice"),peBody.get("totalTradedVolume").toString(), ceBody.get("totalTradedVolume").toString(),null,null,null);
-                        movieLists.add(movieList);
 
+                        Double strikePrice = null;
+                        int sPrice = 0;
+                        if(strikePrice==null) {
+                            JSONObject usBody = jo.getJSONObject("CE");
+                            strikePrice = Double.valueOf(usBody.getString("strikePrice"));
+                            sPrice=strikePrice.intValue();
+                        }
+//                        String expiryDate = jo.getString("expiryDate");
+                        if (sPrice<=ulValue+500 && sPrice>=ulValue-500) {
+                            JSONObject ceBody = jo.getJSONObject("CE");
+                            JSONObject peBody = jo.getJSONObject("PE");
+
+                              ceTotalTradedVolume += (int) ceBody.get("totalTradedVolume");
+                              peTotalTradedVolume += (int) peBody.get("totalTradedVolume");
+                              ceTotalBuyQuantity += (int) ceBody.get("totalBuyQuantity");
+                              ceTotalSellQuantity += (int) ceBody.get("totalSellQuantity");
+                              peTotalBuyQuantity += (int) peBody.get("totalBuyQuantity");
+                              peTotalSellQuantity += (int) peBody.get("totalSellQuantity");
+                              ceOpenInterest += (int) ceBody.get("openInterest");
+                              peOpenInterest += (int) peBody.get("openInterest");
+
+
+
+                            MovieList movieList = new MovieList(jo.getLong("strikePrice"),
+                                    ceBody.get("totalTradedVolume").toString(),
+                                    peBody.get("totalTradedVolume").toString(),
+                                    ceBody.get("totalBuyQuantity").toString(),
+                                    ceBody.get("totalSellQuantity").toString(),
+                                    peBody.get("totalBuyQuantity").toString(),
+                                    peBody.get("totalSellQuantity").toString(),
+                                    ceBody.get("openInterest").toString(),
+                                    peBody.get("openInterest").toString()
+                            );
+                            movieLists.add(movieList);
+                        }
                     }
+
+                    timeStampMain.setText(timeStampValue);
+                    strikePriceTVMain.setText(String.valueOf(underlyingValue));
+                    totalVolumeCEMain.setText(String.valueOf(ceTotalTradedVolume));
+                    totalVolumePEMain.setText(String.valueOf(peTotalTradedVolume));
+                    totalBuyQuantityCEMain.setText(String.valueOf(ceTotalBuyQuantity));
+                    totalAskQuantityCEMain.setText(String.valueOf(ceTotalSellQuantity));
+                    totalBuyQuantityPEMain.setText(String.valueOf(peTotalBuyQuantity));
+                    totalAskQuantityPEMain.setText(String.valueOf(peTotalSellQuantity));
+                    ceOpenInterestMain.setText(String.valueOf(ceOpenInterest));
+                    peOpenInterestMain.setText(String.valueOf(peOpenInterest));
 
                     adapter = new MovieAdapter(movieLists, getApplicationContext());
                     recyclerView.setAdapter(adapter);

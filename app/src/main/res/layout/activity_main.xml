@@ -9,11 +9,280 @@
     android:fitsSystemWindows="true"
     tools:context=".view.MainActivity">
 
+        <RelativeLayout
+            android:id="@+id/relativeLayoutRVmain"
+            android:layout_width="match_parent"
+            android:layout_height="169dp"
+            android:background="@drawable/trading">
+
+                <TextView
+                    android:id="@+id/tvStrikePrice3main"
+                    android:layout_width="136dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="115dp"
+                    android:layout_marginRight="115dp"
+                    android:layout_marginBottom="38dp"
+                    android:layout_toEndOf="@+id/tvBuyQuantityCEmain"
+                    android:layout_toRightOf="@+id/tvBuyQuantityCEmain"
+                    android:background="@android:color/holo_green_light"
+                    android:fontFamily="sans-serif-black"
+                    android:gravity="center"
+                    android:text="tvStrikePrice" />
+
+                <TextView
+                    android:id="@+id/tvBuyQuantityCEmain"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="38dp"
+                    android:background="@android:color/holo_green_light"
+                    android:fontFamily="sans-serif-black"
+                    android:gravity="center"
+                    android:hapticFeedbackEnabled="false"
+                    android:text="tvBuyQuantityCE" />
+
+                <TextView
+                    android:id="@+id/tvVolumeCE3Main"
+                    android:layout_width="100dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="67dp"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:text="CE_BidAskQty"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/tvBuyQuantityPEmain"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginBottom="38dp"
+                    android:background="@android:color/holo_green_light"
+                    android:fontFamily="sans-serif-black"
+                    android:gravity="center"
+                    android:text="tvBuyQuantityPE" />
+
+                <TextView
+                    android:id="@+id/tvVolumePE3Main"
+                    android:layout_width="100dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginBottom="67dp"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:text="PE_BidAskQty"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/tvStrikePrice5Main"
+                    android:layout_width="136dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="115dp"
+                    android:layout_marginRight="115dp"
+                    android:layout_marginBottom="67dp"
+                    android:layout_toEndOf="@+id/tvVolumeCE3Main"
+                    android:layout_toRightOf="@+id/tvVolumeCE3Main"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:text="Open Interest CE_PE"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/tvVolumeCEmain"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="94dp"
+                    android:background="@android:color/holo_green_light"
+                    android:fontFamily="sans-serif-black"
+                    android:gravity="center"
+                    android:text="tvVolumeCE" />
+
+                <TextView
+                    android:id="@+id/tvStrikePriceMain"
+                    android:layout_width="136dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="115dp"
+                    android:layout_marginRight="115dp"
+                    android:layout_marginBottom="94dp"
+                    android:layout_toEndOf="@+id/tvVolumeCE3Main"
+                    android:layout_toRightOf="@+id/tvVolumeCE3Main"
+                    android:background="@android:color/holo_blue_light"
+                    android:fontFamily="sans-serif-black"
+                    android:gravity="center"
+                    android:text="tvStrikePrice" />
+
+                <TextView
+                    android:id="@+id/tvStrikePrice4main"
+                    android:layout_width="136dp"
+                    android:layout_height="17dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="115dp"
+                    android:layout_marginRight="115dp"
+                    android:layout_marginBottom="125dp"
+                    android:layout_toEndOf="@+id/tvVolumeCE2main"
+                    android:layout_toRightOf="@+id/tvVolumeCE2main"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:text="StrikePrice"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/tvVolumePEmain"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginBottom="94dp"
+                    android:background="@android:color/holo_orange_dark"
+                    android:fontFamily="sans-serif-black"
+                    android:gravity="center"
+                    android:text="tvVolumePE" />
+
+                <TextView
+                    android:id="@+id/tvVolumePE2Main"
+                    android:layout_width="100dp"
+                    android:layout_height="17dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginBottom="125dp"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:text="TotalVolumePE"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/tvVolumeCE2main"
+                    android:layout_width="100dp"
+                    android:layout_height="17dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="125dp"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:text="TotalVolumeCE"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/tvStrikePrice2main"
+                    android:layout_width="136dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="115dp"
+                    android:layout_marginRight="115dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_toEndOf="@+id/tvASKQuantityCEmain"
+                    android:layout_toRightOf="@+id/tvASKQuantityCEmain"
+                    android:background="@android:color/holo_orange_dark"
+                    android:fontFamily="sans-serif-black"
+                    android:gravity="center"
+                    android:text="tvStrikePrice" />
+
+                <TextView
+                    android:id="@+id/tvASKQuantityCEmain"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@android:color/holo_orange_dark"
+                    android:fontFamily="sans-serif-black"
+                    android:gravity="center"
+                    android:text="tvASKQuantityCE" />
+
+                <TextView
+                    android:id="@+id/tvASKQuantityPEmain"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginRight="7dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@android:color/holo_orange_dark"
+                    android:fontFamily="sans-serif-black"
+                    android:gravity="center"
+                    android:text="tvASKQuantityPE" />
+
+                <TextView
+                    android:id="@+id/textViewTimeStamp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TimeStamp"
+                    android:textColor="#FFFFFF" />
+
+        </RelativeLayout>
+
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerViewMovie"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/relativeLayoutRVmain"
+            android:layout_marginTop="13dp"
             android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="end|bottom"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="Refresh"
+            android:src="@android:drawable/ic_popup_sync"
+            app:backgroundTint="@android:color/holo_blue_light" />
 
 </RelativeLayout>

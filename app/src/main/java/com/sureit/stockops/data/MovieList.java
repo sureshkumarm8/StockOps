@@ -18,6 +18,9 @@ public class MovieList implements Parcelable {
     private String description;
     private String vote_average;
     private String releaseDate;
+    private String totalBuyQuantity;
+    private String openInterest;
+    private String interest;
 
     private MovieList(Parcel in) {
         id=in.readLong();
@@ -26,6 +29,9 @@ public class MovieList implements Parcelable {
         description = in.readString();
         vote_average = in.readString();
         releaseDate = in.readString();
+        totalBuyQuantity=in.readString();
+        openInterest=in.readString();
+        interest=in.readString();
     }
 
     public static final Creator<MovieList> CREATOR = new Creator<MovieList>() {
@@ -77,6 +83,18 @@ public class MovieList implements Parcelable {
         return releaseDate;
     }
 
+    public String getTotalBuyQuantity() {
+        return totalBuyQuantity;
+    }
+
+    public String getOpenInterest() {
+        return openInterest;
+    }
+
+    public String getInterest() {
+        return interest;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -101,13 +119,22 @@ public class MovieList implements Parcelable {
         this.releaseDate = releaseDate;
     }
 
-    public MovieList(long id, String title, String description, String posterUrl, String vote_average, String releaseDate) {
+    public void setTotalBuyQuantity(String totalBuyQuantity) { this.totalBuyQuantity = totalBuyQuantity; }
+
+    public void setOpenInterest(String openInterest) { this.openInterest = openInterest; }
+
+    public void setInterest(String interest) { this.interest = interest; }
+
+    public MovieList(long id, String title, String description, String posterUrl, String vote_average, String releaseDate, String totalBuyQuantity, String openInterest, String interest) {
         this.id = id;
         this.title = title;
         this.posterUrl = posterUrl;
         this.description = description;
         this.vote_average = vote_average;
         this.releaseDate = releaseDate;
+        this.totalBuyQuantity =totalBuyQuantity;
+        this.openInterest=openInterest;
+        this.interest=interest;
     }
 
     @Override
@@ -123,5 +150,8 @@ public class MovieList implements Parcelable {
         dest.writeString(description);
         dest.writeString(vote_average);
         dest.writeString(releaseDate);
+        dest.writeString(totalBuyQuantity);
+        dest.writeString(openInterest);
+        dest.writeString(interest);
     }
 }

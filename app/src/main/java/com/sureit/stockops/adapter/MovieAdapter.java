@@ -55,8 +55,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         // this method will bind the data to the ViewHolder from whence it'll be shown to other Views
         final MovieList developersList = movieLists.get(position);
         holder.strikePriceTV.setText(String.valueOf(developersList.getId()));
-        holder.bidQuantityTV.setText(developersList.getTitle());
-        holder.askQuantityTV.setText(developersList.getDescription());
+        holder.totalVolumeCE.setText(developersList.getTitle());
+        holder.totalVolumePE.setText(developersList.getDescription());
+        holder.totalBuyQuantityCE.setText(developersList.getPosterUrl());
+        holder.totalAskQuantityCE.setText(developersList.getVote_average());
+        holder.totalBuyQuantityPE.setText(developersList.getReleaseDate());
+        holder.totalAskQuantityPE.setText(developersList.getTotalBuyQuantity());
+        holder.strikePriceTV2.setText(developersList.getOpenInterest());
+        holder.strikePriceTV3.setText(developersList.getInterest());
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +71,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 Intent skipIntent = new Intent(v.getContext(), MovieDetailsActivity.class);
                 skipIntent.putExtra(Constants.PARCEL_KEY,
                         new MovieList(movieList1.getId() ,movieList1.getTitle(),movieList1.getDescription(),movieList1.getPosterUrl(),
-                                movieList1.getVote_average(),movieList1.getReleaseDate()));
+                                movieList1.getVote_average(),movieList1.getReleaseDate(), movieList1.getTotalBuyQuantity(), movieList1.getOpenInterest(), movieList1.getInterest()));
                 v.getContext().startActivity(skipIntent);
             }
         });
@@ -94,8 +100,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
         RelativeLayout relativeLayout;
         TextView strikePriceTV;
-        TextView bidQuantityTV;
-        TextView askQuantityTV;
+        TextView totalVolumeCE;
+        TextView totalVolumePE;
+        TextView totalBuyQuantityCE;
+        TextView totalAskQuantityCE;
+        TextView totalBuyQuantityPE;
+        TextView totalAskQuantityPE;
+        TextView strikePriceTV2;
+        TextView strikePriceTV3;
 
         private ViewHolder(View itemView) {
             super(itemView);
@@ -103,8 +115,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             // initialize the View objects
             relativeLayout = itemView.findViewById(R.id.relativeLayoutRV);
             strikePriceTV = itemView.findViewById(R.id.tvStrikePrice);
-            bidQuantityTV = itemView.findViewById(R.id.tvBidQuantity);
-            askQuantityTV = itemView.findViewById(R.id.tvAskQuantity);
+            totalVolumeCE = itemView.findViewById(R.id.tvVolumeCE);
+            totalVolumePE = itemView.findViewById(R.id.tvVolumePE);
+            totalBuyQuantityCE = itemView.findViewById(R.id.tvBuyQuantityCE);
+            totalAskQuantityCE = itemView.findViewById(R.id.tvASKQuantityCE);
+            totalBuyQuantityPE = itemView.findViewById(R.id.tvBuyQuantityPE);
+            totalAskQuantityPE = itemView.findViewById(R.id.tvASKQuantityPE);
+            strikePriceTV2 = itemView.findViewById(R.id.tvStrikePrice2);
+            strikePriceTV3 = itemView.findViewById(R.id.tvStrikePrice3);
         }
 
     }
