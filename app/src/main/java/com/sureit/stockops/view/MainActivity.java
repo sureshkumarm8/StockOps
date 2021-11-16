@@ -312,6 +312,17 @@ public class MainActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+
+        ceTotalTradedVolume=0;
+        peTotalTradedVolume=0;
+        ceTotalBuyQuantity=0;
+        ceTotalSellQuantity=0;
+        peTotalBuyQuantity=0;
+        peTotalSellQuantity=0;
+        ceOpenInterest=0;
+        peOpenInterest=0;
+        underlyingValue=0.0;
+        timeStampValue=null;
     }
 
     private void checkNseUrl(String nseurl) {
