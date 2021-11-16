@@ -32,7 +32,7 @@
                     android:background="@android:color/holo_green_light"
                     android:fontFamily="sans-serif-black"
                     android:gravity="center"
-                    android:text="tvStrikePrice" />
+                    android:text="OI CE" />
 
                 <TextView
                     android:id="@+id/tvBuyQuantityCEmain"
@@ -46,7 +46,7 @@
                     android:fontFamily="sans-serif-black"
                     android:gravity="center"
                     android:hapticFeedbackEnabled="false"
-                    android:text="tvBuyQuantityCE" />
+                    android:text="BuyQuantityCE" />
 
                 <TextView
                     android:id="@+id/tvVolumeCE3Main"
@@ -58,7 +58,7 @@
                     android:layout_marginBottom="67dp"
                     android:background="#FFFFFF"
                     android:gravity="center"
-                    android:text="CE_BidAskQty"
+                    android:text="CE_BidSellQty in K"
                     android:textSize="10sp" />
 
                 <TextView
@@ -74,7 +74,7 @@
                     android:background="@android:color/holo_green_light"
                     android:fontFamily="sans-serif-black"
                     android:gravity="center"
-                    android:text="tvBuyQuantityPE" />
+                    android:text="BuyQuantityPE" />
 
                 <TextView
                     android:id="@+id/tvVolumePE3Main"
@@ -88,7 +88,7 @@
                     android:layout_marginBottom="67dp"
                     android:background="#FFFFFF"
                     android:gravity="center"
-                    android:text="PE_BidAskQty"
+                    android:text="PE_BidSellQty in K"
                     android:textSize="10sp" />
 
                 <TextView
@@ -107,7 +107,7 @@
                     android:layout_toRightOf="@+id/tvVolumeCE3Main"
                     android:background="#FFFFFF"
                     android:gravity="center"
-                    android:text="Open Interest CE_PE"
+                    android:text="Open Interest CE_PE in K"
                     android:textSize="10sp" />
 
                 <TextView
@@ -118,10 +118,10 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginBottom="94dp"
-                    android:background="@android:color/holo_green_light"
+                    android:background="@android:color/holo_green_dark"
                     android:fontFamily="sans-serif-black"
                     android:gravity="center"
-                    android:text="tvVolumeCE" />
+                    android:text="VolumeCE" />
 
                 <TextView
                     android:id="@+id/tvStrikePriceMain"
@@ -140,7 +140,7 @@
                     android:background="@android:color/holo_blue_light"
                     android:fontFamily="sans-serif-black"
                     android:gravity="center"
-                    android:text="tvStrikePrice" />
+                    android:text="StrikePrice" />
 
                 <TextView
                     android:id="@+id/tvStrikePrice4main"
@@ -153,10 +153,10 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginEnd="115dp"
                     android:layout_marginRight="115dp"
-                    android:layout_marginBottom="125dp"
+                    android:layout_marginBottom="124dp"
                     android:layout_toEndOf="@+id/tvVolumeCE2main"
                     android:layout_toRightOf="@+id/tvVolumeCE2main"
-                    android:background="#FFFFFF"
+                    android:background="@android:color/holo_blue_light"
                     android:gravity="center"
                     android:text="StrikePrice"
                     android:textSize="10sp" />
@@ -171,10 +171,10 @@
                     android:layout_marginEnd="6dp"
                     android:layout_marginRight="6dp"
                     android:layout_marginBottom="94dp"
-                    android:background="@android:color/holo_orange_dark"
+                    android:background="@android:color/holo_red_light"
                     android:fontFamily="sans-serif-black"
                     android:gravity="center"
-                    android:text="tvVolumePE" />
+                    android:text="VolumePE" />
 
                 <TextView
                     android:id="@+id/tvVolumePE2Main"
@@ -185,10 +185,10 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginEnd="6dp"
                     android:layout_marginRight="6dp"
-                    android:layout_marginBottom="125dp"
-                    android:background="#FFFFFF"
+                    android:layout_marginBottom="124dp"
+                    android:background="@android:color/holo_red_light"
                     android:gravity="center"
-                    android:text="TotalVolumePE"
+                    android:text="TotalVolumePE in K"
                     android:textSize="10sp" />
 
                 <TextView
@@ -198,10 +198,10 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginBottom="125dp"
-                    android:background="#FFFFFF"
+                    android:layout_marginBottom="124dp"
+                    android:background="@android:color/holo_green_dark"
                     android:gravity="center"
-                    android:text="TotalVolumeCE"
+                    android:text="TotalVolumeCE in K"
                     android:textSize="10sp" />
 
                 <TextView
@@ -221,7 +221,7 @@
                     android:background="@android:color/holo_orange_dark"
                     android:fontFamily="sans-serif-black"
                     android:gravity="center"
-                    android:text="tvStrikePrice" />
+                    android:text="OI PE" />
 
                 <TextView
                     android:id="@+id/tvASKQuantityCEmain"
@@ -234,7 +234,7 @@
                     android:background="@android:color/holo_orange_dark"
                     android:fontFamily="sans-serif-black"
                     android:gravity="center"
-                    android:text="tvASKQuantityCE" />
+                    android:text="ASKQuantityCE" />
 
                 <TextView
                     android:id="@+id/tvASKQuantityPEmain"
@@ -249,7 +249,7 @@
                     android:background="@android:color/holo_orange_dark"
                     android:fontFamily="sans-serif-black"
                     android:gravity="center"
-                    android:text="tvASKQuantityPE" />
+                    android:text="SellQuantityPE" />
 
                 <TextView
                     android:id="@+id/textViewTimeStamp"

@@ -55,14 +55,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         // this method will bind the data to the ViewHolder from whence it'll be shown to other Views
         final MovieList developersList = movieLists.get(position);
         holder.strikePriceTV.setText(String.valueOf(developersList.getId()));
-        holder.totalVolumeCE.setText(developersList.getTitle());
-        holder.totalVolumePE.setText(developersList.getDescription());
-        holder.totalBuyQuantityCE.setText(developersList.getPosterUrl());
-        holder.totalAskQuantityCE.setText(developersList.getVote_average());
-        holder.totalBuyQuantityPE.setText(developersList.getReleaseDate());
-        holder.totalAskQuantityPE.setText(developersList.getTotalBuyQuantity());
-        holder.strikePriceTV2.setText(developersList.getOpenInterest());
-        holder.strikePriceTV3.setText(developersList.getInterest());
+        holder.totalVolumeCE.setText(String.valueOf(developersList.getTitle()/1000));
+        holder.totalVolumePE.setText(String.valueOf(developersList.getDescription()/1000));
+        holder.totalBuyQuantityCE.setText(String.valueOf(developersList.getPosterUrl()/1000));
+        holder.totalAskQuantityCE.setText(String.valueOf(developersList.getVote_average()/1000));
+        holder.totalBuyQuantityPE.setText(String.valueOf(developersList.getReleaseDate()/1000));
+        holder.totalAskQuantityPE.setText(String.valueOf(developersList.getTotalBuyQuantity()/1000));
+        holder.strikePriceTV2.setText(String.valueOf(developersList.getOpenInterest()/1000));
+        holder.strikePriceTV3.setText(String.valueOf(developersList.getInterest()/1000));
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override

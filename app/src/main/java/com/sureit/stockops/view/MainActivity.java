@@ -41,6 +41,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import am.appwise.components.ni.NoInternetDialog;
@@ -85,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     TextView timeStampMain;
     private Double underlyingValue;
     private String timeStampValue;
+    private MovieList movieList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Refreshing latest data....", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                mMovieDao.delete(movieList);
                 checkNseUrl(URL_NSE);
             }
         });
@@ -189,8 +193,18 @@ public class MainActivity extends AppCompatActivity {
         movieListsL.observe(this, new Observer<List<MovieList>>() {
             @Override
             public void onChanged(@Nullable List<MovieList> movieLists) {
-                adapter.setMoviesLive(movieLists);
-                adapter = new MovieAdapter(adapter.getMoviesLive(), getApplicationContext());
+                Collections.sort(movieLists, new Comparator<MovieList>() {
+                    @Override
+                    public int compare(MovieList val1, MovieList val2) {
+                        if(val1.getTitle() < val2.getTitle() && val1.getDescription() < val2.getDescription()) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    }
+                });
+
+                adapter = new MovieAdapter(movieLists, getApplicationContext());
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
@@ -250,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject ceBody = jo.getJSONObject("CE");
                             JSONObject peBody = jo.getJSONObject("PE");
 
+                            //Add total values for main top card
                               ceTotalTradedVolume += (int) ceBody.get("totalTradedVolume");
                               peTotalTradedVolume += (int) peBody.get("totalTradedVolume");
                               ceTotalBuyQuantity += (int) ceBody.get("totalBuyQuantity");
@@ -261,30 +276,44 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                            MovieList movieList = new MovieList(jo.getLong("strikePrice"),
-                                    ceBody.get("totalTradedVolume").toString(),
-                                    peBody.get("totalTradedVolume").toString(),
-                                    ceBody.get("totalBuyQuantity").toString(),
-                                    ceBody.get("totalSellQuantity").toString(),
-                                    peBody.get("totalBuyQuantity").toString(),
-                                    peBody.get("totalSellQuantity").toString(),
-                                    ceBody.get("openInterest").toString(),
-                                    peBody.get("openInterest").toString()
+                             movieList = new MovieList(jo.getLong("strikePrice"),
+                                    ceBody.getLong("totalTradedVolume"),
+                                    peBody.getLong("totalTradedVolume"),
+                                    ceBody.getLong("totalBuyQuantity"),
+                                    ceBody.getLong("totalSellQuantity"),
+                                    peBody.getLong("totalBuyQuantity"),
+                                    peBody.getLong("totalSellQuantity"),
+                                    ceBody.getLong("openInterest"),
+                                    peBody.getLong("openInterest")
                             );
                             movieLists.add(movieList);
+                            mMovieDao.insert(movieList);
                         }
                     }
 
                     timeStampMain.setText(timeStampValue);
                     strikePriceTVMain.setText(String.valueOf(underlyingValue));
-                    totalVolumeCEMain.setText(String.valueOf(ceTotalTradedVolume));
-                    totalVolumePEMain.setText(String.valueOf(peTotalTradedVolume));
-                    totalBuyQuantityCEMain.setText(String.valueOf(ceTotalBuyQuantity));
-                    totalAskQuantityCEMain.setText(String.valueOf(ceTotalSellQuantity));
-                    totalBuyQuantityPEMain.setText(String.valueOf(peTotalBuyQuantity));
-                    totalAskQuantityPEMain.setText(String.valueOf(peTotalSellQuantity));
-                    ceOpenInterestMain.setText(String.valueOf(ceOpenInterest));
-                    peOpenInterestMain.setText(String.valueOf(peOpenInterest));
+                    totalVolumeCEMain.setText(String.valueOf(ceTotalTradedVolume/1000));
+                    totalVolumePEMain.setText(String.valueOf(peTotalTradedVolume/1000));
+                    totalBuyQuantityCEMain.setText(String.valueOf(ceTotalBuyQuantity/1000));
+                    totalAskQuantityCEMain.setText(String.valueOf(ceTotalSellQuantity/1000));
+                    totalBuyQuantityPEMain.setText(String.valueOf(peTotalBuyQuantity/1000));
+                    totalAskQuantityPEMain.setText(String.valueOf(peTotalSellQuantity/1000));
+                    ceOpenInterestMain.setText(String.valueOf(ceOpenInterest/1000));
+                    peOpenInterestMain.setText(String.valueOf(peOpenInterest/1000));
+
+                    //sort the cards
+                    Collections.sort(movieLists, new Comparator<MovieList>() {
+                        @Override
+                        public int compare(MovieList val1, MovieList val2) {
+                            if(val1.getTitle() > val2.getTitle()
+                                    && val1.getDescription() > val2.getDescription()) {
+                                return -1;
+                            } else {
+                                return 1;
+                            }
+                        }
+                    });
 
                     adapter = new MovieAdapter(movieLists, getApplicationContext());
                     recyclerView.setAdapter(adapter);

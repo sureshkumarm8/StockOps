@@ -13,25 +13,25 @@ public class MovieList implements Parcelable {
     @PrimaryKey
     @ColumnInfo
     private long id;
-    private String title;
-    private String posterUrl;
-    private String description;
-    private String vote_average;
-    private String releaseDate;
-    private String totalBuyQuantity;
-    private String openInterest;
-    private String interest;
+    private long title;
+    private long posterUrl;
+    private long description;
+    private long vote_average;
+    private long releaseDate;
+    private long totalBuyQuantity;
+    private long openInterest;
+    private long interest;
 
     private MovieList(Parcel in) {
         id=in.readLong();
-        title = in.readString();
-        posterUrl = in.readString();
-        description = in.readString();
-        vote_average = in.readString();
-        releaseDate = in.readString();
-        totalBuyQuantity=in.readString();
-        openInterest=in.readString();
-        interest=in.readString();
+        title = in.readLong();
+        posterUrl = in.readLong();
+        description = in.readLong();
+        vote_average = in.readLong();
+        releaseDate = in.readLong();
+        totalBuyQuantity=in.readLong();
+        openInterest=in.readLong();
+        interest=in.readLong();
     }
 
     public static final Creator<MovieList> CREATOR = new Creator<MovieList>() {
@@ -57,41 +57,44 @@ public class MovieList implements Parcelable {
         this.description = movieList.getDescription();
         this.vote_average = movieList.getVote_average();
         this.releaseDate = movieList.getReleaseDate();
+        this.totalBuyQuantity =movieList.getTotalBuyQuantity();
+        this.openInterest= movieList.getOpenInterest();
+        this.interest= movieList.getInterest();
     }
 
     public long getId() {
         return id;
     }
 
-    public String getTitle() {
+    public long getTitle() {
         return title;
     }
 
-    public String getPosterUrl() {
+    public long getPosterUrl() {
         return posterUrl;
     }
 
-    public String getDescription() {
+    public long getDescription() {
         return description;
     }
 
-    public String getVote_average(){
+    public long getVote_average(){
         return vote_average;
     }
 
-    public String getReleaseDate() {
+    public long getReleaseDate() {
         return releaseDate;
     }
 
-    public String getTotalBuyQuantity() {
+    public long getTotalBuyQuantity() {
         return totalBuyQuantity;
     }
 
-    public String getOpenInterest() {
+    public long getOpenInterest() {
         return openInterest;
     }
 
-    public String getInterest() {
+    public long getInterest() {
         return interest;
     }
 
@@ -99,33 +102,33 @@ public class MovieList implements Parcelable {
         this.id = id;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(long title) {
         this.title = title;
     }
 
-    public void setPosterUrl(String posterUrl) {
+    public void setPosterUrl(long posterUrl) {
         this.posterUrl = posterUrl;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(long description) {
         this.description = description;
     }
 
-    public void setVote_average(String vote_average) {
+    public void setVote_average(long vote_average) {
         this.vote_average = vote_average;
     }
 
-    public void setReleaseDate(String releaseDate) {
+    public void setReleaseDate(long releaseDate) {
         this.releaseDate = releaseDate;
     }
 
-    public void setTotalBuyQuantity(String totalBuyQuantity) { this.totalBuyQuantity = totalBuyQuantity; }
+    public void setTotalBuyQuantity(long totalBuyQuantity) { this.totalBuyQuantity = totalBuyQuantity; }
 
-    public void setOpenInterest(String openInterest) { this.openInterest = openInterest; }
+    public void setOpenInterest(long openInterest) { this.openInterest = openInterest; }
 
-    public void setInterest(String interest) { this.interest = interest; }
+    public void setInterest(long interest) { this.interest = interest; }
 
-    public MovieList(long id, String title, String description, String posterUrl, String vote_average, String releaseDate, String totalBuyQuantity, String openInterest, String interest) {
+    public MovieList(long id, long title, long description, long posterUrl, long vote_average, long releaseDate, long totalBuyQuantity, long openInterest, long interest) {
         this.id = id;
         this.title = title;
         this.posterUrl = posterUrl;
@@ -145,13 +148,13 @@ public class MovieList implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
-        dest.writeString(title);
-        dest.writeString(posterUrl);
-        dest.writeString(description);
-        dest.writeString(vote_average);
-        dest.writeString(releaseDate);
-        dest.writeString(totalBuyQuantity);
-        dest.writeString(openInterest);
-        dest.writeString(interest);
+        dest.writeLong(title);
+        dest.writeLong(posterUrl);
+        dest.writeLong(description);
+        dest.writeLong(vote_average);
+        dest.writeLong(releaseDate);
+        dest.writeLong(totalBuyQuantity);
+        dest.writeLong(openInterest);
+        dest.writeLong(interest);
     }
 }
