@@ -128,12 +128,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
         assert movieList != null;
 
         idVal = movieList.getId();
-        final String titleText = movieList.getTitle();
+        final String titleText = String.valueOf(movieList.getTitle());
         String image = POSTER_BASE_URL+ movieList.getPosterUrl();
         String imageB = POSTER_BASE_URL2+ movieList.getPosterUrl();
-        final String descriptionText = movieList.getDescription();
+        final String descriptionText = String.valueOf(movieList.getDescription());
         final String ratings =movieList.getVote_average()+" / 10";
-        final String releaseDate= movieList.getReleaseDate();
+        final String releaseDate= String.valueOf(movieList.getReleaseDate());
 
         loadTrailers();
         loadReviews();

@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.arch.persistence.room.Room;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -89,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
     private String timeStampValue;
     private MovieList movieList;
 
+    Handler mHandler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
         }else {
 //            loadUrlData(BASE_URL_MOVIE);
             checkNseUrl(URL_NSE);
+            // Call this to start the task first time
+            mHandler.postDelayed(mRunnableTask, 5 * (60*1000));
         }
     }
 
@@ -287,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
                                     peBody.getLong("openInterest")
                             );
                             movieLists.add(movieList);
-                            mMovieDao.insert(movieList);
+//                            mMovieDao.insert(movieList);
                         }
                     }
 
@@ -387,6 +392,17 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
+    Runnable mRunnableTask = new Runnable()
+    {
+        @Override
+        public void run() {
+            movieLists.clear();
+            checkNseUrl(URL_NSE);
+            // this will repeat this task again at specified time interval
+            mHandler.postDelayed(this, 5 * (60*1000));
+        }
+    };
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -424,5 +440,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         noInternetDialog.onDestroy();
+        mHandler.removeCallbacksAndMessages(null);
     }
 }
