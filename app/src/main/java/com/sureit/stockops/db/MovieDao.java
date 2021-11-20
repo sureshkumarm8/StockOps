@@ -31,6 +31,6 @@ public interface MovieDao {
     LiveData <List<MovieList>> getMovies();
 
     @Query("SELECT * FROM moviesfav WHERE id = :number")
-    boolean getMovieWithId(long number);
+    boolean getMovieWithId(String number);
 
 }
