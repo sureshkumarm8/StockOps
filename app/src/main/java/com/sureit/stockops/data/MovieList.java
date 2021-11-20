@@ -5,6 +5,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 @Entity(tableName = "moviesfav")
 public class MovieList implements Parcelable {
@@ -12,7 +13,8 @@ public class MovieList implements Parcelable {
 
     @PrimaryKey
     @ColumnInfo
-    private long id;
+    @NonNull
+    private String id;
     private long title;
     private long posterUrl;
     private long description;
@@ -21,9 +23,11 @@ public class MovieList implements Parcelable {
     private long totalBuyQuantity;
     private long openInterest;
     private long interest;
+    private double pchangeoice;
+    private double pchangeoipe;
 
     private MovieList(Parcel in) {
-        id=in.readLong();
+        id=in.readString();
         title = in.readLong();
         posterUrl = in.readLong();
         description = in.readLong();
@@ -32,6 +36,8 @@ public class MovieList implements Parcelable {
         totalBuyQuantity=in.readLong();
         openInterest=in.readLong();
         interest=in.readLong();
+        pchangeoice=in.readDouble();
+        pchangeoipe=in.readDouble();
     }
 
     public static final Creator<MovieList> CREATOR = new Creator<MovieList>() {
@@ -60,9 +66,11 @@ public class MovieList implements Parcelable {
         this.totalBuyQuantity =movieList.getTotalBuyQuantity();
         this.openInterest= movieList.getOpenInterest();
         this.interest= movieList.getInterest();
+        this.pchangeoice=movieList.getPchangeoice();
+        this.pchangeoipe=movieList.getPchangeoipe();
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
@@ -98,7 +106,15 @@ public class MovieList implements Parcelable {
         return interest;
     }
 
-    public void setId(long id) {
+    public double getPchangeoice() {
+        return pchangeoice;
+    }
+
+    public double getPchangeoipe() {
+        return pchangeoipe;
+    }
+
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -128,7 +144,15 @@ public class MovieList implements Parcelable {
 
     public void setInterest(long interest) { this.interest = interest; }
 
-    public MovieList(long id, long title, long description, long posterUrl, long vote_average, long releaseDate, long totalBuyQuantity, long openInterest, long interest) {
+    public void setPchangeoice(double pchangeoice) {
+        this.pchangeoice = pchangeoice;
+    }
+
+    public void setPchangeoipe(double pchangeoipe) {
+        this.pchangeoipe = pchangeoipe;
+    }
+
+    public MovieList(String id, long title, long description, long posterUrl, long vote_average, double pchangeoice) {
         this.id = id;
         this.title = title;
         this.posterUrl = posterUrl;
@@ -138,6 +162,9 @@ public class MovieList implements Parcelable {
         this.totalBuyQuantity =totalBuyQuantity;
         this.openInterest=openInterest;
         this.interest=interest;
+        this.pchangeoice= Math.round(pchangeoice *100)/100;
+        this.pchangeoipe=pchangeoipe;
+
     }
 
     @Override
@@ -147,7 +174,7 @@ public class MovieList implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
+        dest.writeString(id);
         dest.writeLong(title);
         dest.writeLong(posterUrl);
         dest.writeLong(description);
@@ -156,5 +183,7 @@ public class MovieList implements Parcelable {
         dest.writeLong(totalBuyQuantity);
         dest.writeLong(openInterest);
         dest.writeLong(interest);
+        dest.writeDouble(pchangeoice);
+        dest.writeDouble(pchangeoipe);
     }
 }

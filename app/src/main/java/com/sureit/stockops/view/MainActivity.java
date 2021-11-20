@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
                 item.setChecked(true);
                 movieLists.clear();
                 FAV_ROT = true;
-                loadFavMovies();
+//                loadFavMovies();
                 return true;
 
             default:
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
     private void loadUrlData(String bankNiftyUrl) {
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading...");
+        progressDialog.setMessage("BankNifty Data Loading...");
         progressDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, bankNiftyUrl, new Response.Listener<String>() {
@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
                     timeStampValue = recordDetails.get("timestamp").toString();
                     underlyingValue = recordDetails.getDouble("underlyingValue");
                     int ulValue = underlyingValue.intValue();
-                    for (int i = 52; i < 72; i++){
+                    for (int i = 45; i < 72; i++){
                         JSONObject jo = filteredDataArray.getJSONObject(i);
 
                         Double strikePrice = null;
@@ -279,17 +279,20 @@ public class MainActivity extends AppCompatActivity {
                               ceOpenInterest += (int) ceBody.get("openInterest");
                               peOpenInterest += (int) peBody.get("openInterest");
 
-
-
-                             movieList = new MovieList(jo.getLong("strikePrice"),
+                             movieList = new MovieList(ceBody.getString("identifier").substring(25,32),
                                     ceBody.getLong("totalTradedVolume"),
-                                    peBody.getLong("totalTradedVolume"),
                                     ceBody.getLong("totalBuyQuantity"),
                                     ceBody.getLong("totalSellQuantity"),
+                                    ceBody.getLong("openInterest"),
+                                    ceBody.getDouble("pchangeinOpenInterest")
+                            );
+                            movieLists.add(movieList);
+                            movieList = new MovieList(peBody.getString("identifier").substring(25,32),
+                                    peBody.getLong("totalTradedVolume"),
                                     peBody.getLong("totalBuyQuantity"),
                                     peBody.getLong("totalSellQuantity"),
-                                    ceBody.getLong("openInterest"),
-                                    peBody.getLong("openInterest")
+                                    peBody.getLong("openInterest"),
+                                    peBody.getDouble("pchangeinOpenInterest")
                             );
                             movieLists.add(movieList);
 //                            mMovieDao.insert(movieList);
@@ -311,8 +314,7 @@ public class MainActivity extends AppCompatActivity {
                     Collections.sort(movieLists, new Comparator<MovieList>() {
                         @Override
                         public int compare(MovieList val1, MovieList val2) {
-                            if(val1.getTitle() > val2.getTitle()
-                                    && val1.getDescription() > val2.getDescription()) {
+                            if(val1.getTitle() > val2.getTitle()) {
                                 return -1;
                             } else {
                                 return 1;
@@ -325,6 +327,7 @@ public class MainActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    progressDialog.dismiss();
                     Log.e(LOG_TAG, e.getMessage(), e);
                 }
                 progressDialog.dismiss();
@@ -336,6 +339,7 @@ public class MainActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof AuthFailureError) {
                     //handler error 401 unauthorized from here
+                    progressDialog.dismiss();
                     Toast.makeText(MainActivity.this, "401 Error, connecting again...." + error.toString(), Toast.LENGTH_LONG).show();
                     checkNseUrl(URL_NSE);
                 }

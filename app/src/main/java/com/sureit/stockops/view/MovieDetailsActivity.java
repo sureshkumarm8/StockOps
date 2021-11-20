@@ -61,7 +61,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private List<TrailerList> trailerLists;
     private TrailerAdapter adapter;
     private RecyclerView recyclerViewTr;
-    private long idVal;
+    private String idVal;
 
     private List<ReviewsList> reviewsLists;
     private ReviewsAdapter adapter2;

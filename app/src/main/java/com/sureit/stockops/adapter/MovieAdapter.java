@@ -56,13 +56,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         final MovieList developersList = movieLists.get(position);
         holder.strikePriceTV.setText(String.valueOf(developersList.getId()));
         holder.totalVolumeCE.setText(String.valueOf(developersList.getTitle()/1000));
-        holder.totalVolumePE.setText(String.valueOf(developersList.getDescription()/1000));
-        holder.totalBuyQuantityCE.setText(String.valueOf(developersList.getPosterUrl()/1000));
-        holder.totalAskQuantityCE.setText(String.valueOf(developersList.getVote_average()/1000));
-        holder.totalBuyQuantityPE.setText(String.valueOf(developersList.getReleaseDate()/1000));
-        holder.totalAskQuantityPE.setText(String.valueOf(developersList.getTotalBuyQuantity()/1000));
-        holder.strikePriceTV2.setText(String.valueOf(developersList.getOpenInterest()/1000));
-        holder.strikePriceTV3.setText(String.valueOf(developersList.getInterest()/1000));
+        holder.totalBuyQuantityCE.setText(String.valueOf(developersList.getDescription()/1000));
+        holder.totalAskQuantityPE.setText(String.valueOf(developersList.getPosterUrl()/1000));
+        holder.oiChange.setText(String.valueOf(developersList.getVote_average()/1000));
+        holder.pOIchange.setText(String.valueOf(developersList.getPchangeoice()/1000));
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +68,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 Intent skipIntent = new Intent(v.getContext(), MovieDetailsActivity.class);
                 skipIntent.putExtra(Constants.PARCEL_KEY,
                         new MovieList(movieList1.getId() ,movieList1.getTitle(),movieList1.getDescription(),movieList1.getPosterUrl(),
-                                movieList1.getVote_average(),movieList1.getReleaseDate(), movieList1.getTotalBuyQuantity(), movieList1.getOpenInterest(), movieList1.getInterest()));
+                                movieList1.getVote_average(),movieList1.getPchangeoice()));
                 v.getContext().startActivity(skipIntent);
             }
         });
@@ -101,13 +98,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         RelativeLayout relativeLayout;
         TextView strikePriceTV;
         TextView totalVolumeCE;
-        TextView totalVolumePE;
         TextView totalBuyQuantityCE;
-        TextView totalAskQuantityCE;
-        TextView totalBuyQuantityPE;
         TextView totalAskQuantityPE;
-        TextView strikePriceTV2;
-        TextView strikePriceTV3;
+        TextView pOIchange;
+        TextView oiChange;
 
         private ViewHolder(View itemView) {
             super(itemView);
@@ -116,13 +110,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             relativeLayout = itemView.findViewById(R.id.relativeLayoutRV);
             strikePriceTV = itemView.findViewById(R.id.tvStrikePrice);
             totalVolumeCE = itemView.findViewById(R.id.tvVolumeCE);
-            totalVolumePE = itemView.findViewById(R.id.tvVolumePE);
-            totalBuyQuantityCE = itemView.findViewById(R.id.tvBuyQuantityCE);
-            totalAskQuantityCE = itemView.findViewById(R.id.tvASKQuantityCE);
-            totalBuyQuantityPE = itemView.findViewById(R.id.tvBuyQuantityPE);
-            totalAskQuantityPE = itemView.findViewById(R.id.tvASKQuantityPE);
-            strikePriceTV2 = itemView.findViewById(R.id.tvStrikePrice2);
-            strikePriceTV3 = itemView.findViewById(R.id.tvStrikePrice3);
+            totalBuyQuantityCE = itemView.findViewById(R.id.tvBuyQuantity);
+            totalAskQuantityPE = itemView.findViewById(R.id.tvSellQuantity);
+            pOIchange = itemView.findViewById(R.id.tvpOIchange);
+            oiChange = itemView.findViewById(R.id.tvOIchange);
         }
 
     }
