@@ -108,12 +108,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
             // initialize the View objects
             relativeLayout = itemView.findViewById(R.id.relativeLayoutRV);
-            strikePriceTV = itemView.findViewById(R.id.tvStrikePrice);
+            strikePriceTV = itemView.findViewById(R.id.tvStrikePrice2);
             totalVolumeCE = itemView.findViewById(R.id.tvVolumeCE);
-            totalBuyQuantityCE = itemView.findViewById(R.id.tvBuyQuantity);
-            totalAskQuantityPE = itemView.findViewById(R.id.tvSellQuantity);
-            pOIchange = itemView.findViewById(R.id.tvpOIchange);
-            oiChange = itemView.findViewById(R.id.tvOIchange);
+            totalBuyQuantityCE = itemView.findViewById(R.id.tvQuantityTradedMain);
+            totalAskQuantityPE = itemView.findViewById(R.id.tvDeliveryQtyMain);
+            pOIchange = itemView.findViewById(R.id.tvpTotalSellQuantityMain);
+            oiChange = itemView.findViewById(R.id.tvTotalBuyQuantityMain);
         }
 
     }

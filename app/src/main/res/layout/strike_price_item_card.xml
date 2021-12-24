@@ -21,7 +21,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/tvStrikePrice"
+                android:id="@+id/tvStrikePrice2"
                 android:layout_width="120dp"
                 android:layout_height="32dp"
                 android:layout_alignParentBottom="true"
@@ -30,10 +30,10 @@
                 android:layout_marginEnd="3dp"
                 android:layout_marginRight="3dp"
                 android:layout_marginBottom="62dp"
-                android:layout_toStartOf="@+id/tvpOIchange"
-                android:layout_toLeftOf="@+id/tvpOIchange"
-                android:layout_toEndOf="@+id/tvOIchange"
-                android:layout_toRightOf="@+id/tvOIchange"
+                android:layout_toStartOf="@+id/tvpTotalSellQuantityMain"
+                android:layout_toLeftOf="@+id/tvpTotalSellQuantityMain"
+                android:layout_toEndOf="@+id/tvTotalBuyQuantityMain"
+                android:layout_toRightOf="@+id/tvTotalBuyQuantityMain"
                 android:background="@android:color/holo_blue_light"
                 android:fontFamily="sans-serif-black"
                 android:gravity="center"
@@ -55,7 +55,7 @@
                 android:textSize="10sp" />
 
             <TextView
-                android:id="@+id/tvOIchange"
+                android:id="@+id/tvTotalBuyQuantityMain"
                 android:layout_width="100dp"
                 android:layout_height="30dp"
                 android:layout_alignParentStart="true"
@@ -70,7 +70,7 @@
                 android:text="OI CE" />
 
             <TextView
-                android:id="@+id/tvpOIchange"
+                android:id="@+id/tvpTotalSellQuantityMain"
                 android:layout_width="100dp"
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
@@ -100,7 +100,7 @@
                 android:textSize="10sp" />
 
             <TextView
-                android:id="@+id/tvBuyQuantity"
+                android:id="@+id/tvQuantityTradedMain"
                 android:layout_width="100dp"
                 android:layout_height="30dp"
                 android:layout_alignParentStart="true"
@@ -131,7 +131,7 @@
                 android:textSize="10sp" />
 
             <TextView
-                android:id="@+id/tvSellQuantity"
+                android:id="@+id/tvDeliveryQtyMain"
                 android:layout_width="100dp"
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
@@ -189,10 +189,10 @@
                 android:layout_marginEnd="3dp"
                 android:layout_marginRight="3dp"
                 android:layout_marginBottom="5dp"
-                android:layout_toStartOf="@+id/tvSellQuantity"
-                android:layout_toLeftOf="@+id/tvSellQuantity"
-                android:layout_toEndOf="@+id/tvBuyQuantity"
-                android:layout_toRightOf="@+id/tvBuyQuantity"
+                android:layout_toStartOf="@+id/tvDeliveryQtyMain"
+                android:layout_toLeftOf="@+id/tvDeliveryQtyMain"
+                android:layout_toEndOf="@+id/tvQuantityTradedMain"
+                android:layout_toRightOf="@+id/tvQuantityTradedMain"
                 android:background="@android:color/holo_green_dark"
                 android:fontFamily="sans-serif-black"
                 android:gravity="center"

@@ -78,7 +78,6 @@ public class TrailerAdapter extends RecyclerView.Adapter <TrailerAdapter.ViewHol
 
         ViewHolder(View itemView) {
             super(itemView);
-            videoViewTrailer = itemView.findViewById(R.id.videoViewTrailer);
             relativeLayout2 = itemView.findViewById(R.id.relativeLayoutRV2);
         }
     }

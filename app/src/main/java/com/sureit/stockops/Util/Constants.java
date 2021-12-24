@@ -13,7 +13,7 @@ public class Constants {
     public static final String PARCEL_KEY="MovieParcel";
 
     public static final String TABLE_NAME_NOTE ="favmovies";
-    public static final String DB_NAME ="favmoviesdb.db";
+    public static final String DB_NAME ="stockops.db";
     public static final String POSTER_BASE_URL = "https://image.tmdb.org/t/p/w185/";
     public static final String POSTER_BASE_URL2 = "https://image.tmdb.org/t/p/w342/";
     public static final String REVIEW_SEG = "/reviews?api_key=";

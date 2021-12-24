@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/wood"
+    android:layout_width="match_parent"
+    android:layout_height="108dp">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        app:cardCornerRadius="5dp"
+        android:background="@drawable/wood"
+        app:cardElevation="20dp"
+        android:layout_margin="10dp">
+
+        <RelativeLayout
+            android:id="@+id/bankRelativeLayoutRV"
+            android:background="@drawable/wood"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvBankName"
+                android:layout_width="39dp"
+                android:layout_height="75dp"
+                android:layout_alignEnd="@+id/tvStrikePrice5"
+                android:layout_alignRight="@+id/tvStrikePrice5"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginEnd="78dp"
+                android:layout_marginRight="78dp"
+                android:layout_marginBottom="5dp"
+                android:background="@android:color/holo_blue_light"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:text="BankName" />
+
+            <TextView
+                android:id="@+id/tvTotalBuyQuantityBank"
+                android:layout_width="73dp"
+                android:layout_height="55dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="234dp"
+                android:layout_marginRight="234dp"
+                android:layout_marginBottom="5dp"
+                android:background="@android:color/holo_green_light"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:text="TotalBuyQuantityBank" />
+
+            <TextView
+                android:id="@+id/tvQuantityTradedBank"
+                android:layout_width="73dp"
+                android:layout_height="55dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="81dp"
+                android:layout_marginRight="81dp"
+                android:layout_marginBottom="5dp"
+                android:background="@android:color/holo_green_light"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:hapticFeedbackEnabled="false"
+                android:text="QuantityTradedBank" />
+
+            <TextView
+                android:id="@+id/tvpTotalSellQuantityBank"
+                android:layout_width="73dp"
+                android:layout_height="55dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="160dp"
+                android:layout_marginRight="160dp"
+                android:layout_marginBottom="5dp"
+                android:background="@android:color/holo_orange_dark"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:text="TotalSellQuantityBank" />
+
+            <TextView
+                android:id="@+id/tvDeliveryQtyBank"
+                android:layout_width="73dp"
+                android:layout_height="55dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginBottom="5dp"
+                android:background="@android:color/holo_orange_dark"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:text="DeliveryQtyBank" />
+
+            <TextView
+                android:id="@+id/tvVolumePE3"
+                android:layout_width="73dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginBottom="60dp"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:text="Delvered Qty in K"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/tvVolumeCE3"
+                android:layout_width="73dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="81dp"
+                android:layout_marginRight="81dp"
+                android:layout_marginBottom="60dp"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:text="Traded Qty in K"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/tvStrikePrice3"
+                android:layout_width="73dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="160dp"
+                android:layout_marginRight="160dp"
+                android:layout_marginBottom="60dp"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:text="Offers in K"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/tvStrikePrice5"
+                android:layout_width="73dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="234dp"
+                android:layout_marginRight="234dp"
+                android:layout_marginBottom="60dp"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:text="Bids in K"
+                android:textSize="10sp" />
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

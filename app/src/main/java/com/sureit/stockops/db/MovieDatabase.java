@@ -6,13 +6,14 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
 import com.sureit.stockops.Util.Constants;
+import com.sureit.stockops.data.BanksList;
 import com.sureit.stockops.data.MovieList;
 
 /**
- * Created by Pavneet_Singh on 12/31/17.
+ * Created by Suresh on 12/31/17.
  */
 
-@Database(entities = { MovieList.class }, version = 3)
+@Database(entities = { MovieList.class }, version = 1)
 //@TypeConverters({DateTypeConverter.class})
 public abstract class MovieDatabase extends RoomDatabase {
     public abstract MovieDao getMovieDao();

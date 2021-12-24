@@ -10,9 +10,8 @@ import android.support.annotation.NonNull;
 @Entity(tableName = "moviesfav")
 public class MovieList implements Parcelable {
 
-
     @PrimaryKey
-    @ColumnInfo
+    @ColumnInfo(name = "id")
     @NonNull
     private String id;
     private long title;

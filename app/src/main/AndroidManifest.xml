@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher_bull_bear"
@@ -13,8 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_bull_bear"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:theme" >
-        <activity android:name=".view.MainActivity" >
+        tools:replace="android:theme"
+        tools:targetApi="m">
+        <activity android:name=".view.BanksListActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,6 +28,9 @@
             android:name=".view.MovieDetailsActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".view.MainActivity"
+            android:theme="@style/AppTheme"/>
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />

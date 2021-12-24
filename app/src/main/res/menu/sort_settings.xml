@@ -7,12 +7,16 @@
     <item
         android:checked="true"
         android:id="@+id/popular"
-        android:title="@string/sort_by_popular"/>
+        android:title="Bank Nifty Refresh"/>
     <item
         android:id="@+id/rated"
-        android:title="@string/sort_by_ratings"/>
+        android:title=" Refresh Banks Live Data"/>
     <item
         android:id="@+id/myfav"
-        android:title="@string/my_favourites"/>
+        android:title="Refresh All Data"/>
+
+    <item
+        android:id="@+id/loadFTP"
+        android:title="Download from MAC FTP"/>
 </group>
 </menu>

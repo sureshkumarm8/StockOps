@@ -43,7 +43,7 @@
                     android:text="BuyQuantityCE" />
 
                 <TextView
-                    android:id="@+id/tvStrikePriceMain"
+                    android:id="@+id/tvStrikePricemain"
                     android:layout_width="136dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"

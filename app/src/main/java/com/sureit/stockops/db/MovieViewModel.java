@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.util.Log;
 
+import com.sureit.stockops.data.BanksList;
 import com.sureit.stockops.data.MovieList;
 
 import java.util.List;

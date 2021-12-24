@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:background="@drawable/wood"
     android:layout_width="match_parent"
-    android:layout_height="100dp">
+    android:layout_height="70dp">
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -17,16 +17,67 @@
         <RelativeLayout
             android:id="@+id/relativeLayoutRV"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/movie_card_item"
-                android:scaleType="fitXY"
-                android:src="@drawable/empty" />
+            <TextView
+                android:id="@+id/tvTimeStamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="29dp"
+                android:text="TimeStamp" />
+
+            <TextView
+                android:id="@+id/tvBidsHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="316dp"
+                android:layout_marginRight="316dp"
+                android:layout_marginBottom="5dp"
+                android:text="BidsHistory" />
+
+            <TextView
+                android:id="@+id/tvOffersHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="216dp"
+                android:layout_marginRight="216dp"
+                android:layout_marginBottom="5dp"
+                android:text="OffersHistory" />
+
+            <TextView
+                android:id="@+id/tvVolHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="139dp"
+                android:layout_marginRight="139dp"
+                android:layout_marginBottom="5dp"
+                android:text="VolHistory" />
+
+            <TextView
+                android:id="@+id/tvDelvHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="53dp"
+                android:layout_marginRight="53dp"
+                android:layout_marginBottom="5dp"
+                android:text="DelvHistory" />
+
         </RelativeLayout>
+
+
 
     </android.support.v7.widget.CardView>
 </LinearLayout>
