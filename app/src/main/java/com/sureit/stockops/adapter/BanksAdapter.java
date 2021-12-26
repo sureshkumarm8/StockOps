@@ -1,17 +1,10 @@
 package com.sureit.stockops.adapter;
 
-import static com.sureit.stockops.Util.Constants.DB_NAME;
-
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +13,11 @@ import android.widget.TextView;
 
 import com.sureit.stockops.R;
 import com.sureit.stockops.Util.Constants;
+
 import com.sureit.stockops.data.BanksList;
-import com.sureit.stockops.data.MovieList;
 import com.sureit.stockops.db.MovieDao;
-import com.sureit.stockops.db.MovieDatabase;
 import com.sureit.stockops.view.MovieDetailsActivity;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class BanksAdapter extends RecyclerView.Adapter<BanksAdapter.ViewHolder> {
@@ -62,6 +52,7 @@ public class BanksAdapter extends RecyclerView.Adapter<BanksAdapter.ViewHolder> 
         holder.totalAskQuantityPE.setText(String.valueOf(banksData.getTotalSellQuantity()));
         holder.totalDeliveryTV.setText(String.valueOf(banksData.getDeliveryQuantity()));
         holder.totalTradedTV.setText(String.valueOf(banksData.getQuantityTraded()));
+        holder.totalDeliveryPCTV.setText(String.valueOf(banksData.getDeliveryPercent()));
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +92,7 @@ public class BanksAdapter extends RecyclerView.Adapter<BanksAdapter.ViewHolder> 
         TextView totalAskQuantityPE;
         TextView totalTradedTV;
         TextView totalDeliveryTV;
+        TextView totalDeliveryPCTV;
 
         private ViewHolder(View itemView) {
             super(itemView);
@@ -112,6 +104,7 @@ public class BanksAdapter extends RecyclerView.Adapter<BanksAdapter.ViewHolder> 
             totalAskQuantityPE = itemView.findViewById(R.id.tvpTotalSellQuantityBank);
             totalTradedTV = itemView.findViewById(R.id.tvQuantityTradedBank);
             totalDeliveryTV = itemView.findViewById(R.id.tvDeliveryQtyBank);
+            totalDeliveryPCTV = itemView.findViewById(R.id.tvDeliveryPCT);
         }
 
     }

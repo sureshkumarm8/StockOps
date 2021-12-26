@@ -5,13 +5,125 @@
     android:background="@drawable/wood"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="1dp"
     android:fillViewport="true">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutRV"
+        android:background="@drawable/border"
+        android:layout_width="match_parent"
+        android:layout_height="25dp">
+
+        <TextView
+            android:id="@+id/tvTimeStampTtl"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_toStartOf="@+id/tvBidsHistoryTtl"
+            android:layout_toLeftOf="@+id/tvBidsHistoryTtl"
+            android:background="@drawable/border_header"
+            android:gravity="center"
+            android:text="Time"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvBidsHistoryTtl"
+            android:layout_width="68dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_toStartOf="@+id/tvOffersHistoryTtl"
+            android:layout_toLeftOf="@+id/tvOffersHistoryTtl"
+            android:background="@drawable/border_header"
+            android:gravity="center"
+            android:text="Bids"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvOffersHistoryTtl"
+            android:layout_width="68dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_toStartOf="@+id/tvDelvPercentTtl"
+            android:layout_toLeftOf="@+id/tvDelvPercentTtl"
+            android:background="@drawable/border_header"
+            android:gravity="center"
+            android:text="Offers"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDelvPercentTtl"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_toStartOf="@+id/tvVolHistoryTtl"
+            android:layout_toLeftOf="@+id/tvVolHistoryTtl"
+            android:background="@drawable/border_header"
+            android:gravity="center"
+            android:text="Delv %"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvVolHistoryTtl"
+            android:layout_width="68dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_toStartOf="@+id/tvDelvHistoryTtl"
+            android:layout_toLeftOf="@+id/tvDelvHistoryTtl"
+            android:background="@drawable/border_header"
+            android:gravity="center"
+            android:text="Tot. Vol"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDelvHistoryTtl"
+            android:layout_width="68dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginBottom="1dp"
+            android:background="@drawable/border_header"
+            android:gravity="center"
+            android:text="Tot. Del"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rVBankHistory"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="3dp"
+        android:layout_height="700dp"
+        android:layout_below="@+id/relativeLayoutRV"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 

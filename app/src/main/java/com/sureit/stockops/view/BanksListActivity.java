@@ -20,9 +20,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,22 +35,24 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.sureit.stockops.R;
 import com.sureit.stockops.adapter.BanksAdapter;
-import com.sureit.stockops.adapter.MovieAdapter;
+
 import com.sureit.stockops.data.BanksList;
 import com.sureit.stockops.data.MovieList;
+
 import com.sureit.stockops.db.BanksDao;
 import com.sureit.stockops.db.BanksDatabase;
 import com.sureit.stockops.db.BanksViewModel;
 import com.sureit.stockops.db.MovieDao;
 import com.sureit.stockops.db.MovieDatabase;
-import com.sureit.stockops.db.MovieViewModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +78,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
     public static final String URL_BankNifty = "https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY";
     public static final String URL_BanksTradeInfo = "https://www.nseindia.com/api/quote-equity?symbol=";
     public static final String URL_NSE = "https://www.nseindia.com/";
-    public static final String URL_MacFTPServer = "http://192.168.1.100:1313/Desktop/Suresh/Stock/liveQuotesData/banksData";
+    public static final String URL_MacFTPServer = "http://192.168.1.101:1313/Desktop/Suresh/Stock/liveQuotesData/banksData";
     final Map<String, String> headers = new HashMap<String, String>();
     public String cookiedata;
     private int ceTotalTradedVolume;
@@ -148,12 +147,16 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         relativeLayoutBanks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(BanksListActivity.this, MainActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("bankNiftyData", (Serializable) movieLists);
-                bundle.putSerializable("bankNiftyOIdata", (Serializable) bankNiftyOIdata);
-                myIntent.putExtras(bundle);
-                BanksListActivity.this.startActivity(myIntent);
+                try {
+                    Intent myIntent = new Intent(BanksListActivity.this, MainActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("bankNiftyData", (Serializable) movieLists);
+                    bundle.putSerializable("bankNiftyOIdata", (Serializable) bankNiftyOIdata);
+                    myIntent.putExtras(bundle);
+                    BanksListActivity.this.startActivity(myIntent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         recyclerView = findViewById(R.id.recyclerViewBanks);
@@ -529,6 +532,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         long totalSellQuantity = 0;
         long quantityTraded = 0;
         long deliveryQuantity = 0;
+        double deliveryPercent = 0.0;
 //        if(!macFTPfile) {
 //            try {
 //                Thread.sleep(2000);
@@ -579,14 +583,21 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                     String deliveryQuantityStr = jo.getString("deliveryQuantity");
                     deliveryQuantity = parseToLongfrom_(deliveryQuantityStr.trim());
 
-                    banksList = new BanksList(bankName, totalBuyQuantity, totalSellQuantity, quantityTraded, deliveryQuantity);
+                    String deliveryToTradedQuantityStr = jo.getString("deliveryToTradedQuantity");
+                    deliveryPercent = Double.parseDouble(deliveryToTradedQuantityStr.trim());
+
+                    banksList = new BanksList(bankName, totalBuyQuantity, totalSellQuantity, quantityTraded, deliveryQuantity,deliveryPercent);
                     banksLists.add(banksList);
 
                     //add new data to database
-                    long tsLong = System.currentTimeMillis() / 1000;
-                    String ts = Long.toString(tsLong);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm");
+                    String currentTime = dateFormat.format(new Date()).toString();
+
+//                    long tsLong = System.currentTimeMillis() / 1000;
+//                    String ts = Long.toString(tsLong);
+
                     BanksDao banksDao = BanksDatabase.getInstance(getApplicationContext()).notes();
-                    banksList = new BanksList(ts, bankName, totalBuyQuantity, totalSellQuantity, quantityTraded, deliveryQuantity);
+                    banksList = new BanksList(currentTime, bankName, totalBuyQuantity, totalSellQuantity, quantityTraded, deliveryQuantity,deliveryPercent);
                     banksDao.insertBankData(banksList);
                 }
 

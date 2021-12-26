@@ -2,7 +2,6 @@ package com.sureit.stockops.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -10,7 +9,6 @@ import android.support.annotation.NonNull;
 
 @Entity(tableName = "banksDataDB")
 public class BanksList implements Parcelable {
-
 
 
     @ColumnInfo(name = "timeStamp")
@@ -33,6 +31,9 @@ public class BanksList implements Parcelable {
     @ColumnInfo(name = "deliveryQuantity")
     private long deliveryQuantity;
 
+    @ColumnInfo(name = "deliveryPercent")
+    private double deliveryPercent;
+
 
     private BanksList(Parcel in) {
         bankName =in.readString();
@@ -40,6 +41,7 @@ public class BanksList implements Parcelable {
         totalSellQuantity = in.readLong();
         quantityTraded = in.readLong();
         deliveryQuantity = in.readLong();
+        deliveryPercent = in.readDouble();
     }
 
     public static final Creator<BanksList> CREATOR = new Creator<BanksList>() {
@@ -54,21 +56,23 @@ public class BanksList implements Parcelable {
         }
     };
 
-    public BanksList(String bankName, long totalBuyQuantity, long totalSellQuantity, long quantityTraded, long deliveryQuantity) {
+    public BanksList(String bankName, long totalBuyQuantity, long totalSellQuantity, long quantityTraded, long deliveryQuantity, double deliveryPercent) {
         this.bankName = bankName;
         this.totalBuyQuantity =totalBuyQuantity;
         this.totalSellQuantity = totalSellQuantity;
         this.quantityTraded = quantityTraded;
         this.deliveryQuantity = deliveryQuantity;
+        this.deliveryPercent = deliveryPercent;
     }
 
-    public BanksList(String timeStampValue, String bankName, long totalBuyQuantity, long totalSellQuantity, long quantityTraded, long deliveryQuantity) {
+    public BanksList(String timeStampValue, String bankName, long totalBuyQuantity, long totalSellQuantity, long quantityTraded, long deliveryQuantity, double deliveryPercent) {
         this.timeStamp = timeStampValue;
         this.bankName = bankName;
         this.totalBuyQuantity =totalBuyQuantity;
         this.totalSellQuantity = totalSellQuantity;
         this.quantityTraded = quantityTraded;
         this.deliveryQuantity = deliveryQuantity;
+        this.deliveryPercent = deliveryPercent;
     }
 
     public String getBankName() {
@@ -96,6 +100,10 @@ public class BanksList implements Parcelable {
         return timeStamp;
     }
 
+    public double getDeliveryPercent() {
+        return deliveryPercent;
+    }
+
     public void setBankName(String bankName) {
         this.bankName = bankName;
     }
@@ -118,6 +126,10 @@ public class BanksList implements Parcelable {
         this.timeStamp = timeStamp;
     }
 
+    public void setDeliveryPercent(double deliveryPercent) {
+        this.deliveryPercent = deliveryPercent;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -130,6 +142,7 @@ public class BanksList implements Parcelable {
         dest.writeLong(totalSellQuantity);
         dest.writeLong(quantityTraded);
         dest.writeLong(deliveryQuantity);
+        dest.writeDouble(deliveryPercent);
     }
 
 

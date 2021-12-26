@@ -2,14 +2,11 @@ package com.sureit.stockops.view;
 
 import android.app.ProgressDialog;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.arch.persistence.room.Room;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -33,11 +30,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.sureit.stockops.R;
 import com.sureit.stockops.adapter.MovieAdapter;
-import com.sureit.stockops.data.BanksList;
 import com.sureit.stockops.data.MovieList;
 import com.sureit.stockops.db.MovieDao;
 import com.sureit.stockops.db.MovieDatabase;
-import com.sureit.stockops.db.MovieViewModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MovieAdapter adapter;
     private List<MovieList> movieLists;
-    private List<BanksList> banksLists;
     List<String> bankNiftyOIdata;
 
     private MovieDao mMovieDao;
@@ -97,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
     private Double underlyingValue;
     private String timeStampValue;
     private MovieList movieList;
-    private BanksList banksList;
 
     Handler mHandler = new Handler();
 

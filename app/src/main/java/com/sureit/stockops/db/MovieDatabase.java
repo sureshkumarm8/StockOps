@@ -6,7 +6,6 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
 import com.sureit.stockops.Util.Constants;
-import com.sureit.stockops.data.BanksList;
 import com.sureit.stockops.data.MovieList;
 
 /**

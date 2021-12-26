@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.sureit.stockops.R;
 import com.sureit.stockops.data.BanksList;
-import com.sureit.stockops.data.ReviewsList;
 
 import java.util.List;
 
@@ -41,6 +40,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
         holder.timeStampTV.setText(banksList.getTimeStamp());
         holder.bidsHistory.setText(String.valueOf(banksList.getTotalBuyQuantity()));
         holder.offersHistory.setText(String.valueOf(banksList.getTotalSellQuantity()));
+        holder.delvPercent.setText(String.valueOf(banksList.getDeliveryPercent()));
         holder.volHistory.setText(String.valueOf(banksList.getQuantityTraded()));
         holder.delvHistory.setText(String.valueOf(banksList.getDeliveryQuantity()));
 
@@ -57,6 +57,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
         TextView offersHistory;
         TextView volHistory;
         TextView delvHistory;
+        TextView delvPercent;
 
 
         ViewHolder(View itemView) {
@@ -66,6 +67,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
             offersHistory = itemView.findViewById(R.id.tvOffersHistory);
             volHistory = itemView.findViewById(R.id.tvVolHistory);
             delvHistory = itemView.findViewById(R.id.tvDelvHistory);
+            delvPercent = itemView.findViewById(R.id.tvDelvPercent);
         }
     }
 }

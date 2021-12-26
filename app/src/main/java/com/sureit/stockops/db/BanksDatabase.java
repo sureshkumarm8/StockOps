@@ -18,7 +18,7 @@ public abstract class BanksDatabase extends RoomDatabase {
     private Context context;
     public static BanksDatabase getInstance(Context context){
         if(appDatabase == null){
-            appDatabase = Room.databaseBuilder(context.getApplicationContext(), BanksDatabase.class, "Banks-database")
+            appDatabase = Room.databaseBuilder(context.getApplicationContext(), BanksDatabase.class, "Banks-databaseNew")
                     .allowMainThreadQueries()
                     .build();
         }

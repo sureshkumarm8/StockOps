@@ -8,11 +8,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.RelativeLayout;
 
 import com.sureit.stockops.R;
 import com.sureit.stockops.Util.Constants;
-import com.sureit.stockops.adapter.BanksAdapter;
 import com.sureit.stockops.adapter.ReviewsAdapter;
 import com.sureit.stockops.data.BanksList;
 import com.sureit.stockops.db.BanksDao;

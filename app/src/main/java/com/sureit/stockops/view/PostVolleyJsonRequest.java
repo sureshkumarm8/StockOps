@@ -3,7 +3,6 @@ package com.sureit.stockops.view;
 import android.app.Activity;
 import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -14,7 +13,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.sureit.stockops.data.BanksList;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
