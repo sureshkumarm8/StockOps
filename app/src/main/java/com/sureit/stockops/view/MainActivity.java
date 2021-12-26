@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id){
 
-            case R.id.popular:
+            case R.id.banknifty:
                 item.setChecked(true);
                 noInternetDialog = new NoInternetDialog.Builder(this).build();
                 movieLists.clear();
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
                 loadUrlData(POPULAR_MOVIES_URL);
                 return true;
 
-            case R.id.rated:
+            case R.id.banks:
                 item.setChecked(true);
                 noInternetDialog = new NoInternetDialog.Builder(this).build();
                 movieLists.clear();
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                 loadUrlData(TOP_RATED_MOVIES_URL);
                 return true;
 
-            case R.id.myfav:
+            case R.id.alldata:
                 item.setChecked(true);
                 movieLists.clear();
                 FAV_ROT = true;

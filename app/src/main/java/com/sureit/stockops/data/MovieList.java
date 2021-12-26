@@ -161,7 +161,7 @@ public class MovieList implements Parcelable {
         this.totalBuyQuantity =totalBuyQuantity;
         this.openInterest=openInterest;
         this.interest=interest;
-        this.pchangeoice= Math.round(pchangeoice *100)/100;
+        this.pchangeoice= pchangeoice;
         this.pchangeoipe=pchangeoipe;
 
     }

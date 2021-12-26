@@ -16,6 +16,7 @@ import com.sureit.stockops.view.MovieDetailsActivity;
 import com.sureit.stockops.data.MovieList;
 import com.sureit.stockops.R;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
@@ -59,7 +60,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         holder.totalBuyQuantityCE.setText(String.valueOf(developersList.getDescription()/1000));
         holder.totalAskQuantityPE.setText(String.valueOf(developersList.getPosterUrl()/1000));
         holder.oiChange.setText(String.valueOf(developersList.getVote_average()/1000));
-        holder.pOIchange.setText(String.valueOf(developersList.getPchangeoice()/1000));
+        DecimalFormat df = new DecimalFormat("0.00");
+        holder.pOIchange.setText(df.format(developersList.getPchangeoice()));
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override

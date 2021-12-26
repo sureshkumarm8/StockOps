@@ -2,16 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="90dp"
-    android:background="@drawable/wood"
+    android:layout_height="80dp"
+    android:background="@drawable/border_header"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="10dp"
-        android:layout_weight="2"
-        android:background="@drawable/wood"
+        android:layout_margin="3dp"
+        android:layout_weight="1"
+        android:background="@drawable/border"
         app:cardCornerRadius="5dp"
         app:cardElevation="20dp">
 
@@ -46,7 +46,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_toStartOf="@+id/tvQuantityTradedBank"
                 android:layout_toLeftOf="@+id/tvQuantityTradedBank"
-                android:background="@android:color/holo_orange_dark"
+                android:background="@android:color/holo_blue_dark"
                 android:fontFamily="sans-serif-black"
                 android:gravity="center"
                 android:text="DeliveryPercent"
@@ -59,8 +59,8 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="7dp"
+                android:layout_marginLeft="7dp"
                 android:layout_marginEnd="1dp"
                 android:layout_marginRight="1dp"
                 android:layout_marginBottom="5dp"

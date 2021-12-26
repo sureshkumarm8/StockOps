@@ -6,13 +6,13 @@
 
     <item
         android:checked="true"
-        android:id="@+id/popular"
+        android:id="@+id/banknifty"
         android:title="Bank Nifty Refresh"/>
     <item
-        android:id="@+id/rated"
+        android:id="@+id/banks"
         android:title=" Refresh Banks Live Data"/>
     <item
-        android:id="@+id/myfav"
+        android:id="@+id/alldata"
         android:title="Refresh All Data"/>
 
     <item

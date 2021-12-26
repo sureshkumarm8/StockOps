@@ -2,6 +2,7 @@ package com.sureit.stockops.view;
 
 import android.app.Activity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
@@ -15,6 +16,7 @@ import com.sureit.stockops.data.BanksList;
 
 import org.json.JSONObject;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +31,7 @@ public class PostVolleyJsonRequest {
     private String params;
     private BanksList banksList;
     private List<BanksList> banksLists = new ArrayList<>();
-    public PostVolleyJsonRequest(Activity act, VolleyJsonRespondsListener volleyJsonRespondsListener, String netnetworkUrl, String params) {
+    public PostVolleyJsonRequest(Activity act, VolleyJsonRespondsListener volleyJsonRespondsListener,String  type, String netnetworkUrl, String params) {
         this.act = act;
         this.volleyJsonRespondsListener = volleyJsonRespondsListener;
         this.type = type;

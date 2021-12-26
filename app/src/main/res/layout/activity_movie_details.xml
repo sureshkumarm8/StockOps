@@ -29,7 +29,7 @@
             android:layout_marginBottom="1dp"
             android:layout_toStartOf="@+id/tvBidsHistoryTtl"
             android:layout_toLeftOf="@+id/tvBidsHistoryTtl"
-            android:background="@drawable/border_header"
+            android:background="@drawable/border_histheader"
             android:gravity="center"
             android:text="Time"
             android:textStyle="bold" />
@@ -45,7 +45,7 @@
             android:layout_marginBottom="1dp"
             android:layout_toStartOf="@+id/tvOffersHistoryTtl"
             android:layout_toLeftOf="@+id/tvOffersHistoryTtl"
-            android:background="@drawable/border_header"
+            android:background="@drawable/border_histheader"
             android:gravity="center"
             android:text="Bids"
             android:textStyle="bold" />
@@ -61,7 +61,7 @@
             android:layout_marginBottom="1dp"
             android:layout_toStartOf="@+id/tvDelvPercentTtl"
             android:layout_toLeftOf="@+id/tvDelvPercentTtl"
-            android:background="@drawable/border_header"
+            android:background="@drawable/border_histheader"
             android:gravity="center"
             android:text="Offers"
             android:textStyle="bold" />
@@ -77,7 +77,7 @@
             android:layout_marginBottom="1dp"
             android:layout_toStartOf="@+id/tvVolHistoryTtl"
             android:layout_toLeftOf="@+id/tvVolHistoryTtl"
-            android:background="@drawable/border_header"
+            android:background="@drawable/border_histheader"
             android:gravity="center"
             android:text="Delv %"
             android:textStyle="bold" />
@@ -93,7 +93,7 @@
             android:layout_marginBottom="1dp"
             android:layout_toStartOf="@+id/tvDelvHistoryTtl"
             android:layout_toLeftOf="@+id/tvDelvHistoryTtl"
-            android:background="@drawable/border_header"
+            android:background="@drawable/border_histheader"
             android:gravity="center"
             android:text="Tot. Vol"
             android:textStyle="bold" />
@@ -109,7 +109,7 @@
             android:layout_marginEnd="1dp"
             android:layout_marginRight="1dp"
             android:layout_marginBottom="1dp"
-            android:background="@drawable/border_header"
+            android:background="@drawable/border_histheader"
             android:gravity="center"
             android:text="Tot. Del"
             android:textStyle="bold" />

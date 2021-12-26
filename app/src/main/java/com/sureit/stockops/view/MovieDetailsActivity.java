@@ -11,7 +11,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.sureit.stockops.R;
 import com.sureit.stockops.Util.Constants;
-import com.sureit.stockops.adapter.ReviewsAdapter;
+import com.sureit.stockops.adapter.BankHistoryAdapter;
 import com.sureit.stockops.data.BanksList;
 import com.sureit.stockops.db.BanksDao;
 import com.sureit.stockops.db.BanksDatabase;
@@ -32,7 +32,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private BanksDao banksDao;
     RecyclerView recycleViewBankHistory;
     private List<BanksList> banksHostoryList = new ArrayList<>();
-    private ReviewsAdapter adapterHistory;
+    private BankHistoryAdapter adapterHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 //        setupViewModel(getBankName);
 
         BanksViewModel viewModel = ViewModelProviders.of(this).get(BanksViewModel.class);
-        adapterHistory = new ReviewsAdapter(viewModel.getTasks(getBankName),getApplicationContext());
+        adapterHistory = new BankHistoryAdapter(viewModel.getTasks(getBankName),getApplicationContext());
         recycleViewBankHistory.setAdapter(adapterHistory);
         adapterHistory.notifyDataSetChanged();
     }
@@ -64,7 +64,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         viewModel.getTasks().observe(this, new Observer<List<BanksList>>() {
             @Override
             public void onChanged(@Nullable List<BanksList> taskEntries) {
-                adapterHistory = new ReviewsAdapter(taskEntries,getApplicationContext());
+                adapterHistory = new BankHistoryAdapter(taskEntries,getApplicationContext());
                 recycleViewBankHistory.setAdapter(adapterHistory);
                 adapterHistory.notifyDataSetChanged();
             }
