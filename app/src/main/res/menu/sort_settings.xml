@@ -10,13 +10,10 @@
         android:title="Bank Nifty Refresh"/>
     <item
         android:id="@+id/banks"
-        android:title=" Refresh Banks Live Data"/>
+        android:title="Refresh Banks Data"/>
     <item
         android:id="@+id/alldata"
         android:title="Refresh All Data"/>
 
-    <item
-        android:id="@+id/loadFTP"
-        android:title="Download from MAC FTP"/>
 </group>
 </menu>

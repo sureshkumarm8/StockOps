@@ -15,8 +15,7 @@ import com.sureit.stockops.R;
 import com.sureit.stockops.Util.Constants;
 
 import com.sureit.stockops.data.BanksList;
-import com.sureit.stockops.db.MovieDao;
-import com.sureit.stockops.view.MovieDetailsActivity;
+import com.sureit.stockops.view.BankNiftyDetailsActivity;
 
 import java.util.List;
 
@@ -24,7 +23,6 @@ public class BanksAdapter extends RecyclerView.Adapter<BanksAdapter.ViewHolder> 
 
     private List<BanksList> banksLists;
     private Context context;
-    private MovieDao mMovieDao;
 
     public BanksAdapter(List<BanksList> banksLists, Context context) {
 
@@ -51,14 +49,14 @@ public class BanksAdapter extends RecyclerView.Adapter<BanksAdapter.ViewHolder> 
         holder.totalBuyQuantityCE.setText(String.valueOf(banksData.getTotalBuyQuantity()));
         holder.totalAskQuantityPE.setText(String.valueOf(banksData.getTotalSellQuantity()));
         holder.totalDeliveryTV.setText(String.valueOf(banksData.getDeliveryQuantity()));
-        holder.totalTradedTV.setText(String.valueOf(banksData.getQuantityTraded()));
+        holder.totalTradedTV.setText(String.valueOf(banksData.getQuantityTradedsure()));
         holder.totalDeliveryPCTV.setText(String.valueOf(banksData.getDeliveryPercent()));
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BanksList banksData = banksLists.get(position);
-                Intent skipIntent = new Intent(v.getContext(), MovieDetailsActivity.class);
+                Intent skipIntent = new Intent(v.getContext(), BankNiftyDetailsActivity.class);
                 skipIntent.putExtra(Constants.PARCEL_KEY,banksData.getBankName());
                 v.getContext().startActivity(skipIntent);
             }

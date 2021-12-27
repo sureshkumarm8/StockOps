@@ -5,16 +5,20 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import com.sureit.stockops.data.BankNiftyList;
 import com.sureit.stockops.data.BanksList;
 
 import java.util.List;
 
-@Database(entities = {BanksList.class}, version = 1)
+@Database(entities = {BanksList.class, BankNiftyList.class}, version = 2,exportSchema = false)
 public abstract class BanksDatabase extends RoomDatabase {
     private static BanksDatabase appDatabase;
     private BanksDao notesDAO;
+    private BankNiftyDao bankNiftyDao;
+    
+    public abstract BanksDao getBanks();
+    public abstract BankNiftyDao getBankNiftyCP();
 
-    public abstract BanksDao notes();
     private Context context;
     public static BanksDatabase getInstance(Context context){
         if(appDatabase == null){
@@ -31,7 +35,7 @@ public abstract class BanksDatabase extends RoomDatabase {
 
     public List<BanksList> getBanksInfo(Context context, String storeStr) {
         if (notesDAO == null) {
-            notesDAO = BanksDatabase.getInstance(context).notes();
+            notesDAO = BanksDatabase.getInstance(context).getBanks();
         }
         return notesDAO.getBankHistory(storeStr+"%");
     }

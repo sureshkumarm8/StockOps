@@ -29,7 +29,7 @@ public class BankHistoryAdapter extends RecyclerView.Adapter<BankHistoryAdapter.
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // this method will be called whenever our ViewHolder is created
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.movie_item_card, parent, false);
+                .inflate(R.layout.bankhistory_item_card, parent, false);
         return new BankHistoryAdapter.ViewHolder(v);
     }
 
@@ -42,35 +42,24 @@ public class BankHistoryAdapter extends RecyclerView.Adapter<BankHistoryAdapter.
         holder.bidsHistory.setText(String.valueOf(banksList.getTotalBuyQuantity()));
         holder.offersHistory.setText(String.valueOf(banksList.getTotalSellQuantity()));
         holder.delvPercent.setText(String.valueOf(banksList.getDeliveryPercent()));
-        holder.volHistory.setText(String.valueOf(banksList.getQuantityTraded()));
+        holder.volHistory.setText(String.valueOf(banksList.getQuantityTradedsure()));
         holder.delvHistory.setText(String.valueOf(banksList.getDeliveryQuantity()));
 
         //set color for bullish or bearish
         if(position>=1){
             BanksList banksList_1 = banksLists.get(position - 1);
-            int color;
-            color = setBackGcolor(banksList.getTotalBuyQuantity(),banksList_1.getTotalBuyQuantity());
-            holder.bidsHistory.setBackgroundColor(color);
-            color = setBackGcolor(banksList.getTotalSellQuantity(),banksList_1.getTotalSellQuantity());
-            holder.offersHistory.setBackgroundColor(color);
-            color = setBackGcolor(banksList.getDeliveryPercent(),banksList_1.getDeliveryPercent());
-            holder.delvPercent.setBackgroundColor(color);
-        }
-    }
-
-    private int setBackGcolor(double deliveryPercent, double deliveryPercent1) {
-        if(deliveryPercent < deliveryPercent1){
-            return Color.RED;
-        }else{
-            return Color.GREEN;
-        }
-    }
-
-    private int setBackGcolor(long val, long val_1) {
-        if(val>val_1){
-            return Color.RED;
-        }else{
-            return Color.GREEN;
+            if(banksList.getTotalBuyQuantity()<banksList_1.getTotalBuyQuantity()){
+                holder.bidsHistory.setBackgroundColor(Color.GREEN);
+            }else {holder.bidsHistory.setBackgroundColor(Color.RED);}
+            if(banksList.getTotalSellQuantity()>banksList_1.getTotalSellQuantity()){
+                holder.offersHistory.setBackgroundColor(Color.GREEN);
+            }else {holder.offersHistory.setBackgroundColor(Color.RED);}
+            if(banksList.getDeliveryPercent()==banksList_1.getDeliveryPercent()){
+                holder.delvPercent.setBackgroundColor(Color.WHITE);
+            }
+            else if(banksList.getDeliveryPercent()<banksList_1.getDeliveryPercent()) {
+                holder.delvPercent.setBackgroundColor(Color.GREEN);
+            }else {holder.delvPercent.setBackgroundColor(Color.RED);}
         }
     }
 

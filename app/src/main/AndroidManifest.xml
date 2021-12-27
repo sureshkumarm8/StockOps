@@ -25,11 +25,11 @@
         </activity>
         <activity
             xmlns:tools="http://schemas.android.com/tools"
-            android:name=".view.MovieDetailsActivity"
+            android:name=".view.BankNiftyDetailsActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity
-            android:name=".view.MainActivity"
+            android:name=".view.BankNiftyActivity"
             android:theme="@style/AppTheme"/>
         <uses-library
             android:name="org.apache.http.legacy"

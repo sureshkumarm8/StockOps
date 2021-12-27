@@ -9,7 +9,8 @@
         <entry key="app/src/main/res/drawable/border_histheader.xml" value="0.21822916666666667" />
         <entry key="app/src/main/res/drawable/borderheader.xml" value="0.26614583333333336" />
         <entry key="app/src/main/res/layout-land/activity_movie_details.xml" value="0.16145833333333334" />
-        <entry key="app/src/main/res/layout/activity_bankslist.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_banknifty_details.xml" value="0.23854166666666668" />
+        <entry key="app/src/main/res/layout/activity_bankslist.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_movie_details.xml" value="0.49406688241639696" />
         <entry key="app/src/main/res/layout/activity_options_list.xml" value="0.1671875" />

@@ -130,7 +130,7 @@
                 android:layout_toLeftOf="@+id/tvVolumePE3"
                 android:background="#FFFFFF"
                 android:gravity="center"
-                android:text="Traded Qty in K"
+                android:text="Tot Vol in K"
                 android:textSize="10sp" />
 
             <TextView
