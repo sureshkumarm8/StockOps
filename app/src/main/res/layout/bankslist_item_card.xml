@@ -46,7 +46,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_toStartOf="@+id/tvQuantityTradedBank"
                 android:layout_toLeftOf="@+id/tvQuantityTradedBank"
-                android:background="@android:color/holo_blue_dark"
+                android:background="#CDDC39"
                 android:fontFamily="sans-serif-black"
                 android:gravity="center"
                 android:text="DeliveryPercent"

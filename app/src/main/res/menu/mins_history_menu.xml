@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/mvVal"
+        android:icon="@android:drawable/star_on"
+        app:showAsAction="always"
+        android:title="Movement"/>
+    <item
+        android:id="@+id/min1"
+        android:icon="@drawable/min1"
+        app:showAsAction="always"
+        android:title="1 Min"/>
+    <item
+        android:id="@+id/min5"
+        android:icon="@drawable/min5"
+        app:showAsAction="always|withText"
+        android:title="5 min"/>
+    <item
+        android:id="@+id/min10"
+        android:icon="@drawable/min10"
+        app:showAsAction="never"
+        android:title="10 Min">
+    </item>
+    <item
+        android:id="@+id/min15"
+        app:showAsAction="never"
+        android:icon="@drawable/min15"
+        android:title="15 min">
+    </item>
+</menu>

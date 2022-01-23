@@ -55,10 +55,10 @@ public class BankNiftyAdapter extends RecyclerView.Adapter<BankNiftyAdapter.View
 
         // this method will bind the data to the ViewHolder from whence it'll be shown to other Views
         final BankNiftyList developersList = bankNiftyLists.get(position);
-        holder.strikePriceTV.setText(String.valueOf(developersList.getTimestamp()));
+        holder.strikePriceTV.setText(String.valueOf(developersList.getOiname()));
         holder.totalVolumeCE.setText(String.valueOf(developersList.getCalloi()/1000));
-        holder.totalBuyQuantityCE.setText(String.valueOf(developersList.getBntotalbuyquantity()/1000));
-        holder.totalAskQuantityPE.setText(String.valueOf(developersList.getPutoi()/1000));
+        holder.totalBuyQuantityCE.setText(String.valueOf(developersList.getPutoi()/1000));
+        holder.totalAskQuantityPE.setText(String.valueOf(developersList.getBntotalbuyquantity()/1000));
         holder.oiChange.setText(String.valueOf(developersList.getBntotalsellquantity()/1000));
         DecimalFormat df = new DecimalFormat("0.00");
         holder.pOIchange.setText(df.format(developersList.getUnderlyvalue()));
@@ -68,9 +68,7 @@ public class BankNiftyAdapter extends RecyclerView.Adapter<BankNiftyAdapter.View
             public void onClick(View v) {
                 BankNiftyList bankNiftyList1 = bankNiftyLists.get(position);
                 Intent skipIntent = new Intent(v.getContext(), BankNiftyDetailsActivity.class);
-                skipIntent.putExtra(Constants.PARCEL_KEY,
-                        new BankNiftyList(bankNiftyList1.getTimestamp() , bankNiftyList1.getCalloi(), bankNiftyList1.getBntotalbuyquantity(), bankNiftyList1.getPutoi(),
-                                bankNiftyList1.getBntotalsellquantity(), bankNiftyList1.getUnderlyvalue()));
+                skipIntent.putExtra(Constants.PARCEL_KEY,developersList.getOiname());
                 v.getContext().startActivity(skipIntent);
             }
         });

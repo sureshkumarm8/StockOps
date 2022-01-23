@@ -2,25 +2,32 @@ package com.sureit.stockops.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-@Entity(tableName = "bankNiftyDB")
+@Entity(tableName = "bankNiftyDB", primaryKeys = {"timestamp","calloi","putoi","NBQmvVal"})
 public class BankNiftyList implements Parcelable {
 
-    @PrimaryKey
+//    @PrimaryKey(autoGenerate = true)
+//    @NonNull
     @ColumnInfo(name = "id")
-    @NonNull
     private int id=0;
 
+    @ColumnInfo(name = "oiname")
+    private String oiname;
+
+    @NonNull
     @ColumnInfo(name = "timestamp")
     private String timestamp;
 
+    @NonNull
     @ColumnInfo(name = "calloi")
     private long calloi;
 
+    @NonNull
     @ColumnInfo(name = "putoi")
     private long putoi;
 
@@ -33,13 +40,31 @@ public class BankNiftyList implements Parcelable {
     @ColumnInfo(name = "underlyvalue")
     private double underlyvalue;
 
+    @NonNull
+    @ColumnInfo(name = "NBQmvVal")
+    private double NBQmvVal;
+
+    @ColumnInfo(name = "NSQmvVal")
+    private double NSQmvVal;
+
+    @ColumnInfo(name = "NVOLmvVal")
+    private double NVOLmvVal;
+
+    @ColumnInfo(name = "NOImvVal")
+    private double NOImvVal;
+
     private BankNiftyList(Parcel in) {
+        oiname =in.readString();
         timestamp =in.readString();
         calloi = in.readLong();
         putoi = in.readLong();
         bntotalbuyquantity = in.readLong();
         bntotalsellquantity = in.readLong();
         underlyvalue =in.readDouble();
+        NBQmvVal =in.readDouble();
+        NSQmvVal =in.readDouble();
+        NVOLmvVal =in.readDouble();
+        NOImvVal =in.readDouble();
     }
 
     public static final Creator<BankNiftyList> CREATOR = new Creator<BankNiftyList>() {
@@ -102,12 +127,25 @@ public class BankNiftyList implements Parcelable {
         this.underlyvalue = underlyvalue;
     }
 
-    public BankNiftyList(String timestamp, long calloi,  long putoi, long bntotalbuyquantity, long bntotalsellquantity, double underlyvalue) {
+    public BankNiftyList(String timestamp,String oiname, long calloi,  long putoi, long bntotalbuyquantity, long bntotalsellquantity, double underlyvalue) {
         this.timestamp = timestamp;
+        this.oiname = oiname;
         this.calloi = calloi;
         this.putoi = putoi;
         this.bntotalbuyquantity = bntotalbuyquantity;
         this.bntotalsellquantity = bntotalsellquantity;
+        this.underlyvalue = underlyvalue;
+    }
+
+    @Ignore
+    public BankNiftyList(String timestamp,String oiname, long calloi, double NBQmvVal, double NSQmvVal, double NVOLmvVal, double NOImvVal, double underlyvalue) {
+        this.timestamp = timestamp;
+        this.oiname = oiname;
+        this.calloi = calloi;
+        this.NBQmvVal = NBQmvVal;
+        this.NSQmvVal = NSQmvVal;
+        this.NVOLmvVal = NVOLmvVal;
+        this.NOImvVal = NOImvVal;
         this.underlyvalue = underlyvalue;
     }
 
@@ -118,12 +156,17 @@ public class BankNiftyList implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(oiname);
         dest.writeString(timestamp);
         dest.writeLong(calloi);
         dest.writeLong(putoi);
         dest.writeLong(bntotalbuyquantity);
         dest.writeLong(bntotalsellquantity);
         dest.writeDouble(underlyvalue);
+        dest.writeDouble(NBQmvVal);
+        dest.writeDouble(NSQmvVal);
+        dest.writeDouble(NVOLmvVal);
+        dest.writeDouble(NOImvVal);
     }
 
     public int getId() {
@@ -132,5 +175,45 @@ public class BankNiftyList implements Parcelable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getOiname() {
+        return oiname;
+    }
+
+    public void setOiname(String oiname) {
+        this.oiname = oiname;
+    }
+
+    public double getNBQmvVal() {
+        return NBQmvVal;
+    }
+
+    public void setNBQmvVal(double NBQmvVal) {
+        this.NBQmvVal = NBQmvVal;
+    }
+
+    public double getNSQmvVal() {
+        return NSQmvVal;
+    }
+
+    public void setNSQmvVal(double NSQmvVal) {
+        this.NSQmvVal = NSQmvVal;
+    }
+
+    public double getNVOLmvVal() {
+        return NVOLmvVal;
+    }
+
+    public void setNVOLmvVal(double NVOLmvVal) {
+        this.NVOLmvVal = NVOLmvVal;
+    }
+
+    public double getNOImvVal() {
+        return NOImvVal;
+    }
+
+    public void setNOImvVal(double NOImvVal) {
+        this.NOImvVal = NOImvVal;
     }
 }

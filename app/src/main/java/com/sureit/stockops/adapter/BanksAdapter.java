@@ -3,6 +3,7 @@ package com.sureit.stockops.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -61,6 +62,34 @@ public class BanksAdapter extends RecyclerView.Adapter<BanksAdapter.ViewHolder> 
                 v.getContext().startActivity(skipIntent);
             }
         });
+
+        //set color for bullish or bearish
+        if(position>=1){
+            BanksList banksList_1 = banksLists.get(position - 1);
+            if(banksData.getTotalBuyQuantity()==banksList_1.getTotalBuyQuantity()){
+                holder.totalBuyQuantityCE.setBackgroundColor(Color.WHITE);
+            }
+            else if(banksData.getTotalBuyQuantity()>banksList_1.getTotalBuyQuantity()){
+                holder.totalBuyQuantityCE.setBackgroundColor(Color.GREEN);
+            }else {holder.totalBuyQuantityCE.setBackgroundColor(Color.RED);}
+
+            if(banksData.getTotalSellQuantity()==banksList_1.getTotalSellQuantity()){
+                holder.totalAskQuantityPE.setBackgroundColor(Color.WHITE);
+            }
+            else if(banksData.getTotalSellQuantity()<banksList_1.getTotalSellQuantity()){
+                holder.totalAskQuantityPE.setBackgroundColor(Color.GREEN);
+            }else {holder.totalAskQuantityPE.setBackgroundColor(Color.RED);}
+
+            if(banksData.getTotalBuyQuantity()>banksList_1.getTotalBuyQuantity()
+                    && banksData.getTotalSellQuantity()<banksList_1.getTotalSellQuantity()){
+                holder.bankNameTV.setBackgroundColor(Color.GREEN);
+            }else if(banksData.getTotalBuyQuantity()<banksList_1.getTotalBuyQuantity()
+                    && banksData.getTotalSellQuantity()>banksList_1.getTotalSellQuantity()){
+                holder.bankNameTV.setBackgroundColor(Color.RED);
+            }else{
+                holder.bankNameTV.setBackgroundColor(Color.WHITE);
+            }
+        }
 
     }
 

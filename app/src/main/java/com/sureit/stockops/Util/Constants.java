@@ -1,5 +1,7 @@
 package com.sureit.stockops.Util;
 
+import android.content.SharedPreferences;
+
 import com.sureit.stockops.BuildConfig;
 
 public class Constants {
@@ -19,4 +21,6 @@ public class Constants {
     public static final String REVIEW_SEG = "/reviews?api_key=";
     public static final String TRAILER_SEG = "/videos?api_key=";
     public static  boolean FAV_ROT = false;
+
+
 }

@@ -2,29 +2,33 @@ package com.sureit.stockops.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-@Entity(tableName = "banksDataDB")
+@Entity(tableName = "banksDataDB",primaryKeys = {"timeStamp","totalBuyQuantity","totalSellQuantity","TBQmvVal"})
 public class BanksList implements Parcelable {
 
 
+    //    @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "timeStamp")
     private String timeStamp;
 
     @ColumnInfo(name = "bankName")
     private String bankName;
 
+    @NonNull
     @ColumnInfo(name = "totalBuyQuantity")
     private long totalBuyQuantity;
 
+    @NonNull
     @ColumnInfo(name = "totalSellQuantity")
     private long totalSellQuantity;
 
-    @PrimaryKey(autoGenerate = true)
-    @NonNull
+    //This will auto generate. quantityTradedsure is the real data
+//    @PrimaryKey(autoGenerate = true)
+//    @NonNull
     @ColumnInfo(name = "quantityTraded")
     private long quantityTraded=0L;
 
@@ -37,6 +41,18 @@ public class BanksList implements Parcelable {
     @ColumnInfo(name = "deliveryPercent")
     private double deliveryPercent;
 
+    @NonNull
+    @ColumnInfo(name = "TBQmvVal")
+    private double TBQmvVal;
+
+    @ColumnInfo(name = "TSQmvVal")
+    private double TSQmvVal;
+
+    @ColumnInfo(name = "QTSmvVal")
+    private double QTSmvVal;
+
+    @ColumnInfo(name = "DQmvVal")
+    private double DQmvVal;
 
     private BanksList(Parcel in) {
         bankName =in.readString();
@@ -45,6 +61,10 @@ public class BanksList implements Parcelable {
         quantityTradedsure = in.readLong();
         deliveryQuantity = in.readLong();
         deliveryPercent = in.readDouble();
+        TBQmvVal = in.readDouble();
+        TSQmvVal = in.readDouble();
+        QTSmvVal = in.readDouble();
+        DQmvVal = in.readDouble();
     }
 
     public static final Creator<BanksList> CREATOR = new Creator<BanksList>() {
@@ -76,6 +96,18 @@ public class BanksList implements Parcelable {
         this.quantityTradedsure = quantityTradedsure;
         this.deliveryQuantity = deliveryQuantity;
         this.deliveryPercent = deliveryPercent;
+    }
+
+    public BanksList(String currentTime, String bankName,long totalBuyQuantity, long totalSellQuantity, double TBQmvVal, double tSQmvVal, double QTSmvVal, double DQmvVal, double dPmvVal) {
+        this.timeStamp = currentTime;
+        this.bankName = bankName;
+        this.totalBuyQuantity =totalBuyQuantity;
+        this.totalSellQuantity = totalSellQuantity;
+        this.TBQmvVal = TBQmvVal;
+        this.TSQmvVal = tSQmvVal;
+        this.QTSmvVal = QTSmvVal;
+        this.DQmvVal = DQmvVal;
+        this.deliveryPercent = dPmvVal;
     }
 
     public String getBankName() {
@@ -111,6 +143,23 @@ public class BanksList implements Parcelable {
         return quantityTraded;
     }
 
+    public double getTBQmvVal() {
+        return TBQmvVal;
+    }
+
+    public double getTSQmvVal() {
+        return TSQmvVal;
+    }
+
+    public double getQTSmvVal() {
+        return QTSmvVal;
+    }
+
+    public double getDQmvVal() {
+        return DQmvVal;
+    }
+
+
     public void setBankName(String bankName) {
         this.bankName = bankName;
     }
@@ -141,6 +190,23 @@ public class BanksList implements Parcelable {
         this.quantityTraded = quantityTraded;
     }
 
+    public void setTBQmvVal(double TBQmvVal) {
+        this.TBQmvVal = TBQmvVal;
+    }
+
+    public void setTSQmvVal(double TSQmvVal) {
+        this.TSQmvVal = TSQmvVal;
+    }
+
+
+    public void setQTSmvVal(double QTSmvVal) {
+        this.QTSmvVal = QTSmvVal;
+    }
+
+    public void setDQmvVal(double DQmvVal) {
+        this.DQmvVal = DQmvVal;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -154,8 +220,11 @@ public class BanksList implements Parcelable {
         dest.writeLong(quantityTradedsure);
         dest.writeLong(deliveryQuantity);
         dest.writeDouble(deliveryPercent);
+        dest.writeDouble(TBQmvVal);
+        dest.writeDouble(TSQmvVal);
+        dest.writeDouble(QTSmvVal);
+        dest.writeDouble(DQmvVal);
+
     }
-
-
 
 }

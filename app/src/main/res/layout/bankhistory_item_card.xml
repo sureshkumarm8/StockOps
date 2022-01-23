@@ -23,8 +23,8 @@
 
             <TextView
                 android:id="@+id/tvTimeStamp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="60dp"
+                android:layout_height="22dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentBottom="true"
@@ -44,7 +44,7 @@
             <TextView
                 android:id="@+id/tvBidsHistory"
                 android:layout_width="68dp"
-                android:layout_height="match_parent"
+                android:layout_height="22dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="1dp"
@@ -60,7 +60,7 @@
             <TextView
                 android:id="@+id/tvOffersHistory"
                 android:layout_width="68dp"
-                android:layout_height="match_parent"
+                android:layout_height="22dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="1dp"
@@ -76,7 +76,7 @@
             <TextView
                 android:id="@+id/tvDelvPercent"
                 android:layout_width="50dp"
-                android:layout_height="match_parent"
+                android:layout_height="22dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="1dp"
@@ -92,7 +92,7 @@
             <TextView
                 android:id="@+id/tvVolHistory"
                 android:layout_width="68dp"
-                android:layout_height="match_parent"
+                android:layout_height="22dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="1dp"
@@ -108,7 +108,7 @@
             <TextView
                 android:id="@+id/tvDelvHistory"
                 android:layout_width="68dp"
-                android:layout_height="match_parent"
+                android:layout_height="22dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"

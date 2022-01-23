@@ -1,6 +1,7 @@
 package com.sureit.stockops.view;
 
 import android.app.Activity;
+import android.app.Service;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,6 +13,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.sureit.stockops.Util.StockDataRetrieveService;
 import com.sureit.stockops.data.BanksList;
 
 import org.json.JSONObject;
@@ -23,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PostVolleyJsonRequest {
+    private Service serviceStock;
     private String  type;
     private Activity act;
     private VolleyJsonRespondsListener volleyJsonRespondsListener;
@@ -33,6 +36,15 @@ public class PostVolleyJsonRequest {
     private List<BanksList> banksLists = new ArrayList<>();
     public PostVolleyJsonRequest(Activity act, VolleyJsonRespondsListener volleyJsonRespondsListener,String  type, String netnetworkUrl, String params) {
         this.act = act;
+        this.volleyJsonRespondsListener = volleyJsonRespondsListener;
+        this.type = type;
+        this.networkurl = netnetworkUrl;
+        this.params = params;
+        sendRequest();
+    }
+
+    public PostVolleyJsonRequest(StockDataRetrieveService serviceStock, VolleyJsonRespondsListener volleyJsonRespondsListener, String  type, String netnetworkUrl, String params) {
+        this.serviceStock = serviceStock;
         this.volleyJsonRespondsListener = volleyJsonRespondsListener;
         this.type = type;
         this.networkurl = netnetworkUrl;
@@ -94,9 +106,14 @@ public class PostVolleyJsonRequest {
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-            RequestQueue requestQueue = Volley.newRequestQueue(act);
-            requestQueue.add(stringRequest);
+        RequestQueue requestQueue;
+        if(act==null){
+            requestQueue = Volley.newRequestQueue(serviceStock);
+        }else{
+            requestQueue = Volley.newRequestQueue(act);
         }
+        requestQueue.add(stringRequest);
+    }
     }
 
 

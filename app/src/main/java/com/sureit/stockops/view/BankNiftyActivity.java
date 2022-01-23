@@ -1,6 +1,8 @@
 package com.sureit.stockops.view;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,14 +28,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sureit.stockops.R;
 import com.sureit.stockops.adapter.BankNiftyAdapter;
 import com.sureit.stockops.data.BankNiftyList;
+import com.sureit.stockops.data.BanksList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -136,22 +142,40 @@ public class BankNiftyActivity extends AppCompatActivity {
             }
         }
 
+//        Bundle bundle = getIntent().getExtras();
+//        bankNiftyLists = (ArrayList<BankNiftyList>) bundle.getSerializable("bankNiftyData");
+//        bankNiftyOIdata = (List<String>) bundle.getSerializable("bankNiftyOIdata");
 
-        Bundle bundle = getIntent().getExtras();
-        bankNiftyLists = (ArrayList<BankNiftyList>) bundle.getSerializable("bankNiftyData");
-        bankNiftyOIdata = (List<String>) bundle.getSerializable("bankNiftyOIdata");
+//        timeStampMain.setText(bankNiftyOIdata.get(0));
+//        strikePriceTVMain.setText(bankNiftyOIdata.get(1));
+//        totalVolumeCEMain.setText(bankNiftyOIdata.get(2));
+//        totalVolumePEMain.setText(bankNiftyOIdata.get(3));
+//        totalBuyQuantityCEMain.setText(bankNiftyOIdata.get(4));
+//        totalAskQuantityCEMain.setText(bankNiftyOIdata.get(5));
+//        totalBuyQuantityPEMain.setText(bankNiftyOIdata.get(6));
+//        totalAskQuantityPEMain.setText(bankNiftyOIdata.get(7));
+//        ceOpenInterestMain.setText(bankNiftyOIdata.get(8));
+//        peOpenInterestMain.setText(bankNiftyOIdata.get(9));
 
-        timeStampMain.setText(bankNiftyOIdata.get(0));
-        strikePriceTVMain.setText(bankNiftyOIdata.get(1));
-        totalVolumeCEMain.setText(bankNiftyOIdata.get(2));
-        totalVolumePEMain.setText(bankNiftyOIdata.get(3));
-        totalBuyQuantityCEMain.setText(bankNiftyOIdata.get(4));
-        totalAskQuantityCEMain.setText(bankNiftyOIdata.get(5));
-        totalBuyQuantityPEMain.setText(bankNiftyOIdata.get(6));
-        totalAskQuantityPEMain.setText(bankNiftyOIdata.get(7));
-        ceOpenInterestMain.setText(bankNiftyOIdata.get(8));
-        peOpenInterestMain.setText(bankNiftyOIdata.get(9));
-
+        @SuppressLint("WrongConstant")
+        SharedPreferences shOI = getSharedPreferences("NiftyOILiveDisplaySP", MODE_APPEND);
+        bankNiftyLists.clear();
+        Gson gson = new Gson();
+        String json = shOI.getString("bankNiftyData", "");
+        Type type = new TypeToken<List<BankNiftyList>>() {}.getType();
+        bankNiftyLists = gson.fromJson(json, type);
+        if(shOI.getString("timeStampValue","").length()>5) {
+            timeStampMain.setText(shOI.getString("timeStampValue", ""));
+            strikePriceTVMain.setText(shOI.getString("underlyingValue", ""));
+            totalVolumeCEMain.setText(shOI.getString("ceTotalTradedVolume", ""));
+            totalVolumePEMain.setText(shOI.getString("peTotalTradedVolume", ""));
+            totalBuyQuantityCEMain.setText(shOI.getString("ceTotalBuyQuantity", ""));
+            totalAskQuantityCEMain.setText(shOI.getString("ceTotalSellQuantity", ""));
+            totalBuyQuantityPEMain.setText(shOI.getString("peTotalBuyQuantity", ""));
+            totalAskQuantityPEMain.setText(shOI.getString("peTotalSellQuantity", ""));
+            ceOpenInterestMain.setText(shOI.getString("ceOpenInterest", ""));
+            peOpenInterestMain.setText(shOI.getString("peOpenInterest", ""));
+        }
         //sort the cards
         Collections.sort(bankNiftyLists, new Comparator<BankNiftyList>() {
             @Override
@@ -272,7 +296,8 @@ public class BankNiftyActivity extends AppCompatActivity {
                             ceOpenInterest += (int) ceBody.get("openInterest");
                             peOpenInterest += (int) peBody.get("openInterest");
 
-                            bankNiftyList = new BankNiftyList(ceBody.getString("identifier").substring(25,32),
+                            bankNiftyList = new BankNiftyList(timeStampValue.substring(12,17),
+                                    ceBody.getString("identifier").substring(25,32),
                                     ceBody.getLong("totalTradedVolume"),
                                     ceBody.getLong("totalBuyQuantity"),
                                     ceBody.getLong("totalSellQuantity"),
@@ -280,7 +305,8 @@ public class BankNiftyActivity extends AppCompatActivity {
                                     ceBody.getDouble("pchangeinOpenInterest")
                             );
                             bankNiftyLists.add(bankNiftyList);
-                            bankNiftyList = new BankNiftyList(peBody.getString("identifier").substring(25,32),
+                            bankNiftyList = new BankNiftyList(timeStampValue.substring(12,17),
+                                    peBody.getString("identifier").substring(25,32),
                                     peBody.getLong("totalTradedVolume"),
                                     peBody.getLong("totalBuyQuantity"),
                                     peBody.getLong("totalSellQuantity"),

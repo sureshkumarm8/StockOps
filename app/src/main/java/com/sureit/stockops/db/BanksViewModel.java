@@ -44,7 +44,7 @@ public class BanksViewModel extends AndroidViewModel {
 
     public List<BankNiftyList> getOIHistory(String Str) {
         BanksDatabase database = BanksDatabase.getInstance(this.getApplication());
-        return database.getBankNiftyCP().getBankNiftyHistory();
+        return database.getBankNiftyCP().getBankNiftyHistory(Str);
     }
 
 }

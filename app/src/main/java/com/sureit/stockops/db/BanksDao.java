@@ -24,9 +24,14 @@ public interface BanksDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void insertBankData(BanksList banksList);
 
-    @Query("Select * from banksDataDB where bankName LIKE :s ORDER BY quantityTradedsure DESC")
+    @Query("Select * from banksDataDB where bankName LIKE :s")
     public List<BanksList> getBankHistory(String s);
 
     @Query("Select * from banksDataDB ORDER BY `bankName` DESC")
     public List<BanksList> getAllNotesTitles();
+
+    @Query("DELETE FROM banksDataDB WHERE timeStamp NOT IN (SELECT MIN(timeStamp) FROM banksDataDB GROUP BY timeStamp, totalBuyQuantity,totalSellQuantity)")
+    void deleteDuplicates();
+
+
 }

@@ -8,18 +8,24 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sureit.stockops.R;
 import com.sureit.stockops.Util.Constants;
 import com.sureit.stockops.adapter.BankHistoryAdapter;
 import com.sureit.stockops.adapter.OIHistoryAdapter;
+import com.sureit.stockops.data.BankNiftyList;
 import com.sureit.stockops.data.BanksList;
 import com.sureit.stockops.db.BanksDao;
 import com.sureit.stockops.db.BanksDatabase;
 import com.sureit.stockops.db.BanksViewModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import am.appwise.components.ni.NoInternetDialog;
@@ -43,6 +49,9 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
     TextView buyqty;
     TextView sellqty;
     TextView underlyv;
+    private String getBankName;
+    private BanksViewModel viewModel;
+    private String allBanksName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +61,7 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
         banksDatabase = Room.databaseBuilder(this, BanksDatabase.class, DB_NAME)
                 .allowMainThreadQueries()   //Allows room to do operation on main thread
                 .build();
+        banksDao = BanksDatabase.getInstance(getApplicationContext()).getBanks();
 
         recycleViewBankHistory = findViewById(R.id.rVBankHistory);
         recycleViewBankHistory.setHasFixedSize(true);
@@ -68,21 +78,146 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
 
         Bundle data=getIntent().getExtras();
         assert data != null;
-        String getBankName = data.getString(Constants.PARCEL_KEY);
+        getBankName = data.getString(Constants.PARCEL_KEY);
         getSupportActionBar().setTitle(getBankName);
-        BanksViewModel viewModel = ViewModelProviders.of(this).get(BanksViewModel.class);
-        if(getBankName.equals("OI History")){
+        viewModel = ViewModelProviders.of(this).get(BanksViewModel.class);
+
+        final String[] banks = {"AUBANK", "RBLBANK", "BANDHANBNK", "FEDERALBNK", "IDFCFIRSTB", "PNB", "INDUSINDBK", "AXISBANK", "SBIN", "KOTAKBANK", "ICICIBANK", "HDFCBANK","All Banks"};
+
+        int position;
+        switch (getBankName) {
+            case "OI History":
+                ceoi.setText("CE OI");
+                peoi.setText("PE OI");
+                buyqty.setText("CE Vol");
+                sellqty.setText("PE Vol");
+                underlyv.setText("UnderlyV");
+                oiHistoryAdapter = new OIHistoryAdapter(viewModel.getOIHistory(getBankName), getApplicationContext());
+                recycleViewBankHistory.setAdapter(oiHistoryAdapter);
+                position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
+                recycleViewBankHistory.smoothScrollToPosition(position);
+                oiHistoryAdapter.notifyDataSetChanged();
+                break;
+
+            case "CE History":
+            case "PE History":
+                ceoi.setText("Bids");
+                peoi.setText("Offers");
+                buyqty.setText("Tot Vol");
+                sellqty.setText("OI");
+                underlyv.setText("UnderlyV");
+                oiHistoryAdapter = new OIHistoryAdapter(viewModel.getOIHistory(getBankName), getApplicationContext());
+                recycleViewBankHistory.setAdapter(oiHistoryAdapter);
+                position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
+                recycleViewBankHistory.smoothScrollToPosition(position);
+                oiHistoryAdapter.notifyDataSetChanged();
+                break;
+
+            default:
+                if(Arrays.asList(banks).contains(getBankName)) {
+                    adapterHistory = new BankHistoryAdapter(viewModel.getBanksHistory(getBankName), getApplicationContext());
+                    recycleViewBankHistory.setAdapter(adapterHistory);
+                    position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
+                    recycleViewBankHistory.smoothScrollToPosition(position);
+                    adapterHistory.notifyDataSetChanged();
+                }else if(getBankName.contains("CE") || getBankName.contains("CE")){
+                    ceoi.setText("Bids");
+                    peoi.setText("Offers");
+                    buyqty.setText("Tot Vol");
+                    sellqty.setText("OI");
+                    underlyv.setText("oiC%");
+                    oiHistoryAdapter = new OIHistoryAdapter(viewModel.getOIHistory(getBankName), getApplicationContext());
+                    recycleViewBankHistory.setAdapter(oiHistoryAdapter);
+                    position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
+                    recycleViewBankHistory.smoothScrollToPosition(position);
+                    oiHistoryAdapter.notifyDataSetChanged();
+                }
+                break;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.mins_history_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { switch(item.getItemId()) {
+
+        case R.id.mvVal:
+            getBankName = getBankName+"mval";
+            filterByMins(1);
+            return(true);
+
+        case R.id.min1:
+            filterByMins(1);
+            return(true);
+        case R.id.min5:
+            filterByMins(5);
+            return(true);
+        case R.id.min10:
+            filterByMins(10);
+            return(true);
+        case R.id.min15:
+            filterByMins(15);
+            return(true);
+    }
+        return(super.onOptionsItemSelected(item));
+    }
+
+    public void filterByMins(int min_filter){
+        if(getBankName.equals("OI Historymval") || getBankName.equals("CE Historymval") || getBankName.equals("PE Historymval")){
             ceoi.setText("CE OI");
             peoi.setText("PE OI");
             buyqty.setText("CE Vol");
             sellqty.setText("PE Vol");
             underlyv.setText("UnderlyV");
-            oiHistoryAdapter = new OIHistoryAdapter(viewModel.getOIHistory(getBankName),getApplicationContext());
+
+            List<BankNiftyList> oiHistoryFiltered = viewModel.getOIHistory(getBankName);
+            List<BankNiftyList> oiHistoryFilteredNew = new ArrayList<>();
+            for(int i=0; i<oiHistoryFiltered.size(); i++){
+                if(i % min_filter == 0)
+                    oiHistoryFilteredNew.add(oiHistoryFiltered.get(i));
+            }
+
+            oiHistoryAdapter = new OIHistoryAdapter(oiHistoryFilteredNew,getApplicationContext());
             recycleViewBankHistory.setAdapter(oiHistoryAdapter);
+            int position = recycleViewBankHistory.getAdapter().getItemCount()-1;
+            recycleViewBankHistory.smoothScrollToPosition(position);
             oiHistoryAdapter.notifyDataSetChanged();
-        }else {
-            adapterHistory = new BankHistoryAdapter(viewModel.getBanksHistory(getBankName), getApplicationContext());
+        }else if(getBankName.contains("CE") || getBankName.contains("PE") && !getBankName.contains("History")){
+            ceoi.setText("Bids");
+            peoi.setText("Offers");
+            buyqty.setText("Vol");
+            sellqty.setText("OI");
+            underlyv.setText("oiC%");
+
+            List<BankNiftyList> oiHistoryFiltered = viewModel.getOIHistory(getBankName);
+            List<BankNiftyList> oiHistoryFilteredNew = new ArrayList<>();
+            for(int i=0; i<oiHistoryFiltered.size(); i++){
+                if(i % min_filter == 0)
+                    oiHistoryFilteredNew.add(oiHistoryFiltered.get(i));
+            }
+
+            oiHistoryAdapter = new OIHistoryAdapter(oiHistoryFilteredNew,getApplicationContext());
+            recycleViewBankHistory.setAdapter(oiHistoryAdapter);
+            int position = recycleViewBankHistory.getAdapter().getItemCount()-1;
+            recycleViewBankHistory.smoothScrollToPosition(position);
+            oiHistoryAdapter.notifyDataSetChanged();
+        } else {
+
+            List<BanksList> banksHistoryFiltered = viewModel.getBanksHistory(getBankName);
+            List<BanksList> banksHistoryFilteredNew = new ArrayList<>();
+            for(int i=0; i<banksHistoryFiltered.size(); i++){
+                if(i % min_filter == 0)
+                    banksHistoryFilteredNew.add(banksHistoryFiltered.get(i));
+            }
+
+            adapterHistory = new BankHistoryAdapter(banksHistoryFilteredNew, getApplicationContext());
             recycleViewBankHistory.setAdapter(adapterHistory);
+            int position = recycleViewBankHistory.getAdapter().getItemCount()-1;
+            recycleViewBankHistory.smoothScrollToPosition(position);
             adapterHistory.notifyDataSetChanged();
         }
     }

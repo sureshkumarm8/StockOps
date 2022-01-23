@@ -37,29 +37,46 @@ public class OIHistoryAdapter extends RecyclerView.Adapter<OIHistoryAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         final BankNiftyList banksList = bankNiftyLists.get(position);
-
-        holder.timeStampTV.setText(banksList.getTimestamp());
-        holder.bidsHistory.setText(String.valueOf(banksList.getCalloi()));
-        holder.offersHistory.setText(String.valueOf(banksList.getPutoi()));
-        holder.delvPercent.setText(String.valueOf(banksList.getBntotalbuyquantity()));
-        holder.volHistory.setText(String.valueOf(banksList.getBntotalsellquantity()));
-        holder.delvHistory.setText(String.valueOf(banksList.getUnderlyvalue()));
-
+        if(banksList.getOiname().contains("mval")){
+            holder.timeStampTV.setText(banksList.getTimestamp());
+            holder.bidsHistory.setText(String.valueOf(banksList.getNBQmvVal()));
+            holder.offersHistory.setText(String.valueOf(banksList.getNSQmvVal()));
+            holder.delvPercent.setText(String.valueOf(banksList.getNVOLmvVal()));
+            holder.volHistory.setText(String.valueOf(banksList.getNOImvVal()));
+            holder.delvHistory.setText(String.valueOf(banksList.getUnderlyvalue()));
+        }else {
+            holder.timeStampTV.setText(banksList.getTimestamp());
+            holder.bidsHistory.setText(String.valueOf(banksList.getCalloi()));
+            holder.offersHistory.setText(String.valueOf(banksList.getPutoi()));
+            holder.delvPercent.setText(String.valueOf(banksList.getBntotalbuyquantity()));
+            holder.volHistory.setText(String.valueOf(banksList.getBntotalsellquantity()));
+            holder.delvHistory.setText(String.valueOf(banksList.getUnderlyvalue()));
+        }
         //set color for bullish or bearish
         if(position>=1){
             BankNiftyList banksList_1 = bankNiftyLists.get(position - 1);
-            if(banksList.getBntotalsellquantity()<banksList_1.getBntotalsellquantity()){
+
+            if(banksList.getCalloi()==banksList_1.getCalloi()){
+                holder.bidsHistory.setBackgroundColor(Color.WHITE);
+            }
+            else if(banksList.getCalloi()<banksList_1.getCalloi()){
                 holder.bidsHistory.setBackgroundColor(Color.GREEN);
             }else {holder.bidsHistory.setBackgroundColor(Color.RED);}
-            if(banksList.getUnderlyvalue()>banksList_1.getUnderlyvalue()){
+
+            if(banksList.getPutoi()==banksList_1.getPutoi()){
+                holder.offersHistory.setBackgroundColor(Color.WHITE);
+            }
+            else if(banksList.getPutoi()>banksList_1.getPutoi()){
                 holder.offersHistory.setBackgroundColor(Color.GREEN);
             }else {holder.offersHistory.setBackgroundColor(Color.RED);}
-            if(banksList.getCalloi()==banksList_1.getCalloi()){
-                holder.delvPercent.setBackgroundColor(Color.WHITE);
+
+            if(banksList.getCalloi()<banksList_1.getCalloi() && banksList.getPutoi()>banksList_1.getPutoi()){
+                holder.delvHistory.setBackgroundColor(Color.GREEN);
+            }else if(banksList.getCalloi()>banksList_1.getCalloi() && banksList.getPutoi()<banksList_1.getPutoi()){
+                holder.delvHistory.setBackgroundColor(Color.RED);
+            }else{
+                holder.delvHistory.setBackgroundColor(Color.WHITE);
             }
-            else if(banksList.getCalloi()<banksList_1.getCalloi()) {
-                holder.delvPercent.setBackgroundColor(Color.GREEN);
-            }else {holder.delvPercent.setBackgroundColor(Color.RED);}
         }
     }
 
@@ -75,7 +92,6 @@ public class OIHistoryAdapter extends RecyclerView.Adapter<OIHistoryAdapter.View
         TextView volHistory;
         TextView delvHistory;
         TextView delvPercent;
-
 
         ViewHolder(View itemView) {
             super(itemView);

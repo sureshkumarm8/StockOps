@@ -24,8 +24,8 @@ public interface BankNiftyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void insertBankNiftyData(BankNiftyList bankNiftyList);
 
-    @Query("Select * from bankNiftyDB")
-    public List<BankNiftyList> getBankNiftyHistory();
+    @Query("Select * from bankNiftyDB where oiname LIKE :s")
+    public List<BankNiftyList> getBankNiftyHistory(String s);
 
     @Query("Select * from bankNiftyDB ORDER BY timestamp DESC")
     public List<BankNiftyList> getAllNotesTitles();
