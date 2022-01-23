@@ -1252,12 +1252,19 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         movementTrackingNifty("OI History");
         movementTrackingNifty("CE History");
         movementTrackingNifty("PE History");
-
-        int underlyingValue = Integer.parseInt(shOI.getString("underlyingValue", ""));
-        for(int i=1; i<8; i++){
-            movementTrackingNifty("CE"+underlyingValue);
-            movementTrackingNifty("PE"+underlyingValue);
+        try {
+            String underlyingValue1 = shOI.getString("underlyingValue", "").substring(0, 5);
+            int underlyingValue = Integer.parseInt(underlyingValue1)/100;
+            underlyingValue = underlyingValue*100;
+            for (int i = 1; i < 8; i++) {
+                movementTrackingNifty("CE" + underlyingValue);
+                movementTrackingNifty("PE" + underlyingValue);
+                underlyingValue = underlyingValue+100;
+            }
+        } catch (Exception e) {
+            Log.v("underlyingValue to int", e.getMessage());
         }
+
     }
 
     private void movementTrackingBanks(String bankName) {
