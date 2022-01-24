@@ -21,6 +21,8 @@ public class Constants {
     public static final String REVIEW_SEG = "/reviews?api_key=";
     public static final String TRAILER_SEG = "/videos?api_key=";
     public static  boolean FAV_ROT = false;
+    public static double mValConst = 0.0;
+
 
 
 }

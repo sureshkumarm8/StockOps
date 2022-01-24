@@ -174,6 +174,24 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
         Toast.makeText(this, "Service destroyed by user.", Toast.LENGTH_LONG).show();
     }
 
+    private void downloadBankNiftyULFromMAC_FTP() {
+
+        /*
+        1. Start FTP server :  http-server ./ -p 1313
+        2. Strart Node js: suresh@Suresh:~/Desktop/Suresh/Stock/stock-market-india$node app.js 3000
+        3. Run Screipt: suresh@Suresh:~/Desktop/Suresh/Stock/liveQuotesData$sh banksLiveQuotes.sh
+        https://github.com/maanavshah/stock-market-india
+        */
+        deleteCache(this);
+        try {
+            new PostVolleyJsonRequest(StockDataRetrieveService.this, StockDataRetrieveService.this,
+                    "BankNiftyUL", URL_MacFTPServer_BankNiftyOIData+"UL", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private void downloadBanksLiveDataFromMAC_FTP() {
 
         /*
@@ -337,7 +355,7 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
                 Log.e(LOG_TAG, e.getMessage(), e);
             }
 
-        } else {
+        }else {
             long totalBuyQuantity = 0;
             long totalSellQuantity = 0;
             long tradedVolume = 0;
@@ -494,7 +512,7 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
                     Log.d("service is ","running");
                     String start = "09:15";
                     Date marketOpen=null;
-                    String limit = "15:17";
+                    String limit = "15:45";
                     Date marketClose=null;
                     Date now = null;
                     SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm");

@@ -92,7 +92,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
     public static final String URL_BanksTradeInfo = "https://www.nseindia.com/api/quote-equity?symbol=";
     public static final String URL_NSE = "https://www.nseindia.com/";
     public static String URL_MacFTPServer_BanksLiveData = "http://192.168.43.251:1313/Desktop/Suresh/Stock/liveQuotesData/banksData";
-    public static String URL_MacFTPServer_BankNiftyOIData = "http://192.168.43.251:1313/Desktop/Suresh/Stock/liveQuotesData/bankNifty.json";
+    public static String URL_MacFTPServer_BankNiftyOIData = "http://192.168.43.251:1313/Desktop/Suresh/Stock/liveQuotesData/bankNifty";
     final Map<String, String> headers = new HashMap<String, String>();
     public String cookiedata;
     private int ceTotalTradedVolume;
@@ -328,6 +328,52 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         mHandler.postDelayed(mRunnableTask, (5 * 1000));
     }
 
+    private int minsCount=0;
+    Runnable mRunnableTask = new Runnable() {
+        @Override
+        public void run() {
+//            checkNseUrl(URL_NSE);
+//            loadBankNiftyUrlData(URL_BankNifty);
+//            loadBanksTradeInfo();
+            progressDialogFTP.dismiss();
+            bankNiftyLists.clear();
+            banksLists.clear();
+            String start = "09:15";
+            Date marketOpen=null;
+            String limit = "15:45";
+            Date marketClose=null;
+            Date now = null;
+            SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm");
+            String currentTime = dateFormat.format(new Date()).toString();
+            try {
+                marketOpen = dateFormat.parse(start);
+                marketClose = dateFormat.parse(limit);
+                now = dateFormat.parse(currentTime);
+                if (now.after(marketClose)||now.before(marketOpen)){
+                    mHandler.removeCallbacksAndMessages(null);
+                    liveDisplayUI();
+                }else{
+//                    downloadBanksLiveDataFromMAC_FTP();
+                    progressDialogFTP = new ProgressDialog(BanksListActivity.this);
+                    progressDialogFTP.setMessage("Refreshing latest data from FTP ...");
+                    progressDialogFTP.show();
+                    liveDisplayUI();
+                    minsCount++;
+                    if(minsCount == 5){
+                        mvlForBankNifty();
+                        downloadBankNiftyOIDataFromMAC_FTP();
+                        minsCount=0;
+                    }
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            // this will repeat this task again at specified time interval
+            mHandler.postDelayed(this, (60 * 1000));
+        }
+    };
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.sort_settings, menu);
@@ -338,6 +384,10 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+
+            case R.id.mvValLoad:
+                movementTrackingAddAllMissed();
+                return true;
 
             case R.id.newIP:
                 item.setChecked(true);
@@ -375,6 +425,23 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         }
     }
 
+    private void downloadBankNiftyULFromMAC_FTP() {
+
+        /*
+        1. Start FTP server :  http-server ./ -p 1313
+        2. Strart Node js: suresh@Suresh:~/Desktop/Suresh/Stock/stock-market-india$node app.js 3000
+        3. Run Screipt: suresh@Suresh:~/Desktop/Suresh/Stock/liveQuotesData$sh banksLiveQuotes.sh
+        https://github.com/maanavshah/stock-market-india
+        */
+        deleteCache(this);
+        try {
+            new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this, "BankNiftyUL", URL_MacFTPServer_BankNiftyOIData+"UL.json", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private void downloadBanksLiveDataFromMAC_FTP() {
 
         /*
@@ -410,7 +477,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         deleteCache(this);
         progressDialogFTP.show();
         try {
-            new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this,"BankNifty", URL_MacFTPServer_BankNiftyOIData, null);
+            new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this,"BankNifty", URL_MacFTPServer_BankNiftyOIData+".json", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -671,53 +738,6 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             }
         });
     }
-
-    private int minsCount=0;
-    Runnable mRunnableTask = new Runnable() {
-        @Override
-        public void run() {
-//            checkNseUrl(URL_NSE);
-//            loadBankNiftyUrlData(URL_BankNifty);
-//            loadBanksTradeInfo();
-            progressDialogFTP.dismiss();
-            bankNiftyLists.clear();
-            banksLists.clear();
-            String start = "09:15";
-            Date marketOpen=null;
-            String limit = "15:17";
-            Date marketClose=null;
-            Date now = null;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm");
-            String currentTime = dateFormat.format(new Date()).toString();
-            try {
-                marketOpen = dateFormat.parse(start);
-                marketClose = dateFormat.parse(limit);
-                now = dateFormat.parse(currentTime);
-                if (now.after(marketClose)||now.before(marketOpen)){
-                    mHandler.removeCallbacksAndMessages(null);
-                    liveDisplayUI();
-                }else{
-//                    downloadBanksLiveDataFromMAC_FTP();
-                    progressDialogFTP = new ProgressDialog(BanksListActivity.this);
-                    progressDialogFTP.setMessage("Refreshing latest data from FTP ...");
-                    progressDialogFTP.show();
-                    liveDisplayUI();
-                    minsCount++;
-                    if(minsCount == 5){
-                        downloadBankNiftyOIDataFromMAC_FTP();
-                        minsCount=0;
-                    }
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            // this will repeat this task again at specified time interval
-            mHandler.postDelayed(this, (60 * 1000));
-        }
-    };
-
-
     @Override
     public void onSuccessJson(String response, String type) {
 //        if(type.equals("StrikePrice")){
@@ -1248,23 +1268,28 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                 ceOpenInterestBanks.setText(shOI.getString("ceOpenInterest", ""));
                 peOpenInterestBanks.setText(shOI.getString("peOpenInterest", ""));
             }
+//        mvlForBankNifty();
+    }
 
+    private void mvlForBankNifty() {
         movementTrackingNifty("OI History");
         movementTrackingNifty("CE History");
         movementTrackingNifty("PE History");
         try {
-            String underlyingValue1 = shOI.getString("underlyingValue", "").substring(0, 5);
+            @SuppressLint("WrongConstant") SharedPreferences shUl = getSharedPreferences("NiftyOILiveDisplaySP", MODE_APPEND);
+            String underlyingValue1 = shUl.getString("underlyingValue", "").substring(0, 5);
             int underlyingValue = Integer.parseInt(underlyingValue1)/100;
-            underlyingValue = underlyingValue*100;
+            int underlyingValueCE = underlyingValue * 100;
+            int underlyingValuePE = underlyingValueCE - 700;
             for (int i = 1; i < 8; i++) {
-                movementTrackingNifty("CE" + underlyingValue);
-                movementTrackingNifty("PE" + underlyingValue);
-                underlyingValue = underlyingValue+100;
+                movementTrackingNifty("CE" + underlyingValueCE);
+                movementTrackingNifty("PE" + underlyingValuePE);
+                underlyingValueCE += 100;
+                underlyingValuePE += 100;
             }
         } catch (Exception e) {
             Log.v("underlyingValue to int", e.getMessage());
         }
-
     }
 
     private void movementTrackingBanks(String bankName) {
@@ -1276,8 +1301,8 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             List<BanksList> banksHistoryPrev = viewModel.getBanksHistory(bankName);
             int bankHisLen = banksHistoryPrev.size();
             if (bankHisLen > 1) {
-                curBanksList = banksHistoryPrev.get(bankHisLen);
-                prevBanksList = banksHistoryPrev.get(bankHisLen - 1);
+                curBanksList = banksHistoryPrev.get(bankHisLen - 1);
+                prevBanksList = banksHistoryPrev.get(bankHisLen - 2);
                 addmValDataBanks(bankName, curBanksList, prevBanksList);
             } else {
                 curBanksList = banksHistoryPrev.get(0);
@@ -1307,7 +1332,8 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             if(prevVal==0.0){
                 return 0.0;
             }else {
-                double mValD = curVal / prevVal;
+                DecimalFormat df = new DecimalFormat("0.000");
+                double mValD = Double.parseDouble(df.format(curVal / prevVal));
                 Log.v("mValDoubles", String.valueOf(mValD));
                 return mValD;
             }
@@ -1325,8 +1351,8 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             List<BankNiftyList> banksHistoryPrev = viewModel.getOIHistory(oiName);
             int bankHisLen = banksHistoryPrev.size();
             if (bankHisLen > 1) {
-                curNiftyList = banksHistoryPrev.get(bankHisLen);
-                prevNiftyList = banksHistoryPrev.get(bankHisLen - 1);
+                curNiftyList = banksHistoryPrev.get(bankHisLen - 1);
+                prevNiftyList = banksHistoryPrev.get(bankHisLen - 2);
                 addmValDataNifty(oiName, curNiftyList, prevNiftyList);
             } else {
                 curNiftyList = banksHistoryPrev.get(0);
@@ -1345,9 +1371,83 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         double mValDQ = getmVal (curNiftyList.getBntotalsellquantity() , prevNiftyList.getBntotalsellquantity());
         double mValDP = getmVal(curNiftyList.getUnderlyvalue() , prevNiftyList.getUnderlyvalue());
 
+
+
         bankNiftyList = new BankNiftyList(curNiftyList.getTimestamp(),oiName+"mval", curNiftyList.getCalloi(),
                 mValTBQ, mValTSQ,mVAlQTS,mValDQ,mValDP);
         bankNiftyDao.insertBankNiftyData(bankNiftyList);
+    }
+
+    private void movementTrackingAddAllMissed() {
+
+        ProgressDialog progressDialogFTP = new ProgressDialog(BanksListActivity.this);
+        progressDialogFTP.setMessage("Adding missed mVal for All Banks & OIC ...");
+        progressDialogFTP.show();
+
+        BankNiftyList curNiftyList = null;
+        BankNiftyList prevNiftyList = null;
+        BanksList curBanksList = null;
+        BanksList prevBanksList = null;
+
+        final String[] banks = {"All Banks", "AUBANK", "RBLBANK", "BANDHANBNK", "FEDERALBNK", "IDFCFIRSTB", "PNB", "INDUSINDBK", "AXISBANK", "SBIN", "KOTAKBANK", "ICICIBANK", "HDFCBANK"};
+        try {
+            for (String bankName : banks) {
+                List<BanksList> banksHistoryPrev = viewModel.getBanksHistory(bankName);
+                int bankHisLen = banksHistoryPrev.size();
+                if (bankHisLen > 1) {
+                    for (int i = bankHisLen; i > 0; i--) {
+                        curBanksList = banksHistoryPrev.get(bankHisLen - 1);
+                        prevBanksList = banksHistoryPrev.get(bankHisLen - 2);
+                        addmValDataBanks(banks[i], curBanksList, prevBanksList);
+                    }
+                } else {
+                    curBanksList = banksHistoryPrev.get(0);
+                    prevBanksList = banksHistoryPrev.get(0);
+                    addmValDataBanks(bankName, curBanksList, prevBanksList);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        @SuppressLint("WrongConstant") SharedPreferences shUl = getSharedPreferences("NiftyOILiveDisplaySP", MODE_APPEND);
+        String underlyingValue1 = shUl.getString("underlyingValue", "").substring(0, 5);
+        int underlyingValue = Integer.parseInt(underlyingValue1) / 100;
+        int underlyingValueCE = underlyingValue * 100;
+        int underlyingValuePE = underlyingValueCE - 700;
+        final List<String> OIChain = new ArrayList<>();
+        OIChain.add("OI History");
+        OIChain.add("CE History");
+        OIChain.add("PE History");
+        for (int i = 1; i < 8; i++) {
+            OIChain.add("CE" + underlyingValueCE);
+            OIChain.add("PE" + underlyingValuePE);
+            underlyingValueCE += 100;
+            underlyingValuePE += 100;
+        }
+
+        for (String oiName : OIChain) {
+        try {
+            List<BankNiftyList> banksHistoryPrev = viewModel.getOIHistory(oiName);
+            int bankHisLen = banksHistoryPrev.size();
+            if (bankHisLen > 1) {
+                for (int i = bankHisLen; i > 0; i--) {
+                    curNiftyList = banksHistoryPrev.get(bankHisLen - 1);
+                    prevNiftyList = banksHistoryPrev.get(bankHisLen - 2);
+                    addmValDataNifty(oiName, curNiftyList, prevNiftyList);
+                }
+            } else {
+                curNiftyList = banksHistoryPrev.get(0);
+                prevNiftyList = banksHistoryPrev.get(0);
+                addmValDataNifty(oiName, curNiftyList, prevNiftyList);
+            }
+        } catch (Exception e) {
+            Log.v("movementTrackingBanks", e.getMessage());
+        }
+    }
+
+        progressDialogFTP.dismiss();
+
     }
 
 }
