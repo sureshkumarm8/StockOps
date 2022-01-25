@@ -747,7 +747,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                 timeStampValue = recordDetails.get("timestamp").toString();
                 underlyingValue = recordDetails.getDouble("underlyingValue");
                 int ulValue = underlyingValue.intValue();
-                for (int i = 35; i < 86; i++) {
+                for (int i = 0; i < filteredDataArray.length(); i++) {
                     JSONObject jo = filteredDataArray.getJSONObject(i);
 
                     Double strikePrice = null;
