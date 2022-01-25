@@ -1,0 +1,105 @@
+downloadFromMAC_FTP
+
+1. Start FTP server :  http-server ./ -p 1313
+2. Strart Node js:  cd Desktop/Suresh/Stock/stock-market-india$node app.js 3000
+3. Run Screipts: suresh@Suresh:~/Desktop/Suresh/Stock/liveQuotesData$python3 bankNiftydata.py  suresh@Suresh:~/Desktop/Suresh/Stock/liveQuotesData$sh banksLiveQuotes.sh  cd Desktop/Suresh/Stock/liveQuotesData   sh 1minUpdates.sh cd Desktop/Suresh/Stock/liveQuotesData sh 5minBankNIftyUpdates.sh
+
+
+How it works:
+1. Start - http-server ./ -p 1313
+2. Start - node app.js 3000
+3. run sh 1minUpdates.sh - sh banksLiveQuotes.sh - python3 appendAllBanks.py - python3 bankNiftydata.py
+
+
+banksLiveQuotes.sh: 
+wget -O bankNiftyUL.json http://localhost:3000/nse/get_indices
+wget -O banksData1.json http://localhost:3000/nse/get_quote_info?companyName=HDFCBANK,ICICIBANK,KOTAKBANK,SBIN
+wget -O banksData2.json http://localhost:3000/nse/get_quote_info?companyName=AXISBANK,INDUSINDBK,PNB,IDFCFIRSTB
+wget -O banksData3.json http://localhost:3000/nse/get_quote_info?companyName=FEDERALBNK,BANDHANBNK,RBLBANK,AUBANK
+timestamp() {
+date +"%T" # current time
+}
+echo "Download Completed...."
+timestamp
+
+appendAllBanks.py:
+import json
+
+# function to add to JSON
+def write_json(new_data, filename='banksData1.json'):
+with open(filename,'r+') as file:
+# First we load existing data into a dict.
+file_data = json.load(file)
+# Join new_data with file_data inside emp_details
+file_data["data"].append(new_data)
+# Sets file's current position at offset.
+file.seek(0)
+# convert back to json.
+json.dump(file_data, file, indent = 4)
+
+f = open('banksData2.json',)
+data = json.load(f)
+for i in data['data']:
+write_json(i)
+
+f = open('banksData3.json',)
+data = json.load(f)
+for i in data['data']:
+write_json(i)
+
+# Opening JSON file
+f = open('bankNiftyUL.json',)
+data = json.load(f)
+for i in data['data'][3:4]:
+write_json(i)
+
+# Closing file
+f.close()
+
+
+
+bankNiftydata.py:
+import json
+from jugaad_data.nse import NSELive 
+
+n = NSELive()
+print ("Bank Nifty Data Downloading....... ")
+option_chain = n.index_option_chain("BANKNIFTY")
+with open("bankNifty.json", "w") as outfile:
+# data=json.load(option_chain)
+
+try:
+if option_chain['records']["expiryDates"]:
+del option_chain['records']["expiryDates"]
+del option_chain['records']['data']
+del option_chain['records']['strikePrices']
+del option_chain['records']['index']
+del option_chain['filtered']['CE']
+del option_chain['filtered']['PE']
+del option_chain['filtered']['data'][:55]
+del option_chain['filtered']['data'][-55:]
+# print (data)
+except KeyError:
+print ("Key doesn't exist")
+json.dump(option_chain, outfile)
+
+print ("Success !")    
+
+
+
+
+Links:
+API’s for stocks Live sever
+https://github.com/maanavshah/stock-market-india
+
+Pyhton Scripts 
+best as of now > we can download to MAC then FTP to app
+https://github.com/jugaad-py/jugaad-data
+https://marketsetup.in/documentation/jugaad-data/live/#live-index-option-chain
+
+Nse Python
+https://nsetools.readthedocs.io/en/latest/usage.html
+https://nsepy.xyz/
+
+Github token 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
+

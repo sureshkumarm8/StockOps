@@ -186,11 +186,13 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
                     oiHistoryFilteredNew.add(oiHistoryFiltered.get(i));
             }
 
+            if (oiHistoryFilteredNew.size() > 0) {
             oiHistoryAdapter = new OIHistoryAdapter(oiHistoryFilteredNew, getApplicationContext());
             recycleViewBankHistory.setAdapter(oiHistoryAdapter);
             int position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
             recycleViewBankHistory.smoothScrollToPosition(position);
             oiHistoryAdapter.notifyDataSetChanged();
+            }
         } else if (getBankName.equals("CE Historymval") || getBankName.equals("PE Historymval")) {
             ceoi.setText("Bids");
             peoi.setText("Offers");

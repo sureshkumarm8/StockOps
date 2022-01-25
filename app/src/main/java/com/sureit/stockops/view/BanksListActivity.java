@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -25,6 +26,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -91,8 +93,8 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
     public static final String URL_BankNifty = "https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY";
     public static final String URL_BanksTradeInfo = "https://www.nseindia.com/api/quote-equity?symbol=";
     public static final String URL_NSE = "https://www.nseindia.com/";
-    public static String URL_MacFTPServer_BanksLiveData = "http://192.168.43.251:1313/Desktop/Suresh/Stock/liveQuotesData/banksData";
-    public static String URL_MacFTPServer_BankNiftyOIData = "http://192.168.43.251:1313/Desktop/Suresh/Stock/liveQuotesData/bankNifty";
+    public static String URL_MacFTPServer_BanksLiveData = "http://192.168.43.251:1313/Desktop/Suresh/Stock/liveQuotesData/banksData1.json";
+    public static String URL_MacFTPServer_BankNiftyOIData = "http://192.168.43.251:1313/Desktop/Suresh/Stock/liveQuotesData/bankNifty.json";
     final Map<String, String> headers = new HashMap<String, String>();
     public String cookiedata;
     private int ceTotalTradedVolume;
@@ -143,10 +145,12 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
     private BanksViewModel viewModel;
 
 
+    @SuppressLint("InvalidWakeLockTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bankslist);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         bankNiftyLists = new ArrayList<>();
         banksLists = new ArrayList<>();
@@ -340,7 +344,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             banksLists.clear();
             String start = "09:15";
             Date marketOpen=null;
-            String limit = "15:45";
+            String limit = "15:40";
             Date marketClose=null;
             Date now = null;
             SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm");
@@ -361,7 +365,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                     minsCount++;
                     if(minsCount == 5){
                         mvlForBankNifty();
-                        downloadBankNiftyOIDataFromMAC_FTP();
+//                        downloadBankNiftyOIDataFromMAC_FTP();
                         minsCount=0;
                     }
                 }
@@ -425,23 +429,6 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         }
     }
 
-    private void downloadBankNiftyULFromMAC_FTP() {
-
-        /*
-        1. Start FTP server :  http-server ./ -p 1313
-        2. Strart Node js: suresh@Suresh:~/Desktop/Suresh/Stock/stock-market-india$node app.js 3000
-        3. Run Screipt: suresh@Suresh:~/Desktop/Suresh/Stock/liveQuotesData$sh banksLiveQuotes.sh
-        https://github.com/maanavshah/stock-market-india
-        */
-        deleteCache(this);
-        try {
-            new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this, "BankNiftyUL", URL_MacFTPServer_BankNiftyOIData+"UL.json", null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
     private void downloadBanksLiveDataFromMAC_FTP() {
 
         /*
@@ -457,9 +444,9 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         macFTPfile = true;
         progressDialogFTP.show();
         try {
-            for(int i=1; i<= 3; i++){
-                new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this,"Banks", URL_MacFTPServer_BanksLiveData +i+".json", null);
-            }
+//            for(int i=1; i<= 3; i++){
+                new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this,"Banks", URL_MacFTPServer_BanksLiveData, null);
+//            }
 //            new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this,"StrikePrice", URL_MacFTPServer_BanksLiveData +"StrikeP.json", null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -477,7 +464,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         deleteCache(this);
         progressDialogFTP.show();
         try {
-            new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this,"BankNifty", URL_MacFTPServer_BankNiftyOIData+".json", null);
+            new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this,"BankNifty", URL_MacFTPServer_BankNiftyOIData, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -711,7 +698,6 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
     @Override
     protected void onPause() {
         super.onPause();
-
     }
 
     @Override
@@ -981,6 +967,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             }
 //        }
         }
+        liveDisplayUI();
     }
 
     private void setSentimentColorsBanksTotal() {
@@ -1214,6 +1201,20 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
     public void liveDisplayUI(){
         banksLists.clear();
 
+        SharedPreferences shOI = getSharedPreferences("NiftyOILiveDisplaySP", MODE_APPEND);
+        if(shOI.getString("timeStampValue","").length()>5) {
+            timeStampBanks.setText(shOI.getString("timeStampValue", ""));
+            strikePriceTVBanks.setText(shOI.getString("underlyingValue", ""));
+            totalVolumeCEBanks.setText(shOI.getString("ceTotalTradedVolume", ""));
+            totalVolumePEBanks.setText(shOI.getString("peTotalTradedVolume", ""));
+            totalBuyQuantityCEBanks.setText(shOI.getString("ceTotalBuyQuantity", ""));
+            totalAskQuantityCEBanks.setText(shOI.getString("ceTotalSellQuantity", ""));
+            totalBuyQuantityPEBanks.setText(shOI.getString("peTotalBuyQuantity", ""));
+            totalAskQuantityPEBanks.setText(shOI.getString("peTotalSellQuantity", ""));
+            ceOpenInterestBanks.setText(shOI.getString("ceOpenInterest", ""));
+            peOpenInterestBanks.setText(shOI.getString("peOpenInterest", ""));
+        }
+
         movementTrackingBanks("All Banks");
         final String[] banks = {"AUBANK", "RBLBANK", "BANDHANBNK", "FEDERALBNK", "IDFCFIRSTB", "PNB", "INDUSINDBK", "AXISBANK", "SBIN", "KOTAKBANK", "ICICIBANK", "HDFCBANK"};
         try {
@@ -1238,9 +1239,10 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                 totalBuyQuantityCEAllTV.setText(sh.getString("allBanksBuyQuantity", ""));
                 totalAskQuantityPEAllTV.setText(sh.getString("allBanksSellQuantity", ""));
                 totalTradedAllTV.setText(sh.getString("allBanksQuantityTraded", ""));
-                totalDeliveryAllTV.setText(sh.getString("allBanksDeliveryQuantity", ""));
+                totalDeliveryAllTV.setText(sh.getString("underlyingValue", ""));
                 allBanksDeliveryPercent = sh.getFloat("allBanksDeliveryPercent", 0);
                 totalDeliveryAllPCTV.setText(df.format(allBanksDeliveryPercent / 12) + "%");
+                strikePriceTVBanks.setText(sh.getString("underlyingValue", ""));
                 setSentimentColorsOI("OI History");
                 setSentimentColorsOI("CE History");
                 setSentimentColorsOI("PE History");
@@ -1255,19 +1257,6 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             }
         }
 
-            SharedPreferences shOI = getSharedPreferences("NiftyOILiveDisplaySP", MODE_APPEND);
-            if(shOI.getString("timeStampValue","").length()>5) {
-                timeStampBanks.setText(shOI.getString("timeStampValue", ""));
-                strikePriceTVBanks.setText(shOI.getString("underlyingValue", ""));
-                totalVolumeCEBanks.setText(shOI.getString("ceTotalTradedVolume", ""));
-                totalVolumePEBanks.setText(shOI.getString("peTotalTradedVolume", ""));
-                totalBuyQuantityCEBanks.setText(shOI.getString("ceTotalBuyQuantity", ""));
-                totalAskQuantityCEBanks.setText(shOI.getString("ceTotalSellQuantity", ""));
-                totalBuyQuantityPEBanks.setText(shOI.getString("peTotalBuyQuantity", ""));
-                totalAskQuantityPEBanks.setText(shOI.getString("peTotalSellQuantity", ""));
-                ceOpenInterestBanks.setText(shOI.getString("ceOpenInterest", ""));
-                peOpenInterestBanks.setText(shOI.getString("peOpenInterest", ""));
-            }
 //        mvlForBankNifty();
     }
 

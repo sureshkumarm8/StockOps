@@ -68,10 +68,7 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
     BanksDao banksDao;
     BankNiftyDao bankNiftyDao;
 
-    public static final String URL_BankNifty = "https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY";
-    public static final String URL_BanksTradeInfo = "https://www.nseindia.com/api/quote-equity?symbol=";
-    public static final String URL_NSE = "https://www.nseindia.com/";
-    public static String URL_MacFTPServer_BanksLiveData = "http://192.168.43.251:1313/Desktop/Suresh/Stock/liveQuotesData/banksData";
+    public static String URL_MacFTPServer_BanksLiveData = "http://192.168.43.251:1313/Desktop/Suresh/Stock/liveQuotesData/banksData1.json";
     public static String URL_MacFTPServer_BankNiftyOIData = "http://192.168.43.251:1313/Desktop/Suresh/Stock/liveQuotesData/bankNifty.json";
     final Map<String, String> headers = new HashMap<String, String>();
     public String cookiedata;
@@ -83,21 +80,14 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
     private int peTotalSellQuantity;
     private int ceOpenInterest;
     private int peOpenInterest;
-
-    TextView strikePriceTVBanks;
-    TextView ceOpenInterestBanks;
-    TextView peOpenInterestBanks;
-    TextView timeStampBanks;
     private Double underlyingValue;
     private String timeStampValue;
     private BankNiftyList bankNiftyList;
     private BanksList banksList;
-    List<String> banksRetryList = new ArrayList<>();
 
     private boolean bnkT = false;
     private boolean mainT = false;
     private boolean retry = false;
-    List<String> bankNiftyOIdata = new ArrayList<>();
     private boolean macFTPfile = false;
 
     long allBanksBuyQuantity;
@@ -108,7 +98,6 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
     private int retrievesDataCompleted=0;
     private int minsCount=0;
     private Context mContextSTRS;
-    private BanksViewModel viewModel;
 
     public StockDataRetrieveService(){
     }
@@ -174,24 +163,6 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
         Toast.makeText(this, "Service destroyed by user.", Toast.LENGTH_LONG).show();
     }
 
-    private void downloadBankNiftyULFromMAC_FTP() {
-
-        /*
-        1. Start FTP server :  http-server ./ -p 1313
-        2. Strart Node js: suresh@Suresh:~/Desktop/Suresh/Stock/stock-market-india$node app.js 3000
-        3. Run Screipt: suresh@Suresh:~/Desktop/Suresh/Stock/liveQuotesData$sh banksLiveQuotes.sh
-        https://github.com/maanavshah/stock-market-india
-        */
-        deleteCache(this);
-        try {
-            new PostVolleyJsonRequest(StockDataRetrieveService.this, StockDataRetrieveService.this,
-                    "BankNiftyUL", URL_MacFTPServer_BankNiftyOIData+"UL", null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
     private void downloadBanksLiveDataFromMAC_FTP() {
 
         /*
@@ -205,9 +176,9 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
         */
         deleteCache(this);
         try {
-            for(int i=1; i<= 3; i++){
-                new PostVolleyJsonRequest(localBinder.getService(), StockDataRetrieveService.this,"Banks", URL_MacFTPServer_BanksLiveData +i+".json", null);
-            }
+//            for(int i=1; i<= 3; i++){
+                new PostVolleyJsonRequest(localBinder.getService(), StockDataRetrieveService.this,"Banks", URL_MacFTPServer_BanksLiveData, null);
+//            }
 //            new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this,"StrikePrice", URL_MacFTPServer_BanksLiveData +"StrikeP.json", null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -233,18 +204,7 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
 
     @Override
     public void onSuccessJson(String response, String type) {
-//        if(type.equals("StrikePrice")){
-//            JSONObject jsonObject = null;
-//            try {
-//                jsonObject = new JSONObject(response);
-//                JSONArray indices = jsonObject.getJSONArray("data");
-//                JSONObject jo = indices.getJSONObject(3);
-//                strikePriceTVBanks.setText(jo.getString("last"));
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
+
         if (type.equals("BankNifty")) {
             try {
                 JSONObject jsonObject = new JSONObject(response);
@@ -254,7 +214,7 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
                 timeStampValue = recordDetails.get("timestamp").toString();
                 underlyingValue = recordDetails.getDouble("underlyingValue");
                 int ulValue = underlyingValue.intValue();
-                for (int i = 35; i < 86; i++) {
+                for (int i = 0; i < filteredDataArray.length(); i++) {
                     JSONObject jo = filteredDataArray.getJSONObject(i);
 
                     Double strikePrice = null;
@@ -362,50 +322,15 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
             long deliveryQuantity = 0;
             double deliveryPercent = 0.0;
             String bankName = "";
-//        if(!macFTPfile) {
-//            try {
-//                Thread.sleep(2000);
-//                JSONObject jsonObject = new JSONObject(response);
-//
-//                JSONObject marketDeptOrderBook = jsonObject.getJSONObject("marketDeptOrderBook");
-//                String totalBuyQuantityStr = marketDeptOrderBook.getString("totalBuyQuantity");
-//                totalBuyQuantity = Long.parseLong(totalBuyQuantityStr.trim()) / 1000;
-//                String totalSellQuantityStr = marketDeptOrderBook.getString("totalSellQuantity");
-//                totalSellQuantity = Long.parseLong(totalSellQuantityStr.trim()) / 1000;
-//
-//                JSONObject securityWiseDP = jsonObject.getJSONObject("securityWiseDP");
-//                String quantityTradedStr = securityWiseDP.getString("tradedVolume");
-//                tradedVolume = Long.parseLong(quantityTradedStr.trim()) / 1000;
-//                String deliveryQuantityStr = securityWiseDP.getString("deliveryQuantity");
-//                deliveryQuantity = Long.parseLong(deliveryQuantityStr.trim()) / 1000;
-//
-//                banksList = new BanksList(bankName, totalBuyQuantity, totalSellQuantity, tradedVolume, deliveryQuantity);
-//                banksLists.add(banksList);
-//
-//                //add new data to database
-//                long tsLong = System.currentTimeMillis() / 1000;
-//                String ts = Long.toString(tsLong);
-//                BanksDao banksDao = BanksDatabase.getInstance(getApplicationContext()).notes();
-//                banksList = new BanksList(ts, bankName, totalBuyQuantity, totalSellQuantity, tradedVolume, deliveryQuantity);
-//                banksDao.insertBankNiftyData(banksList);
-//
-//            } catch (JSONException | InterruptedException e) {
-//                e.printStackTrace();
-//                Log.e(LOG_TAG, e.getMessage(), e);
-//            }
-//        }else{
+
             try {
                 retrievesDataCompleted++;
-                //add new data to database
-//                SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm");
-////                String currentTime = dateFormat.format(new Date()).toString();
                 String currentTime;
 
-//                Thread.sleep(2000);
                 JSONObject jsonObject = new JSONObject(response);
                 currentTime = jsonObject.getString("lastUpdateTime").substring(12,17);
                 JSONArray banksArr = jsonObject.getJSONArray("data");
-                for (int i = 0; i < banksArr.length(); i++) {
+                for (int i = 0; i < banksArr.length()-1; i++) {
                     JSONObject jo = banksArr.getJSONObject(i);
                     bankName = jo.getString("symbol");
                     String totalBuyQuantityStr = jo.getString("totalBuyQuantity");
@@ -440,9 +365,12 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
                     banksList = new BanksList(currentTime, bankName, totalBuyQuantity, totalSellQuantity, tradedVolume, deliveryQuantity, deliveryPercent);
                     banksDao.insertBankData(banksList);
                 }
-                macFTPfile = false;
-                if(retrievesDataCompleted==3){
-                    banksList = new BanksList(currentTime, "All Banks", allBanksBuyQuantity, allBanksSellQuantity, allBanksQuantityTraded, allBanksDeliveryQuantity, allBanksDeliveryPercent);
+//                macFTPfile = false;
+//                if(retrievesDataCompleted==3){
+                JSONObject jo = banksArr.getJSONObject(banksArr.length()-1);
+                String ulValue = jo.getString("last").substring(0, 6).replaceAll(",","");
+                long underlyingValue = Long.parseLong(ulValue);
+                    banksList = new BanksList(currentTime, "All Banks", allBanksBuyQuantity, allBanksSellQuantity, allBanksQuantityTraded, underlyingValue, allBanksDeliveryPercent);
                     banksDao.insertBankData(banksList);
 
                     // Storing data into SharedPreferences
@@ -452,13 +380,12 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
                     editor.putString("allBanksBuyQuantity", String.valueOf(allBanksBuyQuantity));
                     editor.putString("allBanksSellQuantity", String.valueOf(allBanksSellQuantity));
                     editor.putString("allBanksQuantityTraded", String.valueOf(allBanksQuantityTraded));
-                    editor.putString("allBanksDeliveryQuantity", String.valueOf(allBanksDeliveryQuantity));
+                    editor.putString("underlyingValue", String.valueOf(underlyingValue));
                     editor.putFloat("allBanksDeliveryPercent", (float) allBanksDeliveryPercent);
                     Gson gson = new Gson();
                     String json = gson.toJson(banksLists);
                     editor.putString("BanksLiveDisplayData", json);
                     editor.commit();
-//                    banksListActivityObj.liveDisplayUI();
 
                     allBanksBuyQuantity=0;
                     allBanksSellQuantity=0;
@@ -467,7 +394,7 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
                     allBanksDeliveryPercent=0.0;
                     retrievesDataCompleted=0;
                     banksLists.clear();
-                }
+//                }
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.e(LOG_TAG, e.getMessage(), e);
@@ -479,17 +406,6 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
     @Override
     public void onFailureJson(int responseCode, String msg, String type) {
         Toast.makeText(StockDataRetrieveService.this, type + "Error:" + msg, Toast.LENGTH_LONG).show();
-        if (type.equals("BankNifty"))
-            timeStampBanks.setText(msg);
-        strikePriceTVBanks.setText(msg);
-        ceOpenInterestBanks.setText(msg);
-        peOpenInterestBanks.setText(msg);
-        banksRetryList.add(type);
-//        if(!retry){
-//            retry=true;
-//            Toast.makeText(BanksListActivity.this, "banksRetryList :" + banksRetryList.toString(), Toast.LENGTH_LONG).show();
-////            retryFailedBanksTradeInfo(banksRetryList);
-//        }
     }
 
     private Long parseToLongfrom_(String trim) {
@@ -525,13 +441,14 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
                             mHandler.removeCallbacksAndMessages(null);
                         }else{
                             downloadBanksLiveDataFromMAC_FTP();
+                            downloadBankNiftyOIDataFromMAC_FTP();
 //                            Toast.makeText(StockDataRetrieveService.this, "1 min service", Toast.LENGTH_SHORT).show();
-                            minsCount++;
-                            if(minsCount == 5){
-                                downloadBankNiftyOIDataFromMAC_FTP();
-//                                Toast.makeText(StockDataRetrieveService.this, "5 min service", Toast.LENGTH_SHORT).show();
-                                minsCount=0;
-                            }
+//                            minsCount++;
+//                            if(minsCount == 5){
+////                                downloadBankNiftyOIDataFromMAC_FTP();
+////                                Toast.makeText(StockDataRetrieveService.this, "5 min service", Toast.LENGTH_SHORT).show();
+//                                minsCount=0;
+//                            }
                         }
                     } catch (ParseException e) {
                         e.printStackTrace();
