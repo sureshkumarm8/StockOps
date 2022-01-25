@@ -12,6 +12,11 @@
         android:icon="@drawable/ic_wifi_white"
         app:showAsAction="always|withText"
         android:title="1 Min"/>
+    <item
+        android:id="@+id/exportCSV"
+        android:icon="@android:drawable/stat_sys_download_done"
+        app:showAsAction="never"
+        android:title="Export to CSV"/>
     <group
     android:id="@+id/sort"
     android:checkableBehavior="single">

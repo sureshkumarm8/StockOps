@@ -366,6 +366,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                     String currentTime = dateFormat.format(new Date()).toString();
                     saveDbToCSV(currentTime+"BankNifty");
                     saveDbToCSV(currentTime+"AllBanks");
+                    liveDisplayUI();
                 }
             }else{
                 progressDialogFTP = new ProgressDialog(BanksListActivity.this);
@@ -440,6 +441,15 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                 item.setChecked(true);
                 noInternetDialog = new NoInternetDialog.Builder(this).build();
                 getNewIP();
+                return true;
+
+            case R.id.exportCSV:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("DD_MM_YYYY_HH_mm_");
+                    String currentTime = dateFormat.format(new Date()).toString();
+                    saveDbToCSV(currentTime+"BankNifty");
+                    saveDbToCSV(currentTime+"AllBanks");
+                }
                 return true;
 
             case R.id.banknifty:
@@ -1492,7 +1502,12 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         try {
             file.createNewFile();
             CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
-            Cursor curCSV = banksDao.getAllDataCSV();//query("SELECT * FROM " + TableName, null);
+            Cursor curCSV;
+            if(fileName.contains("AllBanks")){
+                curCSV = banksDao.getAllDataCSV();//query("SELECT * FROM " + TableName, null);
+            }else{
+                curCSV = bankNiftyDao.getAllDataCSV();
+            }
             csvWrite.writeNext(curCSV.getColumnNames());
             while (curCSV.moveToNext()) {
                 //Which column you want to exprort
