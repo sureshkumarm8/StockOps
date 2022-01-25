@@ -1,5 +1,6 @@
 package com.sureit.stockops.view;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.arch.lifecycle.Observer;
@@ -8,16 +9,23 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.os.PowerManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -44,6 +52,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sureit.stockops.R;
+import com.sureit.stockops.Util.CSVWriter;
 import com.sureit.stockops.Util.Constants;
 import com.sureit.stockops.Util.StockDataRetrieveService;
 import com.sureit.stockops.adapter.BanksAdapter;
@@ -61,6 +70,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
@@ -81,6 +91,8 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 
     private static final String LOG_TAG = "BanksListActivity";
     NoInternetDialog noInternetDialog;
+    private static final int STORAGE_PERMISSION_CODE = 101;
+    private static final int CAMERA_PERMISSION_CODE = 100;
 
     private RecyclerView recyclerView;
     private BanksAdapter adapter;
@@ -151,6 +163,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bankslist);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE);
 
         bankNiftyLists = new ArrayList<>();
         banksLists = new ArrayList<>();
@@ -334,6 +347,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 
     private int minsCount=0;
     Runnable mRunnableTask = new Runnable() {
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void run() {
 //            checkNseUrl(URL_NSE);
@@ -355,6 +369,12 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                 now = dateFormat.parse(currentTime);
                 if (now.after(marketClose)||now.before(marketOpen)){
                     mHandler.removeCallbacksAndMessages(null);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        dateFormat = new SimpleDateFormat("DD_MM_YYYY_HH_mm_");
+                        currentTime = dateFormat.format(new Date()).toString();
+                    }
+                    saveDbToCSV(currentTime+"BankNifty");
+                    saveDbToCSV(currentTime+"AllBanks");
                     liveDisplayUI();
                 }else{
 //                    downloadBanksLiveDataFromMAC_FTP();
@@ -1439,6 +1459,67 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 
     }
 
+    public void saveDbToCSV(String fileName){
+        checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE);
+        File exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/StockOps/DBFiles/");
+        if (!exportDir.exists()) {
+            exportDir.mkdirs();
+        }
+        File file = new File(exportDir, fileName + ".csv");
+        try {
+            file.createNewFile();
+            CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
+            Cursor curCSV = banksDao.getAllDataCSV();//query("SELECT * FROM " + TableName, null);
+            csvWrite.writeNext(curCSV.getColumnNames());
+            while (curCSV.moveToNext()) {
+                //Which column you want to exprort
+                String arrStr[] = new String[curCSV.getColumnCount()];
+                for (int i = 0; i < curCSV.getColumnCount() - 1; i++)
+                    arrStr[i] = curCSV.getString(i);
+                csvWrite.writeNext(arrStr);
+            }
+            csvWrite.close();
+            curCSV.close();
+        } catch (Exception sqlEx) {
+            Log.e("MainActivity", sqlEx.getMessage(), sqlEx);
+        }
+    }
+
+    // Function to check and request permission.
+    public void checkPermission(String permission, int requestCode)
+    {
+        if (ContextCompat.checkSelfPermission(BanksListActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
+            // Requesting the permission
+            ActivityCompat.requestPermissions(BanksListActivity.this, new String[] { permission }, requestCode);
+        }
+        else {
+//            Toast.makeText(BanksListActivity.this, "Permission already granted", Toast.LENGTH_SHORT).show();
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode,
+                permissions,
+                grantResults);
+
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(BanksListActivity.this, "Camera Permission Granted", Toast.LENGTH_SHORT) .show();
+            }
+            else {
+                Toast.makeText(BanksListActivity.this, "Camera Permission Denied", Toast.LENGTH_SHORT) .show();
+            }
+        }
+        else if (requestCode == STORAGE_PERMISSION_CODE) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                Toast.makeText(BanksListActivity.this, "Storage Permission Granted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(BanksListActivity.this, "Storage Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
 }
 
 

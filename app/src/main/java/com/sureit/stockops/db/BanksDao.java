@@ -1,13 +1,12 @@
 package com.sureit.stockops.db;
 
-import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
-
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.database.Cursor;
 
 import com.sureit.stockops.data.BanksList;
 
@@ -33,5 +32,7 @@ public interface BanksDao {
     @Query("DELETE FROM banksDataDB WHERE timeStamp NOT IN (SELECT MIN(timeStamp) FROM banksDataDB GROUP BY timeStamp, totalBuyQuantity,totalSellQuantity)")
     void deleteDuplicates();
 
+    @Query("Select * from banksDataDB")
+    public Cursor getAllDataCSV();
 
 }
