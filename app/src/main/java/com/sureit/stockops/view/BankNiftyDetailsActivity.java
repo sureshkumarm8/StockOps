@@ -261,7 +261,7 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
     }
 
     public void filterByMins(int min_filter) {
-        if (getBankName.equals("OI Historymval")) {
+        if (getBankName.equals("OI History")) {
             ceoi.setText("CE OI");
             peoi.setText("PE OI");
             buyqty.setText("CE Vol");
@@ -271,7 +271,8 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
             List<BankNiftyList> oiHistoryFiltered = viewModel.getOIHistory(getBankName);
             List<BankNiftyList> oiHistoryFilteredNew = new ArrayList<>();
             for (int i = 0; i < oiHistoryFiltered.size(); i++) {
-                if (i % min_filter == 0)
+                int tsMins = Integer.parseInt(oiHistoryFiltered.get(i).getTimestamp().substring(3,5));
+                if (tsMins % min_filter == 0)
                     oiHistoryFilteredNew.add(oiHistoryFiltered.get(i));
             }
 
@@ -280,7 +281,7 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
             int position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
             recycleViewBankHistory.smoothScrollToPosition(position);
             oiHistoryAdapter.notifyDataSetChanged();
-        } else if (getBankName.equals("CE Historymval") || getBankName.equals("PE Historymval")) {
+        } else if (getBankName.equals("CE History") || getBankName.equals("PE History")) {
             ceoi.setText("Bids");
             peoi.setText("Offers");
             buyqty.setText("Vol");
@@ -290,7 +291,8 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
             List<BankNiftyList> oiHistoryFiltered = viewModel.getOIHistory(getBankName);
             List<BankNiftyList> oiHistoryFilteredNew = new ArrayList<>();
             for (int i = 0; i < oiHistoryFiltered.size(); i++) {
-                if (i % min_filter == 0)
+                int tsMins = Integer.parseInt(oiHistoryFiltered.get(i).getTimestamp().substring(3,5));
+                if (tsMins % min_filter == 0)
                     oiHistoryFilteredNew.add(oiHistoryFiltered.get(i));
             }
 
@@ -310,7 +312,8 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
             List<BankNiftyList> oiHistoryFiltered = viewModel.getOIHistory(getBankName);
             List<BankNiftyList> oiHistoryFilteredNew = new ArrayList<>();
             for (int i = 0; i < oiHistoryFiltered.size(); i++) {
-                if (i % min_filter == 0)
+                int tsMins = Integer.parseInt(oiHistoryFiltered.get(i).getTimestamp().substring(3,5));
+                if (tsMins % min_filter == 0)
                     oiHistoryFilteredNew.add(oiHistoryFiltered.get(i));
             }
             if (oiHistoryFilteredNew.size() > 0) {
@@ -325,7 +328,8 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
         List<BanksList> banksHistoryFiltered = viewModel.getBanksHistory(getBankName);
         List<BanksList> banksHistoryFilteredNew = new ArrayList<>();
         for (int i = 0; i < banksHistoryFiltered.size(); i++) {
-            if (i % min_filter == 0)
+            int tsMins = Integer.parseInt(banksHistoryFiltered.get(i).getTimeStamp().substring(3,5));
+            if (tsMins % min_filter == 0)
                 banksHistoryFilteredNew.add(banksHistoryFiltered.get(i));
         }
 
