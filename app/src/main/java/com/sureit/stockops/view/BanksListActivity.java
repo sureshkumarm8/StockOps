@@ -18,7 +18,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -342,7 +341,12 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 //        downloadBanksLiveDataFromMAC_FTP();
 //        liveDisplayUI();
         // Call this to start the task first time
-        mHandler.postDelayed(mRunnableTask, (5 * 1000));
+        if(!isMarketClosed()) {
+            mHandler.postDelayed(mRunnableTask, (5 * 1000));
+        }else{
+            progressDialogFTP.setMessage("Market Closed, FTP Refresh Stopped");
+            progressDialogFTP.show();
+        }
     }
 
     private int minsCount=0;
@@ -356,47 +360,66 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             progressDialogFTP.dismiss();
             bankNiftyLists.clear();
             banksLists.clear();
-            String start = "09:15";
-            Date marketOpen=null;
-            String limit = "15:40";
-            Date marketClose=null;
-            Date now = null;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm");
-            String currentTime = dateFormat.format(new Date()).toString();
-            try {
-                marketOpen = dateFormat.parse(start);
-                marketClose = dateFormat.parse(limit);
-                now = dateFormat.parse(currentTime);
-                if (now.after(marketClose)||now.before(marketOpen)){
-                    mHandler.removeCallbacksAndMessages(null);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        dateFormat = new SimpleDateFormat("DD_MM_YYYY_HH_mm_");
-                        currentTime = dateFormat.format(new Date()).toString();
-                    }
+            if(isMarketClosed()){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("DD_MM_YYYY_HH_mm_");
+                    String currentTime = dateFormat.format(new Date()).toString();
                     saveDbToCSV(currentTime+"BankNifty");
                     saveDbToCSV(currentTime+"AllBanks");
-                    liveDisplayUI();
-                }else{
-//                    downloadBanksLiveDataFromMAC_FTP();
-                    progressDialogFTP = new ProgressDialog(BanksListActivity.this);
-                    progressDialogFTP.setMessage("Refreshing latest data from FTP ...");
-                    progressDialogFTP.show();
-                    liveDisplayUI();
-                    minsCount++;
-                    if(minsCount == 5){
-                        mvlForBankNifty();
-//                        downloadBankNiftyOIDataFromMAC_FTP();
-                        minsCount=0;
-                    }
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
+            }else{
+                progressDialogFTP = new ProgressDialog(BanksListActivity.this);
+                progressDialogFTP.setMessage("Refreshing latest data from FTP ...");
+                progressDialogFTP.show();
+                liveDisplayUI();
             }
 
             // this will repeat this task again at specified time interval
             mHandler.postDelayed(this, (60 * 1000));
         }
     };
+
+    private boolean isMarketClosed(){
+        String start = "09:15";
+        Date marketOpen=null;
+        String limit = "15:40";
+        Date marketClose=null;
+        Date now = null;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm");
+        String currentTime = dateFormat.format(new Date()).toString();
+        try {
+            marketOpen = dateFormat.parse(start);
+            marketClose = dateFormat.parse(limit);
+            now = dateFormat.parse(currentTime);
+            if (now.after(marketClose)||now.before(marketOpen)){
+//                mHandler.removeCallbacksAndMessages(null);
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                    dateFormat = new SimpleDateFormat("DD_MM_YYYY_HH_mm_");
+//                    currentTime = dateFormat.format(new Date()).toString();
+//                }
+//                saveDbToCSV(currentTime+"BankNifty");
+//                saveDbToCSV(currentTime+"AllBanks");
+//                liveDisplayUI();
+                return true;
+            }else{
+////                    downloadBanksLiveDataFromMAC_FTP();
+//                progressDialogFTP = new ProgressDialog(BanksListActivity.this);
+//                progressDialogFTP.setMessage("Refreshing latest data from FTP ...");
+//                progressDialogFTP.show();
+//                liveDisplayUI();
+//                minsCount++;
+//                if(minsCount == 5){
+//                    mvlForBankNifty();
+////                        downloadBankNiftyOIDataFromMAC_FTP();
+//                    minsCount=0;
+//                }
+                return false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
