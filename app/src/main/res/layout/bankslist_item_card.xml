@@ -23,7 +23,7 @@
 
             <TextView
                 android:id="@+id/tvVolumePE2"
-                android:layout_width="43dp"
+                android:layout_width="50dp"
                 android:layout_height="15dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="1dp"
@@ -33,12 +33,12 @@
                 android:layout_toLeftOf="@+id/tvVolumeCE3"
                 android:background="#FFFFFF"
                 android:gravity="center"
-                android:text="Del %"
+                android:text="Diff %"
                 android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/tvDeliveryPCT"
-                android:layout_width="43dp"
+                android:layout_width="50dp"
                 android:layout_height="45dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="1dp"
@@ -49,7 +49,7 @@
                 android:background="#CDDC39"
                 android:fontFamily="sans-serif-black"
                 android:gravity="center"
-                android:text="DeliveryPercent"
+                android:text="PercentDifference"
                 android:textSize="12sp" />
 
             <TextView
@@ -74,7 +74,7 @@
 
             <TextView
                 android:id="@+id/tvQuantityTradedBank"
-                android:layout_width="70dp"
+                android:layout_width="68dp"
                 android:layout_height="45dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="1dp"
@@ -90,7 +90,7 @@
 
             <TextView
                 android:id="@+id/tvDeliveryQtyBank"
-                android:layout_width="70dp"
+                android:layout_width="68dp"
                 android:layout_height="45dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
@@ -98,14 +98,14 @@
                 android:layout_marginEnd="7dp"
                 android:layout_marginRight="7dp"
                 android:layout_marginBottom="5dp"
-                android:background="@android:color/holo_orange_dark"
+                android:background="@android:color/holo_blue_light"
                 android:fontFamily="sans-serif-black"
                 android:gravity="center"
-                android:text="DeliveryQtyBank" />
+                android:text="Market Price" />
 
             <TextView
                 android:id="@+id/tvVolumePE3"
-                android:layout_width="70dp"
+                android:layout_width="68dp"
                 android:layout_height="15dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
@@ -115,12 +115,12 @@
                 android:layout_marginBottom="50dp"
                 android:background="#FFFFFF"
                 android:gravity="center"
-                android:text="Delvrd Qty in K"
+                android:text="Market"
                 android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/tvVolumeCE3"
-                android:layout_width="70dp"
+                android:layout_width="68dp"
                 android:layout_height="15dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="1dp"
@@ -135,7 +135,7 @@
 
             <TextView
                 android:id="@+id/tvpTotalSellQuantityBank"
-                android:layout_width="70dp"
+                android:layout_width="68dp"
                 android:layout_height="45dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="1dp"
@@ -150,7 +150,7 @@
 
             <TextView
                 android:id="@+id/tvStrikePrice3"
-                android:layout_width="70dp"
+                android:layout_width="68dp"
                 android:layout_height="15dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="1dp"
@@ -165,7 +165,7 @@
 
             <TextView
                 android:id="@+id/tvTotalBuyQuantityBank"
-                android:layout_width="70dp"
+                android:layout_width="68dp"
                 android:layout_height="45dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="1dp"
@@ -180,7 +180,7 @@
 
             <TextView
                 android:id="@+id/tvStrikePrice5"
-                android:layout_width="70dp"
+                android:layout_width="68dp"
                 android:layout_height="15dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="1dp"

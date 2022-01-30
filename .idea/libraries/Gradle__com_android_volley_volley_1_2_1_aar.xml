@@ -1,12 +1,13 @@
 <component name="libraryTable">
   <library name="Gradle: com.android.volley:volley:1.2.1@aar">
     <ANNOTATIONS>
-      <root url="jar:///usr/local/Cellar/gradle/gradle-6.4.1/caches/transforms-2/files-2.1/275053cbcc10564f59e53cbe2ed7092f/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5148cb284855bac9e5edbc633b9c4081/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar:///usr/local/Cellar/gradle/gradle-6.4.1/caches/transforms-2/files-2.1/275053cbcc10564f59e53cbe2ed7092f/jars/classes.jar!/" />
       <root url="file:///usr/local/Cellar/gradle/gradle-6.4.1/caches/transforms-2/files-2.1/275053cbcc10564f59e53cbe2ed7092f/res" />
-      <root url="file:///usr/local/Cellar/gradle/gradle-6.4.1/caches/transforms-2/files-2.1/275053cbcc10564f59e53cbe2ed7092f/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5148cb284855bac9e5edbc633b9c4081/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5148cb284855bac9e5edbc633b9c4081/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5148cb284855bac9e5edbc633b9c4081/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

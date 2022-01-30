@@ -38,44 +38,44 @@ public class BankHistoryAdapter extends RecyclerView.Adapter<BankHistoryAdapter.
 
         final BanksList banksList = banksLists.get(position);
 
-        if(banksList.getBankName().contains("mval")){
+        if(banksList.getBankName().contains("mval") || banksList.getBankName().contains("MStr")){
             holder.timeStampTV.setText(banksList.getTimeStamp());
             holder.bidsHistory.setText(String.valueOf(banksList.getTBQmvVal()));
             holder.offersHistory.setText(String.valueOf(banksList.getTSQmvVal()));
-            holder.delvPercent.setText(String.valueOf(banksList.getQTSmvVal()));
-            holder.volHistory.setText(String.valueOf(banksList.getDQmvVal()));
-            holder.delvHistory.setText(String.valueOf(banksList.getDeliveryPercent()));
+            holder.percentDiff.setText(String.valueOf(banksList.getPercentDiff()));
+            holder.totalVolHistory.setText(String.valueOf(banksList.getQTSmvVal()));
+            holder.underlyingValue.setText(String.valueOf(banksList.getUnderlyingValue()));
         }else {
             holder.timeStampTV.setText(banksList.getTimeStamp());
             holder.bidsHistory.setText(String.valueOf(banksList.getTotalBuyQuantity()));
             holder.offersHistory.setText(String.valueOf(banksList.getTotalSellQuantity()));
-            holder.delvPercent.setText(String.valueOf(banksList.getDeliveryPercent()));
-            holder.volHistory.setText(String.valueOf(banksList.getQuantityTradedsure()));
-            holder.delvHistory.setText(String.valueOf(banksList.getDeliveryQuantity()));
+            holder.percentDiff.setText(String.valueOf(banksList.getPercentDiff()));
+            holder.totalVolHistory.setText(String.valueOf(banksList.getQuantityTradedsure()));
+            holder.underlyingValue.setText(String.valueOf(banksList.getUnderlyingValue()));
         }
         //set color for bullish or bearish
         if(position>=1){
             BanksList banksList_1 = banksLists.get(position - 1);
             if(banksList.getTotalBuyQuantity()==banksList_1.getTotalBuyQuantity()){
-                holder.delvPercent.setBackgroundColor(Color.WHITE);
+                holder.percentDiff.setBackgroundColor(Color.WHITE);
             }
             else if(banksList.getTotalBuyQuantity()>banksList_1.getTotalBuyQuantity()){
                 holder.bidsHistory.setBackgroundColor(Color.GREEN);
             }else {holder.bidsHistory.setBackgroundColor(Color.RED);}
 
             if(banksList.getTotalSellQuantity()==banksList_1.getTotalSellQuantity()){
-                holder.delvPercent.setBackgroundColor(Color.WHITE);
+                holder.percentDiff.setBackgroundColor(Color.WHITE);
             }
             else if(banksList.getTotalSellQuantity()<banksList_1.getTotalSellQuantity()){
                 holder.offersHistory.setBackgroundColor(Color.GREEN);
             }else {holder.offersHistory.setBackgroundColor(Color.RED);}
 
-            if(banksList.getDeliveryPercent()==banksList_1.getDeliveryPercent()){
-                holder.delvPercent.setBackgroundColor(Color.WHITE);
+            if(banksList.getPercentDiff()==banksList_1.getPercentDiff()){
+                holder.percentDiff.setBackgroundColor(Color.WHITE);
             }
-            else if(banksList.getDeliveryPercent()>banksList_1.getDeliveryPercent()) {
-                holder.delvPercent.setBackgroundColor(Color.GREEN);
-            }else {holder.delvPercent.setBackgroundColor(Color.RED);}
+            else if(banksList.getPercentDiff()>banksList_1.getPercentDiff()) {
+                holder.percentDiff.setBackgroundColor(Color.GREEN);
+            }else {holder.percentDiff.setBackgroundColor(Color.RED);}
 
             if(banksList.getTotalBuyQuantity()>banksList_1.getTotalBuyQuantity()
                     && banksList.getTotalSellQuantity()<banksList_1.getTotalSellQuantity()){
@@ -98,9 +98,9 @@ public class BankHistoryAdapter extends RecyclerView.Adapter<BankHistoryAdapter.
         TextView timeStampTV;
         TextView bidsHistory;
         TextView offersHistory;
-        TextView volHistory;
-        TextView delvHistory;
-        TextView delvPercent;
+        TextView totalVolHistory;
+        TextView underlyingValue;
+        TextView percentDiff;
 
 
         ViewHolder(View itemView) {
@@ -108,9 +108,9 @@ public class BankHistoryAdapter extends RecyclerView.Adapter<BankHistoryAdapter.
             timeStampTV = itemView.findViewById(R.id.tvTimeStamp);
             bidsHistory = itemView.findViewById(R.id.tvBidsHistory);
             offersHistory = itemView.findViewById(R.id.tvOffersHistory);
-            volHistory = itemView.findViewById(R.id.tvVolHistory);
-            delvHistory = itemView.findViewById(R.id.tvDelvHistory);
-            delvPercent = itemView.findViewById(R.id.tvDelvPercent);
+            totalVolHistory = itemView.findViewById(R.id.tvVolHistory);
+            underlyingValue = itemView.findViewById(R.id.tvDelvHistory);
+            percentDiff = itemView.findViewById(R.id.tvDelvPercent);
         }
     }
 }

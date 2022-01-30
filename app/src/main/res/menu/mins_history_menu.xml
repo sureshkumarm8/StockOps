@@ -4,13 +4,18 @@
 
     <item
         android:id="@+id/mvVal"
-        android:icon="@android:drawable/star_on"
+        android:icon="@drawable/mval"
         app:showAsAction="always"
         android:title="Movement"/>
     <item
+        android:id="@+id/marketStrength"
+        android:icon="@drawable/market_strength"
+        app:showAsAction="always"
+        android:title="Market Strength"/>
+    <item
         android:id="@+id/min1"
         android:icon="@drawable/min1"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:title="1 Min"/>
     <item
         android:id="@+id/min5"

@@ -37,18 +37,25 @@ public class OIHistoryAdapter extends RecyclerView.Adapter<OIHistoryAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         final BankNiftyList banksList = bankNiftyLists.get(position);
-        if(banksList.getOiname().contains("mval")){
+        if(banksList.getOiname().contains("mval") || banksList.getOiname().contains("MStr")){
             holder.timeStampTV.setText(banksList.getTimestamp());
             holder.bidsHistory.setText(String.valueOf(banksList.getNBQmvVal()));
             holder.offersHistory.setText(String.valueOf(banksList.getNSQmvVal()));
             holder.delvPercent.setText(String.valueOf(banksList.getNVOLmvVal()));
             holder.volHistory.setText(String.valueOf(banksList.getNOImvVal()));
             holder.delvHistory.setText(String.valueOf(banksList.getUnderlyvalue()));
-        }else {
+        }else if(banksList.getOiname().contains("OI History") || banksList.getOiname().contains("CE History") || banksList.getOiname().contains("PE History")){
             holder.timeStampTV.setText(banksList.getTimestamp());
             holder.bidsHistory.setText(String.valueOf(banksList.getCalloi()));
             holder.offersHistory.setText(String.valueOf(banksList.getPutoi()));
             holder.delvPercent.setText(String.valueOf(banksList.getBntotalbuyquantity()));
+            holder.volHistory.setText(String.valueOf(banksList.getBntotalsellquantity()));
+            holder.delvHistory.setText(String.valueOf(banksList.getUnderlyvalue()));
+        }else {
+            holder.timeStampTV.setText(banksList.getTimestamp());
+            holder.bidsHistory.setText(String.valueOf(banksList.getPutoi()));
+            holder.offersHistory.setText(String.valueOf(banksList.getBntotalbuyquantity()));
+            holder.delvPercent.setText(String.valueOf(banksList.getCalloi()));
             holder.volHistory.setText(String.valueOf(banksList.getBntotalsellquantity()));
             holder.delvHistory.setText(String.valueOf(banksList.getUnderlyvalue()));
         }

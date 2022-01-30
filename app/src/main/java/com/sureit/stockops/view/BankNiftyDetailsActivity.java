@@ -96,7 +96,8 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
                 oiHistoryAdapter = new OIHistoryAdapter(viewModel.getOIHistory(getBankName), getApplicationContext());
                 recycleViewBankHistory.setAdapter(oiHistoryAdapter);
                 position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
-                recycleViewBankHistory.smoothScrollToPosition(position);
+                if(position>5)
+                    recycleViewBankHistory.smoothScrollToPosition(position);
                 oiHistoryAdapter.notifyDataSetChanged();
                 break;
 
@@ -110,7 +111,8 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
                 oiHistoryAdapter = new OIHistoryAdapter(viewModel.getOIHistory(getBankName), getApplicationContext());
                 recycleViewBankHistory.setAdapter(oiHistoryAdapter);
                 position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
-                recycleViewBankHistory.smoothScrollToPosition(position);
+                if(position>5)
+                    recycleViewBankHistory.smoothScrollToPosition(position);
                 oiHistoryAdapter.notifyDataSetChanged();
                 break;
 
@@ -119,7 +121,8 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
                     adapterHistory = new BankHistoryAdapter(viewModel.getBanksHistory(getBankName), getApplicationContext());
                     recycleViewBankHistory.setAdapter(adapterHistory);
                     position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
-                    recycleViewBankHistory.smoothScrollToPosition(position);
+                    if(position>5)
+                        recycleViewBankHistory.smoothScrollToPosition(position);
                     adapterHistory.notifyDataSetChanged();
                 } else if (getBankName.contains("CE") || getBankName.contains("PE")) {
                     ceoi.setText("Bids");
@@ -130,7 +133,8 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
                     oiHistoryAdapter = new OIHistoryAdapter(viewModel.getOIHistory(getBankName), getApplicationContext());
                     recycleViewBankHistory.setAdapter(oiHistoryAdapter);
                     position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
-                    recycleViewBankHistory.smoothScrollToPosition(position);
+                    if(position>5)
+                        recycleViewBankHistory.smoothScrollToPosition(position);
                     oiHistoryAdapter.notifyDataSetChanged();
                 }
                 break;
@@ -151,7 +155,13 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
             case R.id.mvVal:
                 if (!getBankName.contains("mval"))
                     getBankName = getBankName + "mval";
-                filterByMval("mval");
+                filterByMval();
+                return (true);
+
+            case R.id.marketStrength:
+                if (!getBankName.contains("MStr"))
+                    getBankName = getBankName + "MStr";
+                filterByMSTR();
                 return (true);
 
             case R.id.min1:
@@ -170,7 +180,7 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
         return (super.onOptionsItemSelected(item));
     }
 
-    public void filterByMval(String mval) {
+    public void filterByMval() {
         if (getBankName.equals("OI Historymval")) {
             ceoi.setText("CE OI");
             peoi.setText("PE OI");
@@ -190,7 +200,8 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
             oiHistoryAdapter = new OIHistoryAdapter(oiHistoryFilteredNew, getApplicationContext());
             recycleViewBankHistory.setAdapter(oiHistoryAdapter);
             int position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
-            recycleViewBankHistory.smoothScrollToPosition(position);
+            if(position>5)
+                recycleViewBankHistory.smoothScrollToPosition(position);
             oiHistoryAdapter.notifyDataSetChanged();
             }
         } else if (getBankName.equals("CE Historymval") || getBankName.equals("PE Historymval")) {
@@ -214,7 +225,8 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
                 oiHistoryAdapter = new OIHistoryAdapter(oiHistoryFilteredNew, getApplicationContext());
                 recycleViewBankHistory.setAdapter(oiHistoryAdapter);
                 int position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
-                recycleViewBankHistory.smoothScrollToPosition(position);
+                if(position>5)
+                    recycleViewBankHistory.smoothScrollToPosition(position);
                 oiHistoryAdapter.notifyDataSetChanged();
             }
         } else if (getBankName.contains("CE") || getBankName.contains("PE") && !getBankName.contains("History")) {
@@ -237,7 +249,8 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
                 oiHistoryAdapter = new OIHistoryAdapter(oiHistoryFilteredNew, getApplicationContext());
                 recycleViewBankHistory.setAdapter(oiHistoryAdapter);
                 int position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
-                recycleViewBankHistory.smoothScrollToPosition(position);
+                if(position>5)
+                    recycleViewBankHistory.smoothScrollToPosition(position);
                 oiHistoryAdapter.notifyDataSetChanged();
             }
         } else {
@@ -254,7 +267,8 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
                 adapterHistory = new BankHistoryAdapter(banksHistoryFilteredNew, getApplicationContext());
                 recycleViewBankHistory.setAdapter(adapterHistory);
                 int position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
-                recycleViewBankHistory.smoothScrollToPosition(position);
+                if(position>5)
+                    recycleViewBankHistory.smoothScrollToPosition(position);
                 adapterHistory.notifyDataSetChanged();
             }
         }
@@ -271,15 +285,15 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
             List<BankNiftyList> oiHistoryFiltered = viewModel.getOIHistory(getBankName);
             List<BankNiftyList> oiHistoryFilteredNew = new ArrayList<>();
             for (int i = 0; i < oiHistoryFiltered.size(); i++) {
-                int tsMins = Integer.parseInt(oiHistoryFiltered.get(i).getTimestamp().substring(3,5));
-                if (tsMins % min_filter == 0)
+                if (i % min_filter == 0)
                     oiHistoryFilteredNew.add(oiHistoryFiltered.get(i));
             }
 
             oiHistoryAdapter = new OIHistoryAdapter(oiHistoryFilteredNew, getApplicationContext());
             recycleViewBankHistory.setAdapter(oiHistoryAdapter);
             int position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
-            recycleViewBankHistory.smoothScrollToPosition(position);
+            if(position>5)
+                recycleViewBankHistory.smoothScrollToPosition(position);
             oiHistoryAdapter.notifyDataSetChanged();
         } else if (getBankName.equals("CE History") || getBankName.equals("PE History")) {
             ceoi.setText("Bids");
@@ -291,15 +305,15 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
             List<BankNiftyList> oiHistoryFiltered = viewModel.getOIHistory(getBankName);
             List<BankNiftyList> oiHistoryFilteredNew = new ArrayList<>();
             for (int i = 0; i < oiHistoryFiltered.size(); i++) {
-                int tsMins = Integer.parseInt(oiHistoryFiltered.get(i).getTimestamp().substring(3,5));
-                if (tsMins % min_filter == 0)
+                if (i % min_filter == 0)
                     oiHistoryFilteredNew.add(oiHistoryFiltered.get(i));
             }
 
             oiHistoryAdapter = new OIHistoryAdapter(oiHistoryFilteredNew, getApplicationContext());
             recycleViewBankHistory.setAdapter(oiHistoryAdapter);
             int position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
-            recycleViewBankHistory.smoothScrollToPosition(position);
+            if(position>5)
+                recycleViewBankHistory.smoothScrollToPosition(position);
             oiHistoryAdapter.notifyDataSetChanged();
         }
         else if (getBankName.contains("CE") || getBankName.contains("PE") && !getBankName.contains("History")) {
@@ -312,15 +326,15 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
             List<BankNiftyList> oiHistoryFiltered = viewModel.getOIHistory(getBankName);
             List<BankNiftyList> oiHistoryFilteredNew = new ArrayList<>();
             for (int i = 0; i < oiHistoryFiltered.size(); i++) {
-                int tsMins = Integer.parseInt(oiHistoryFiltered.get(i).getTimestamp().substring(3,5));
-                if (tsMins % min_filter == 0)
+                if (i % min_filter == 0)
                     oiHistoryFilteredNew.add(oiHistoryFiltered.get(i));
             }
             if (oiHistoryFilteredNew.size() > 0) {
                 oiHistoryAdapter = new OIHistoryAdapter(oiHistoryFilteredNew, getApplicationContext());
                 recycleViewBankHistory.setAdapter(oiHistoryAdapter);
                 int position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
-                recycleViewBankHistory.smoothScrollToPosition(position);
+                if(position>5)
+                    recycleViewBankHistory.smoothScrollToPosition(position);
                 oiHistoryAdapter.notifyDataSetChanged();
             }
         } else {
@@ -328,8 +342,7 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
         List<BanksList> banksHistoryFiltered = viewModel.getBanksHistory(getBankName);
         List<BanksList> banksHistoryFilteredNew = new ArrayList<>();
         for (int i = 0; i < banksHistoryFiltered.size(); i++) {
-            int tsMins = Integer.parseInt(banksHistoryFiltered.get(i).getTimeStamp().substring(3,5));
-            if (tsMins % min_filter == 0)
+            if (i % min_filter == 0)
                 banksHistoryFilteredNew.add(banksHistoryFiltered.get(i));
         }
 
@@ -337,9 +350,104 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
             adapterHistory = new BankHistoryAdapter(banksHistoryFilteredNew, getApplicationContext());
             recycleViewBankHistory.setAdapter(adapterHistory);
             int position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
-            recycleViewBankHistory.smoothScrollToPosition(position);
+            if(position>5)
+                recycleViewBankHistory.smoothScrollToPosition(position);
             adapterHistory.notifyDataSetChanged();
         }
+        }
+    }
+
+    public void filterByMSTR() {
+        if (getBankName.equals("OI HistoryMStr")) {
+            ceoi.setText("CE OI");
+            peoi.setText("PE OI");
+            buyqty.setText("CE Vol");
+            sellqty.setText("PE Vol");
+            underlyv.setText("uVal");
+
+            List<BankNiftyList> oiHistoryFiltered = viewModel.getOIHistory(getBankName);
+            List<BankNiftyList> oiHistoryFilteredNew = new ArrayList<>();
+            for (int i = 0; i < oiHistoryFiltered.size(); i++) {
+                if (oiHistoryFiltered.get(0).getCalloi() > mValConst || oiHistoryFiltered.get(0).getPutoi() > mValConst
+                        || oiHistoryFiltered.get(0).getCalloi() < -mValConst || oiHistoryFiltered.get(0).getPutoi() < -mValConst)
+                    oiHistoryFilteredNew.add(oiHistoryFiltered.get(i));
+            }
+
+            if (oiHistoryFilteredNew.size() > 0) {
+                oiHistoryAdapter = new OIHistoryAdapter(oiHistoryFilteredNew, getApplicationContext());
+                recycleViewBankHistory.setAdapter(oiHistoryAdapter);
+                int position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
+                if(position>5)
+                    recycleViewBankHistory.smoothScrollToPosition(position);
+                oiHistoryAdapter.notifyDataSetChanged();
+            }
+        } else if (getBankName.equals("CE HistoryMStr") || getBankName.equals("PE HistoryMStr")) {
+            ceoi.setText("Bids");
+            peoi.setText("Offers");
+            buyqty.setText("Vol");
+            sellqty.setText("OI");
+            underlyv.setText("uVal");
+
+            List<BankNiftyList> oiHistoryFiltered = viewModel.getOIHistory(getBankName);
+            List<BankNiftyList> oiHistoryFilteredNew = new ArrayList<>();
+            for (int i = 0; i < oiHistoryFiltered.size(); i++) {
+                if (oiHistoryFiltered.get(0).getNBQmvVal() > mValConst || oiHistoryFiltered.get(0).getNSQmvVal() > mValConst
+                        || oiHistoryFiltered.get(0).getNOImvVal() > mValConst
+                        || oiHistoryFiltered.get(0).getNBQmvVal() < -mValConst || oiHistoryFiltered.get(0).getNSQmvVal() < -mValConst
+                        || oiHistoryFiltered.get(0).getNOImvVal() < -mValConst)
+                    oiHistoryFilteredNew.add(oiHistoryFiltered.get(i));
+            }
+
+            if (oiHistoryFilteredNew.size() > 0) {
+                oiHistoryAdapter = new OIHistoryAdapter(oiHistoryFilteredNew, getApplicationContext());
+                recycleViewBankHistory.setAdapter(oiHistoryAdapter);
+                int position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
+                if(position>5)
+                    recycleViewBankHistory.smoothScrollToPosition(position);
+                oiHistoryAdapter.notifyDataSetChanged();
+            }
+        } else if (getBankName.contains("CE") || getBankName.contains("PE") && !getBankName.contains("History")) {
+            ceoi.setText("Bids");
+            peoi.setText("Offers");
+            buyqty.setText("Vol");
+            sellqty.setText("OI");
+            underlyv.setText("oiC%");
+
+            List<BankNiftyList> oiHistoryFiltered = viewModel.getOIHistory(getBankName);
+            List<BankNiftyList> oiHistoryFilteredNew = new ArrayList<>();
+            for (int i = 0; i < oiHistoryFiltered.size(); i++) {
+                if (oiHistoryFiltered.get(0).getNBQmvVal() > mValConst || oiHistoryFiltered.get(0).getNSQmvVal() > mValConst
+                        || oiHistoryFiltered.get(0).getNOImvVal() > mValConst
+                        || oiHistoryFiltered.get(0).getNBQmvVal() < -mValConst || oiHistoryFiltered.get(0).getNSQmvVal() < -mValConst
+                        || oiHistoryFiltered.get(0).getNOImvVal() < -mValConst)
+                    oiHistoryFilteredNew.add(oiHistoryFiltered.get(i));
+            }
+            if (oiHistoryFilteredNew.size() > 0) {
+                oiHistoryAdapter = new OIHistoryAdapter(oiHistoryFilteredNew, getApplicationContext());
+                recycleViewBankHistory.setAdapter(oiHistoryAdapter);
+                int position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
+                if(position>5)
+                    recycleViewBankHistory.smoothScrollToPosition(position);
+                oiHistoryAdapter.notifyDataSetChanged();
+            }
+        } else {
+
+            List<BanksList> banksHistoryFiltered = viewModel.getBanksHistory(getBankName);
+            List<BanksList> banksHistoryFilteredNew = new ArrayList<>();
+            for (int i = 0; i < banksHistoryFiltered.size(); i++) {
+                if (banksHistoryFiltered.get(0).getTBQmvVal() > mValConst || banksHistoryFiltered.get(0).getTSQmvVal() > mValConst
+                        || banksHistoryFiltered.get(0).getTBQmvVal() < -mValConst || banksHistoryFiltered.get(0).getTSQmvVal() < -mValConst)
+                    banksHistoryFilteredNew.add(banksHistoryFiltered.get(i));
+            }
+
+            if (banksHistoryFilteredNew.size() > 0) {
+                adapterHistory = new BankHistoryAdapter(banksHistoryFilteredNew, getApplicationContext());
+                recycleViewBankHistory.setAdapter(adapterHistory);
+                int position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
+                if(position>5)
+                    recycleViewBankHistory.smoothScrollToPosition(position);
+                adapterHistory.notifyDataSetChanged();
+            }
         }
     }
 

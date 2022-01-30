@@ -324,7 +324,7 @@
 
                         <TextView
                             android:id="@+id/tvDeliveryPCTAll"
-                            android:layout_width="43dp"
+                            android:layout_width="50dp"
                             android:layout_height="45dp"
                             android:layout_alignParentBottom="true"
                             android:layout_marginEnd="1dp"
@@ -360,7 +360,7 @@
 
                         <TextView
                             android:id="@+id/tvQuantityTradedBankAll"
-                            android:layout_width="70dp"
+                            android:layout_width="68dp"
                             android:layout_height="45dp"
                             android:layout_alignParentBottom="true"
                             android:layout_marginEnd="1dp"
@@ -376,7 +376,7 @@
 
                         <TextView
                             android:id="@+id/tvDeliveryQtyBankAll"
-                            android:layout_width="70dp"
+                            android:layout_width="68dp"
                             android:layout_height="45dp"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
@@ -392,7 +392,7 @@
 
                         <TextView
                             android:id="@+id/tvpTotalSellQuantityBankAll"
-                            android:layout_width="70dp"
+                            android:layout_width="68dp"
                             android:layout_height="45dp"
                             android:layout_alignParentBottom="true"
                             android:layout_marginEnd="1dp"
@@ -408,7 +408,7 @@
 
                         <TextView
                             android:id="@+id/tvTotalBuyQuantityBankAll"
-                            android:layout_width="70dp"
+                            android:layout_width="68dp"
                             android:layout_height="45dp"
                             android:layout_alignParentBottom="true"
                             android:layout_marginEnd="1dp"

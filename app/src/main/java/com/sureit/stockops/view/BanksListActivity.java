@@ -104,8 +104,9 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
     public static final String URL_BankNifty = "https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY";
     public static final String URL_BanksTradeInfo = "https://www.nseindia.com/api/quote-equity?symbol=";
     public static final String URL_NSE = "https://www.nseindia.com/";
-    public static String URL_MacFTPServer_BanksLiveData = "http://192.168.43.251:1313/Desktop/Suresh/Stock/liveQuotesData/banksData1.json";
-    public static String URL_MacFTPServer_BankNiftyOIData = "http://192.168.43.251:1313/Desktop/Suresh/Stock/liveQuotesData/bankNifty.json";
+    public static String URL_FTP = "http://192.168.43.251:1313/";
+    public static String URL_MacFTPServer_BanksLiveData = URL_FTP + "Desktop/Suresh/Stock/liveQuotesData/banksData1.json";
+    public static String URL_MacFTPServer_BankNiftyOIData = URL_FTP + "Desktop/Suresh/Stock/liveQuotesData/bankNifty.json";
     final Map<String, String> headers = new HashMap<String, String>();
     public String cookiedata;
     private int ceTotalTradedVolume;
@@ -152,7 +153,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
     TextView totalTradedAllTV;
     TextView totalDeliveryAllTV;
     TextView totalDeliveryAllPCTV;
-    private int retrievesDataCompleted=0;
+    private int retrievesDataCompleted = 0;
     private BanksViewModel viewModel;
 
 
@@ -240,7 +241,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             @Override
             public void onClick(View v) {
                 Intent skipIntent = new Intent(v.getContext(), BankNiftyDetailsActivity.class);
-                skipIntent.putExtra(Constants.PARCEL_KEY,"All Banks");
+                skipIntent.putExtra(Constants.PARCEL_KEY, "All Banks");
                 v.getContext().startActivity(skipIntent);
             }
         });
@@ -250,7 +251,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             @Override
             public void onClick(View v) {
                 Intent skipIntent = new Intent(v.getContext(), BankNiftyDetailsActivity.class);
-                skipIntent.putExtra(Constants.PARCEL_KEY,"OI History");
+                skipIntent.putExtra(Constants.PARCEL_KEY, "OI History");
                 v.getContext().startActivity(skipIntent);
             }
         });
@@ -258,7 +259,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             @Override
             public void onClick(View v) {
                 Intent skipIntent = new Intent(v.getContext(), BankNiftyDetailsActivity.class);
-                skipIntent.putExtra(Constants.PARCEL_KEY,"OI History");
+                skipIntent.putExtra(Constants.PARCEL_KEY, "OI History");
                 v.getContext().startActivity(skipIntent);
             }
         });
@@ -267,7 +268,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             @Override
             public void onClick(View v) {
                 Intent skipIntent = new Intent(v.getContext(), BankNiftyDetailsActivity.class);
-                skipIntent.putExtra(Constants.PARCEL_KEY,"CE History");
+                skipIntent.putExtra(Constants.PARCEL_KEY, "CE History");
                 v.getContext().startActivity(skipIntent);
             }
         });
@@ -275,7 +276,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             @Override
             public void onClick(View v) {
                 Intent skipIntent = new Intent(v.getContext(), BankNiftyDetailsActivity.class);
-                skipIntent.putExtra(Constants.PARCEL_KEY,"CE History");
+                skipIntent.putExtra(Constants.PARCEL_KEY, "CE History");
                 v.getContext().startActivity(skipIntent);
             }
         });
@@ -283,7 +284,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             @Override
             public void onClick(View v) {
                 Intent skipIntent = new Intent(v.getContext(), BankNiftyDetailsActivity.class);
-                skipIntent.putExtra(Constants.PARCEL_KEY,"CE History");
+                skipIntent.putExtra(Constants.PARCEL_KEY, "CE History");
                 v.getContext().startActivity(skipIntent);
             }
         });
@@ -292,7 +293,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             @Override
             public void onClick(View v) {
                 Intent skipIntent = new Intent(v.getContext(), BankNiftyDetailsActivity.class);
-                skipIntent.putExtra(Constants.PARCEL_KEY,"PE History");
+                skipIntent.putExtra(Constants.PARCEL_KEY, "PE History");
                 v.getContext().startActivity(skipIntent);
             }
         });
@@ -300,7 +301,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             @Override
             public void onClick(View v) {
                 Intent skipIntent = new Intent(v.getContext(), BankNiftyDetailsActivity.class);
-                skipIntent.putExtra(Constants.PARCEL_KEY,"PE History");
+                skipIntent.putExtra(Constants.PARCEL_KEY, "PE History");
                 v.getContext().startActivity(skipIntent);
             }
         });
@@ -308,11 +309,10 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             @Override
             public void onClick(View v) {
                 Intent skipIntent = new Intent(v.getContext(), BankNiftyDetailsActivity.class);
-                skipIntent.putExtra(Constants.PARCEL_KEY,"PE History");
+                skipIntent.putExtra(Constants.PARCEL_KEY, "PE History");
                 v.getContext().startActivity(skipIntent);
             }
         });
-
 
 
         if (savedInstanceState != null) {
@@ -327,7 +327,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 //        checkNseUrl(URL_NSE);
 //        loadBankNiftyUrlData(URL_BankNifty);
 //        loadBanksTradeInfo();
-        checkFTPURL("http://192.168.43.251:1313/Desktop/Suresh/");
+        checkFTPURL(URL_FTP);
         Intent intent = new Intent(getApplicationContext(), StockDataRetrieveService.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             getApplicationContext().startForegroundService(intent);
@@ -341,50 +341,33 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 //        downloadBanksLiveDataFromMAC_FTP();
 //        liveDisplayUI();
         // Call this to start the task first time
-        if(!isMarketClosed()) {
+        if (!isMarketClosed()) {
             mHandler.postDelayed(mRunnableTask, (5 * 1000));
-        }else{
+        } else {
             progressDialogFTP.setMessage("Market Closed, FTP Refresh Stopped");
             progressDialogFTP.show();
+            liveDisplayUI();
         }
     }
 
-    private int minsCount=0;
     Runnable mRunnableTask = new Runnable() {
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void run() {
-//            checkNseUrl(URL_NSE);
-//            loadBankNiftyUrlData(URL_BankNifty);
-//            loadBanksTradeInfo();
             progressDialogFTP.dismiss();
             bankNiftyLists.clear();
             banksLists.clear();
-            if(isMarketClosed()){
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("DD_MM_YYYY_HH_mm_");
-                    String currentTime = dateFormat.format(new Date()).toString();
-                    saveDbToCSV(currentTime+"BankNifty");
-                    saveDbToCSV(currentTime+"AllBanks");
-                    liveDisplayUI();
-                }
-            }else{
-                progressDialogFTP = new ProgressDialog(BanksListActivity.this);
-                progressDialogFTP.setMessage("Refreshing latest data from FTP ...");
-                progressDialogFTP.show();
-                liveDisplayUI();
-            }
-
+            liveDisplayUI();
             // this will repeat this task again at specified time interval
-            mHandler.postDelayed(this, (60 * 1000));
+            mHandler.postDelayed(this, (45 * 1000));
         }
     };
 
-    private boolean isMarketClosed(){
-        String start = "09:15";
-        Date marketOpen=null;
-        String limit = "15:40";
-        Date marketClose=null;
+    private boolean isMarketClosed() {
+        String start = "08:55";
+        Date marketOpen = null;
+        String limit = "15:35";
+        Date marketClose = null;
         Date now = null;
         SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm");
         String currentTime = dateFormat.format(new Date()).toString();
@@ -392,7 +375,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             marketOpen = dateFormat.parse(start);
             marketClose = dateFormat.parse(limit);
             now = dateFormat.parse(currentTime);
-            if (now.after(marketClose)||now.before(marketOpen)){
+            if (now.after(marketClose) || now.before(marketOpen)) {
 //                mHandler.removeCallbacksAndMessages(null);
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 //                    dateFormat = new SimpleDateFormat("DD_MM_YYYY_HH_mm_");
@@ -402,7 +385,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 //                saveDbToCSV(currentTime+"AllBanks");
 //                liveDisplayUI();
                 return true;
-            }else{
+            } else {
 ////                    downloadBanksLiveDataFromMAC_FTP();
 //                progressDialogFTP = new ProgressDialog(BanksListActivity.this);
 //                progressDialogFTP.setMessage("Refreshing latest data from FTP ...");
@@ -447,8 +430,8 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("DD_MM_YYYY_HH_mm_");
                     String currentTime = dateFormat.format(new Date()).toString();
-                    saveDbToCSV(currentTime+"BankNifty");
-                    saveDbToCSV(currentTime+"AllBanks");
+                    saveDbToCSV(currentTime + "BankNifty");
+                    saveDbToCSV(currentTime + "AllBanks");
                 }
                 return true;
 
@@ -498,7 +481,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         progressDialogFTP.show();
         try {
 //            for(int i=1; i<= 3; i++){
-                new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this,"Banks", URL_MacFTPServer_BanksLiveData, null);
+            new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this, "Banks", URL_MacFTPServer_BanksLiveData, null);
 //            }
 //            new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this,"StrikePrice", URL_MacFTPServer_BanksLiveData +"StrikeP.json", null);
         } catch (Exception e) {
@@ -517,7 +500,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         deleteCache(this);
         progressDialogFTP.show();
         try {
-            new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this,"BankNifty", URL_MacFTPServer_BankNiftyOIData, null);
+            new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this, "BankNifty", URL_MacFTPServer_BankNiftyOIData, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -532,8 +515,8 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 
         final String[] banks = {"AUBANK", "RBLBANK", "BANDHANBNK", "FEDERALBNK", "IDFCFIRSTB", "PNB", "INDUSINDBK", "AXISBANK", "SBIN", "KOTAKBANK", "ICICIBANK", "HDFCBANK"};
         try {
-            for(int i=0; i< banks.length; i++){
-                new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this,banks[i],URL_BanksTradeInfo + banks[i] + "&section=trade_info", cookiedata);
+            for (int i = 0; i < banks.length; i++) {
+                new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this, banks[i], URL_BanksTradeInfo + banks[i] + "&section=trade_info", cookiedata);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -586,7 +569,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                             ceOpenInterest += (int) ceBody.get("openInterest");
                             peOpenInterest += (int) peBody.get("openInterest");
 
-                            bankNiftyList = new BankNiftyList(timeStampValue.substring(12,17),
+                            bankNiftyList = new BankNiftyList(timeStampValue.substring(12, 17),
                                     ceBody.getString("identifier").substring(25, 32),
                                     ceBody.getLong("totalTradedVolume"),
                                     ceBody.getLong("totalBuyQuantity"),
@@ -595,7 +578,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                                     ceBody.getDouble("pchangeinOpenInterest")
                             );
                             bankNiftyLists.add(bankNiftyList);
-                            bankNiftyList = new BankNiftyList(timeStampValue.substring(12,17),
+                            bankNiftyList = new BankNiftyList(timeStampValue.substring(12, 17),
                                     peBody.getString("identifier").substring(25, 32),
                                     peBody.getLong("totalTradedVolume"),
                                     peBody.getLong("totalBuyQuantity"),
@@ -610,12 +593,12 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                     bankNiftyOIdata.add(String.valueOf(underlyingValue));
                     bankNiftyOIdata.add(String.valueOf(ceTotalTradedVolume / 1000));
                     bankNiftyOIdata.add(String.valueOf(peTotalTradedVolume / 1000));
-                    bankNiftyOIdata.add(String.valueOf(ceTotalBuyQuantity /1000));
-                    bankNiftyOIdata.add(String.valueOf(ceTotalSellQuantity /1000));
-                    bankNiftyOIdata.add(String.valueOf(peTotalBuyQuantity /1000));
-                    bankNiftyOIdata.add(String.valueOf(peTotalSellQuantity /1000));
-                    bankNiftyOIdata.add(String.valueOf(ceOpenInterest /1000));
-                    bankNiftyOIdata.add(String.valueOf(peOpenInterest /1000));
+                    bankNiftyOIdata.add(String.valueOf(ceTotalBuyQuantity / 1000));
+                    bankNiftyOIdata.add(String.valueOf(ceTotalSellQuantity / 1000));
+                    bankNiftyOIdata.add(String.valueOf(peTotalBuyQuantity / 1000));
+                    bankNiftyOIdata.add(String.valueOf(peTotalSellQuantity / 1000));
+                    bankNiftyOIdata.add(String.valueOf(ceOpenInterest / 1000));
+                    bankNiftyOIdata.add(String.valueOf(peOpenInterest / 1000));
 
                     timeStampBanks.setText(timeStampValue);
                     strikePriceTVBanks.setText(String.valueOf(underlyingValue));
@@ -726,9 +709,9 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         progressDialog.setMessage("All Banks Live Data Loading...");
         progressDialog.show();
         try {
-            for(int i=0; i< banksRetryList.size(); i++){
+            for (int i = 0; i < banksRetryList.size(); i++) {
                 Thread.sleep(10000);
-                new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this, banksRetryList.get(i),URL_BanksTradeInfo + banksRetryList.get(i) + "&section=trade_info", cookiedata);
+                new PostVolleyJsonRequest(BanksListActivity.this, BanksListActivity.this, banksRetryList.get(i), URL_BanksTradeInfo + banksRetryList.get(i) + "&section=trade_info", cookiedata);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -773,10 +756,11 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         viewModel.getBanksHistory().observe(this, new Observer<List<BanksList>>() {
             @Override
             public void onChanged(@Nullable List<BanksList> taskEntries) {
-                new BanksAdapter(taskEntries,getApplicationContext());
+                new BanksAdapter(taskEntries, getApplicationContext());
             }
         });
     }
+
     @Override
     public void onSuccessJson(String response, String type) {
 //        if(type.equals("StrikePrice")){
@@ -814,7 +798,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                         JSONObject ceBody = jo.getJSONObject("CE");
                         JSONObject peBody = jo.getJSONObject("PE");
 
-                        if(sPrice>ulValue-200) {
+                        if (sPrice > ulValue - 200) {
 
                             //Add total values for main top card
                             ceTotalTradedVolume += (int) ceBody.get("totalTradedVolume");
@@ -833,7 +817,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                             bankNiftyLists.add(bankNiftyList);
                             bankNiftyDao.insertBankNiftyData(bankNiftyList);
                         }
-                        if(sPrice<ulValue-200) {
+                        if (sPrice < ulValue - 200) {
 
                             //Add total values for main top card
                             peTotalTradedVolume += (int) peBody.get("totalTradedVolume");
@@ -856,15 +840,15 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                 }
 
                 //Add data for "OI History"
-                bankNiftyList = new BankNiftyList(timeStampValue.substring(12,17),"OI History", (long) (ceOpenInterest / 1000), (long) (peOpenInterest / 1000), (long) (ceTotalTradedVolume / 1000),(long) (peTotalTradedVolume / 1000),Double.valueOf(underlyingValue));
+                bankNiftyList = new BankNiftyList(timeStampValue.substring(12, 17), "OI History", (long) (ceOpenInterest / 1000), (long) (peOpenInterest / 1000), (long) (ceTotalTradedVolume / 1000), (long) (peTotalTradedVolume / 1000), Double.valueOf(underlyingValue));
                 bankNiftyDao.insertBankNiftyData(bankNiftyList);
 
                 //Add data for "CE History"
-                bankNiftyList = new BankNiftyList(timeStampValue.substring(12,17),"CE History", (long) (ceTotalBuyQuantity / 1000), (long) (ceTotalSellQuantity / 1000), (long) (ceTotalTradedVolume / 1000),(long) (ceOpenInterest / 1000),Double.valueOf(underlyingValue));
+                bankNiftyList = new BankNiftyList(timeStampValue.substring(12, 17), "CE History", (long) (ceTotalBuyQuantity / 1000), (long) (ceTotalSellQuantity / 1000), (long) (ceTotalTradedVolume / 1000), (long) (ceOpenInterest / 1000), Double.valueOf(underlyingValue));
                 bankNiftyDao.insertBankNiftyData(bankNiftyList);
 
                 //Add data for "PE History"
-                bankNiftyList = new BankNiftyList(timeStampValue.substring(12,17),"PE History", (long) (peTotalBuyQuantity / 1000), (long) (peTotalSellQuantity / 1000), (long) (peTotalTradedVolume / 1000),(long) (peOpenInterest / 1000),Double.valueOf(underlyingValue));
+                bankNiftyList = new BankNiftyList(timeStampValue.substring(12, 17), "PE History", (long) (peTotalBuyQuantity / 1000), (long) (peTotalSellQuantity / 1000), (long) (peTotalTradedVolume / 1000), (long) (peOpenInterest / 1000), Double.valueOf(underlyingValue));
                 bankNiftyDao.insertBankNiftyData(bankNiftyList);
 
 
@@ -886,14 +870,14 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                 editor.putString("bankNiftyData", json);
                 editor.commit();
 
-                ceTotalTradedVolume=0;
-                peTotalTradedVolume=0;
-                ceTotalBuyQuantity=0;
-                ceTotalSellQuantity=0;
-                peTotalBuyQuantity=0;
-                peTotalSellQuantity=0;
-                ceOpenInterest=0;
-                peOpenInterest=0;
+                ceTotalTradedVolume = 0;
+                peTotalTradedVolume = 0;
+                ceTotalBuyQuantity = 0;
+                ceTotalSellQuantity = 0;
+                peTotalBuyQuantity = 0;
+                peTotalSellQuantity = 0;
+                ceOpenInterest = 0;
+                peOpenInterest = 0;
                 bankNiftyLists.clear();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -949,7 +933,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 
 //                Thread.sleep(2000);
                 JSONObject jsonObject = new JSONObject(response);
-                currentTime = jsonObject.getString("lastUpdateTime").substring(12,17);
+                currentTime = jsonObject.getString("lastUpdateTime").substring(12, 17);
                 JSONArray banksArr = jsonObject.getJSONArray("data");
                 for (int i = 0; i < banksArr.length(); i++) {
                     JSONObject jo = banksArr.getJSONObject(i);
@@ -976,18 +960,18 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                     banksList = new BanksList(bankName, totalBuyQuantity, totalSellQuantity, tradedVolume, deliveryQuantity, deliveryPercent);
                     banksLists.add(banksList);
 
-                    allBanksBuyQuantity+=totalBuyQuantity;
-                    allBanksSellQuantity+=totalSellQuantity;
-                    allBanksQuantityTraded+=tradedVolume;
-                    allBanksDeliveryQuantity+=deliveryQuantity;
-                    allBanksDeliveryPercent+=deliveryPercent;
+                    allBanksBuyQuantity += totalBuyQuantity;
+                    allBanksSellQuantity += totalSellQuantity;
+                    allBanksQuantityTraded += tradedVolume;
+                    allBanksDeliveryQuantity += deliveryQuantity;
+                    allBanksDeliveryPercent += deliveryPercent;
 
                     //To store in DB
                     banksList = new BanksList(currentTime, bankName, totalBuyQuantity, totalSellQuantity, tradedVolume, deliveryQuantity, deliveryPercent);
                     banksDao.insertBankData(banksList);
                 }
                 macFTPfile = false;
-                if(retrievesDataCompleted==3){
+                if (retrievesDataCompleted == 3) {
                     banksList = new BanksList(currentTime, "All Banks", allBanksBuyQuantity, allBanksSellQuantity, allBanksQuantityTraded, allBanksDeliveryQuantity, allBanksDeliveryPercent);
                     banksDao.insertBankData(banksList);
 
@@ -1006,12 +990,12 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                     editor.commit();
 //                    banksListActivityObj.liveDisplayUI();
 
-                    allBanksBuyQuantity=0;
-                    allBanksSellQuantity=0;
-                    allBanksQuantityTraded=0;
-                    allBanksDeliveryQuantity=0;
-                    allBanksDeliveryPercent=0.0;
-                    retrievesDataCompleted=0;
+                    allBanksBuyQuantity = 0;
+                    allBanksSellQuantity = 0;
+                    allBanksQuantityTraded = 0;
+                    allBanksDeliveryQuantity = 0;
+                    allBanksDeliveryPercent = 0.0;
+                    retrievesDataCompleted = 0;
                     banksLists.clear();
                 }
             } catch (JSONException e) {
@@ -1044,6 +1028,14 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                 totalAskQuantityPEAllTV.setBackgroundColor(Color.RED);
             }
 
+            if (all_banks.get(size).getPercentDiff() == all_banks.get(size - 1).getPercentDiff()) {
+                totalDeliveryAllPCTV.setBackgroundColor(Color.WHITE);
+            } else if (all_banks.get(size).getPercentDiff() > all_banks.get(size - 1).getPercentDiff()) {
+                totalDeliveryAllPCTV.setBackgroundColor(Color.GREEN);
+            } else {
+                totalDeliveryAllPCTV.setBackgroundColor(Color.RED);
+            }
+
             if (all_banks.get(size).getTotalBuyQuantity() > all_banks.get(size - 1).getTotalBuyQuantity()
                     && all_banks.get(size).getTotalSellQuantity() < all_banks.get(size - 1).getTotalSellQuantity()) {
                 bankNameAllTV.setBackgroundColor(Color.GREEN);
@@ -1058,7 +1050,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         }
     }
 
-    private void setSentimentColorsOI(String historyStr){
+    private void setSentimentColorsOI(String historyStr) {
         try {
             BanksViewModel viewModel = ViewModelProviders.of(this).get(BanksViewModel.class);
             List<BankNiftyList> oi_history = viewModel.getOIHistory(historyStr);
@@ -1129,10 +1121,10 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 
 
     private Long parseToLongfrom_(String trim) {
-        if(trim.length()>2){
-            trim = trim.replaceAll(",","");
-            return Long.parseLong(trim)/1000;
-        }else{
+        if (trim.length() > 2) {
+            trim = trim.replaceAll(",", "");
+            return Long.parseLong(trim) / 1000;
+        } else {
             return 0L;
         }
     }
@@ -1156,9 +1148,9 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 
     public static void deleteCache(Context context) {
         String start = "09:15";
-        Date marketOpen=null;
+        Date marketOpen = null;
         String limit = "15:17";
-        Date marketClose=null;
+        Date marketClose = null;
         Date now = null;
         SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm");
         String currentTime = dateFormat.format(new Date()).toString();
@@ -1166,9 +1158,9 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             marketOpen = dateFormat.parse(start);
             marketClose = dateFormat.parse(limit);
             now = dateFormat.parse(currentTime);
-            if (now.after(marketClose)||now.before(marketOpen)){
-                Log.v(LOG_TAG,"Don't delete cache during market close");
-            }else{
+            if (now.after(marketClose) || now.before(marketOpen)) {
+                Log.v(LOG_TAG, "Don't delete cache during market close");
+            } else {
                 File dir = context.getCacheDir();
                 deleteDir(dir);
             }
@@ -1189,7 +1181,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                 }
             }
             return dir.delete();
-        } else if(dir!= null && dir.isFile()) {
+        } else if (dir != null && dir.isFile()) {
             return dir.delete();
         } else {
             return false;
@@ -1240,8 +1232,8 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String newIP = String.valueOf(taskEditText.getText());
-                        URL_MacFTPServer_BanksLiveData = "http://"+ newIP +":1313/Desktop/Suresh/Stock/liveQuotesData/banksData";
-                        URL_MacFTPServer_BankNiftyOIData = "http://"+ newIP +":1313/Desktop/Suresh/Stock/liveQuotesData/bankNifty.json";
+                        URL_MacFTPServer_BanksLiveData = "http://" + newIP + ":1313/Desktop/Suresh/Stock/liveQuotesData/banksData";
+                        URL_MacFTPServer_BankNiftyOIData = "http://" + newIP + ":1313/Desktop/Suresh/Stock/liveQuotesData/bankNifty.json";
 
                     }
                 })
@@ -1251,11 +1243,12 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
     }
 
     @SuppressLint("WrongConstant")
-    public void liveDisplayUI(){
+    public void liveDisplayUI() {
         banksLists.clear();
+        progressDialogFTP.dismiss();
 
         SharedPreferences shOI = getSharedPreferences("NiftyOILiveDisplaySP", MODE_APPEND);
-        if(shOI.getString("timeStampValue","").length()>5) {
+        if (shOI.getString("timeStampValue", "").length() > 5) {
             timeStampBanks.setText(shOI.getString("timeStampValue", ""));
             strikePriceTVBanks.setText(shOI.getString("underlyingValue", ""));
             totalVolumeCEBanks.setText(shOI.getString("ceTotalTradedVolume", ""));
@@ -1267,23 +1260,17 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             ceOpenInterestBanks.setText(shOI.getString("ceOpenInterest", ""));
             peOpenInterestBanks.setText(shOI.getString("peOpenInterest", ""));
         }
+        setSentimentColorsOI("OI History");
+        setSentimentColorsOI("CE History");
+        setSentimentColorsOI("PE History");
 
-        movementTrackingBanks("All Banks");
-        final String[] banks = {"AUBANK", "RBLBANK", "BANDHANBNK", "FEDERALBNK", "IDFCFIRSTB", "PNB", "INDUSINDBK", "AXISBANK", "SBIN", "KOTAKBANK", "ICICIBANK", "HDFCBANK"};
-        try {
-            for (int i = 0; i < banks.length; i++) {
-                movementTrackingBanks(banks[i]);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        progressDialogFTP.dismiss();
         SharedPreferences sh = getSharedPreferences("AllBanksLiveDisplaySP", MODE_APPEND);
-        if(sh.getString("All Banks","").contains("All Banks")){
+        if (sh.getString("All Banks", "").contains("All Banks")) {
             Gson gson = new Gson();
             String json = sh.getString("BanksLiveDisplayData", "");
-            Type type = new TypeToken<List<BanksList>>() {}.getType();
+            Type type = new TypeToken<List<BanksList>>() {
+            }.getType();
             banksLists = gson.fromJson(json, type);
 
             DecimalFormat df = new DecimalFormat("0.00");
@@ -1296,9 +1283,6 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                 allBanksDeliveryPercent = sh.getFloat("allBanksDeliveryPercent", 0);
                 totalDeliveryAllPCTV.setText(df.format(allBanksDeliveryPercent / 12) + "%");
                 strikePriceTVBanks.setText(sh.getString("underlyingValue", ""));
-                setSentimentColorsOI("OI History");
-                setSentimentColorsOI("CE History");
-                setSentimentColorsOI("PE History");
                 setSentimentColorsBanksTotal();
 
                 adapter = new BanksAdapter(banksLists, getApplicationContext());
@@ -1310,114 +1294,39 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             }
         }
 
-//        mvlForBankNifty();
-    }
+        //Moved to Service class
+//        movementTrackingBanks("All Banks");
+//        final String[] banks = {"AUBANK", "RBLBANK", "BANDHANBNK", "FEDERALBNK", "IDFCFIRSTB", "PNB", "INDUSINDBK", "AXISBANK", "SBIN", "KOTAKBANK", "ICICIBANK", "HDFCBANK"};
+//        try {
+//            for (int i = 0; i < banks.length; i++) {
+//                movementTrackingBanks(banks[i]);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        mHandler.postDelayed(mValBankNiftyRTask, 500);
 
-    private void mvlForBankNifty() {
-        movementTrackingNifty("OI History");
-        movementTrackingNifty("CE History");
-        movementTrackingNifty("PE History");
-        try {
-            @SuppressLint("WrongConstant") SharedPreferences shUl = getSharedPreferences("NiftyOILiveDisplaySP", MODE_APPEND);
-            String underlyingValue1 = shUl.getString("underlyingValue", "").substring(0, 5);
-            int underlyingValue = Integer.parseInt(underlyingValue1)/100;
-            int underlyingValueCE = underlyingValue * 100;
-            int underlyingValuePE = underlyingValueCE - 700;
-            for (int i = 1; i < 8; i++) {
-                movementTrackingNifty("CE" + underlyingValueCE);
-                movementTrackingNifty("PE" + underlyingValuePE);
-                underlyingValueCE += 100;
-                underlyingValuePE += 100;
-            }
-        } catch (Exception e) {
-            Log.v("underlyingValue to int", e.getMessage());
-        }
-    }
+//        long tbQmvVal = 0;
+//        long tsQmvVal = 0;
+//        double tDPmvVAl = 0;
+//        long qTmvVal = 0;
+//        long uLmvVal = Long.parseLong(sh.getString("underlyingValue", ""));
+//        List<BanksList> allBanksMValPV = null;
+//        for (int i = 0; i < banks.length; i++) {
+//            allBanksMValPV = viewModel.getBanksHistory(banks[i] + "mval");
+//            tbQmvVal += allBanksMValPV.get(allBanksMValPV.size() - 1).getTBQmvVal();
+//            tsQmvVal += allBanksMValPV.get(allBanksMValPV.size() - 1).getTSQmvVal();
+//            tDPmvVAl += allBanksMValPV.get(allBanksMValPV.size() - 1).getDeliveryPercent();
+//            qTmvVal += allBanksMValPV.get(allBanksMValPV.size() - 1).getQuantityTradedsure();
+//        }
+//        DecimalFormat df = new DecimalFormat("0.00");
+//        totalBuyQuantityCEAllTV.setText(df.format(tbQmvVal / 12));
+//        totalAskQuantityPEAllTV.setText(df.format(tsQmvVal / 12));
 
-    private void movementTrackingBanks(String bankName) {
+//        banksList = new BanksList(allBanksMValPV.get(0).getTimeStamp(), "All Banksmval",tbQmvVal/12,
+//                tsQmvVal/12, qTmvVal, uLmvVal , tDPmvVAl/12);
+//        banksDao.insertBankData(banksList);
 
-        BanksList curBanksList = null;
-        BanksList prevBanksList = null;
-
-        try {
-            List<BanksList> banksHistoryPrev = viewModel.getBanksHistory(bankName);
-            int bankHisLen = banksHistoryPrev.size();
-            if (bankHisLen > 1) {
-                curBanksList = banksHistoryPrev.get(bankHisLen - 1);
-                prevBanksList = banksHistoryPrev.get(bankHisLen - 2);
-                addmValDataBanks(bankName, curBanksList, prevBanksList);
-            } else {
-                curBanksList = banksHistoryPrev.get(0);
-                prevBanksList = banksHistoryPrev.get(0);
-                addmValDataBanks(bankName, curBanksList, prevBanksList);
-            }
-        }catch (Exception e){
-            Log.v("movementTrackingBanks",e.getMessage());
-        }
-    }
-
-    private void addmValDataBanks(String bankName, BanksList curBanksList, BanksList prevBanksList) {
-        double mValTBQ = getmVal(curBanksList.getTotalBuyQuantity(), prevBanksList.getTotalBuyQuantity());
-        double mValTSQ = getmVal(curBanksList.getTotalSellQuantity(), prevBanksList.getTotalSellQuantity());
-        double mVAlQTS = getmVal (curBanksList.getQuantityTradedsure() , prevBanksList.getQuantityTradedsure());
-        double mValDQ = getmVal (curBanksList.getDeliveryQuantity() , prevBanksList.getDeliveryQuantity());
-        double mValDP = getmVal(curBanksList.getDeliveryPercent() , prevBanksList.getDeliveryPercent());
-
-        BanksList banksList = new BanksList(curBanksList.getTimeStamp(),
-                bankName + "mval", curBanksList.getTotalBuyQuantity(), curBanksList.getTotalSellQuantity(),
-                mValTBQ, mValTSQ, mVAlQTS, mValDQ, mValDP);
-        banksDao.insertBankData(banksList);
-    }
-
-    private double getmVal(double curVal, double prevVal) {
-        try{
-            if(prevVal==0.0){
-                return 0.0;
-            }else {
-                DecimalFormat df = new DecimalFormat("0.000");
-                double mValD = Double.parseDouble(df.format(curVal / prevVal));
-                Log.v("mValDoubles", String.valueOf(mValD));
-                return mValD;
-            }
-        }catch (Exception e){
-            return 0.0;
-        }
-    }
-
-    private void movementTrackingNifty(String oiName) {
-
-        BankNiftyList curNiftyList = null;
-        BankNiftyList prevNiftyList = null;
-
-        try {
-            List<BankNiftyList> banksHistoryPrev = viewModel.getOIHistory(oiName);
-            int bankHisLen = banksHistoryPrev.size();
-            if (bankHisLen > 1) {
-                curNiftyList = banksHistoryPrev.get(bankHisLen - 1);
-                prevNiftyList = banksHistoryPrev.get(bankHisLen - 2);
-                addmValDataNifty(oiName, curNiftyList, prevNiftyList);
-            } else {
-                curNiftyList = banksHistoryPrev.get(0);
-                prevNiftyList = banksHistoryPrev.get(0);
-                addmValDataNifty(oiName, curNiftyList, prevNiftyList);
-            }
-        }catch (Exception e){
-            Log.v("movementTrackingBanks",e.getMessage());
-        }
-    }
-
-    private void addmValDataNifty(String oiName, BankNiftyList curNiftyList, BankNiftyList prevNiftyList) {
-        double mValTBQ = getmVal(curNiftyList.getCalloi(), prevNiftyList.getCalloi());
-        double mValTSQ = getmVal(curNiftyList.getPutoi(), prevNiftyList.getPutoi());
-        double mVAlQTS = getmVal (curNiftyList.getBntotalbuyquantity() , prevNiftyList.getBntotalbuyquantity());
-        double mValDQ = getmVal (curNiftyList.getBntotalsellquantity() , prevNiftyList.getBntotalsellquantity());
-        double mValDP = getmVal(curNiftyList.getUnderlyvalue() , prevNiftyList.getUnderlyvalue());
-
-
-
-        bankNiftyList = new BankNiftyList(curNiftyList.getTimestamp(),oiName+"mval", curNiftyList.getCalloi(),
-                mValTBQ, mValTSQ,mVAlQTS,mValDQ,mValDP);
-        bankNiftyDao.insertBankNiftyData(bankNiftyList);
     }
 
     private void movementTrackingAddAllMissed() {
@@ -1428,24 +1337,31 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 
         BankNiftyList curNiftyList = null;
         BankNiftyList prevNiftyList = null;
+        BankNiftyList prevNiftyList2 = null;
         BanksList curBanksList = null;
         BanksList prevBanksList = null;
+        BanksList prevBanksList2 = null;
 
         final String[] banks = {"All Banks", "AUBANK", "RBLBANK", "BANDHANBNK", "FEDERALBNK", "IDFCFIRSTB", "PNB", "INDUSINDBK", "AXISBANK", "SBIN", "KOTAKBANK", "ICICIBANK", "HDFCBANK"};
         try {
             for (String bankName : banks) {
                 List<BanksList> banksHistoryPrev = viewModel.getBanksHistory(bankName);
                 int bankHisLen = banksHistoryPrev.size();
-                if (bankHisLen > 1) {
-                    for (int i = bankHisLen; i > 0; i--) {
-                        curBanksList = banksHistoryPrev.get(bankHisLen - 1);
-                        prevBanksList = banksHistoryPrev.get(bankHisLen - 2);
-                        addmValDataBanks(banks[i], curBanksList, prevBanksList);
-                    }
+                if (bankHisLen > 2) {
+                    curBanksList = banksHistoryPrev.get(bankHisLen - 1);
+                    prevBanksList = banksHistoryPrev.get(bankHisLen - 2);
+                    prevBanksList2 = banksHistoryPrev.get(bankHisLen - 3);
+                    addmValDataBanks(bankName, curBanksList, prevBanksList, prevBanksList2);
+                } else if (bankHisLen > 1) {
+                    curBanksList = banksHistoryPrev.get(bankHisLen - 1);
+                    prevBanksList = banksHistoryPrev.get(0);
+                    prevBanksList2 = banksHistoryPrev.get(0);
+                    addmValDataBanks(bankName, curBanksList, prevBanksList, prevBanksList2);
                 } else {
                     curBanksList = banksHistoryPrev.get(0);
                     prevBanksList = banksHistoryPrev.get(0);
-                    addmValDataBanks(bankName, curBanksList, prevBanksList);
+                    prevBanksList2 = banksHistoryPrev.get(0);
+                    addmValDataBanks(bankName, curBanksList, prevBanksList, prevBanksList2);
                 }
             }
         } catch (Exception e) {
@@ -1469,30 +1385,99 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         }
 
         for (String oiName : OIChain) {
-        try {
-            List<BankNiftyList> banksHistoryPrev = viewModel.getOIHistory(oiName);
-            int bankHisLen = banksHistoryPrev.size();
-            if (bankHisLen > 1) {
-                for (int i = bankHisLen; i > 0; i--) {
+            try {
+                List<BankNiftyList> banksHistoryPrev = viewModel.getOIHistory(oiName);
+                int bankHisLen = banksHistoryPrev.size();
+                if (bankHisLen > 2) {
                     curNiftyList = banksHistoryPrev.get(bankHisLen - 1);
                     prevNiftyList = banksHistoryPrev.get(bankHisLen - 2);
-                    addmValDataNifty(oiName, curNiftyList, prevNiftyList);
+                    prevNiftyList2 = banksHistoryPrev.get(bankHisLen - 3);
+                    addmValDataNifty(oiName, curNiftyList, prevNiftyList, prevNiftyList2);
+                } else if (bankHisLen > 1) {
+                    curNiftyList = banksHistoryPrev.get(bankHisLen - 1);
+                    prevNiftyList = banksHistoryPrev.get(0);
+                    prevNiftyList2 = banksHistoryPrev.get(0);
+                    addmValDataNifty(oiName, curNiftyList, prevNiftyList, prevNiftyList2);
+                } else {
+                    curNiftyList = banksHistoryPrev.get(0);
+                    prevNiftyList = banksHistoryPrev.get(0);
+                    prevNiftyList2 = banksHistoryPrev.get(0);
+                    addmValDataNifty(oiName, curNiftyList, prevNiftyList, prevNiftyList2);
                 }
-            } else {
-                curNiftyList = banksHistoryPrev.get(0);
-                prevNiftyList = banksHistoryPrev.get(0);
-                addmValDataNifty(oiName, curNiftyList, prevNiftyList);
+            } catch (Exception e) {
+                Log.v("movementTrackingBanks", e.getMessage());
             }
-        } catch (Exception e) {
-            Log.v("movementTrackingBanks", e.getMessage());
         }
-    }
 
         progressDialogFTP.dismiss();
 
     }
 
-    public void saveDbToCSV(String fileName){
+    private void addmValDataBanks(String bankName, BanksList curBanksList, BanksList prevBanksList, BanksList prevBanksList2) {
+        double mValTBQ = getmVal(curBanksList.getTotalBuyQuantity(), prevBanksList.getTotalBuyQuantity(), prevBanksList2.getTotalBuyQuantity());
+        double mValTSQ = getmVal(curBanksList.getTotalSellQuantity(), prevBanksList.getTotalSellQuantity(), prevBanksList2.getTotalSellQuantity());
+        double mVAlQTS = getmVal(curBanksList.getQuantityTradedsure(), prevBanksList.getQuantityTradedsure(), prevBanksList2.getQuantityTradedsure());
+        double mValDQ = getmVal(curBanksList.getUnderlyingValue(), prevBanksList.getUnderlyingValue(), prevBanksList2.getUnderlyingValue());
+        double mValDP = getmVal(curBanksList.getPercentDiff(), prevBanksList.getPercentDiff(), prevBanksList2.getPercentDiff());
+
+        BanksList banksList = new BanksList(curBanksList.getTimeStamp(),
+                bankName + "mval", curBanksList.getTotalBuyQuantity(), curBanksList.getTotalSellQuantity(),
+                mValTBQ, mValTSQ, mVAlQTS, mValDQ, mValDP);
+        banksDao.insertBankData(banksList);
+    }
+
+    private double getmVal(double curVal, double prevVal, double prevVal2) {
+        try {
+            if (prevVal == 0.0) {
+                return 0.0;
+            } else {
+                DecimalFormat df = new DecimalFormat("0.00");
+                double val = (curVal / prevVal);
+                val = val * 100;
+                double mValD = Double.parseDouble(df.format(val));
+                Log.v("mValDoubles", String.valueOf(mValD));
+                return mValD;
+            }
+        } catch (Exception e) {
+            return 0.0;
+        }
+    }
+
+    private double getmValPercent(double curVal, double prevVal, double prevVal2) {
+        try {
+            if (prevVal == 0.0) {
+                return 0.0;
+            } else {
+                DecimalFormat df = new DecimalFormat("0.0");
+                double prevPV = prevVal - prevVal2;
+                if (prevPV == 0.0) prevPV = 0.01;
+                double curPV = curVal - prevVal;
+                if (curPV == 0.0) curPV = 0.01;
+                double val = (curPV / prevPV);
+                val = val * 100;
+                double mValD = Double.parseDouble(df.format(val));
+                Log.v("mValDoubles", String.valueOf(mValD));
+                return mValD;
+            }
+        } catch (Exception e) {
+            return 0.0;
+        }
+    }
+
+    private void addmValDataNifty(String oiName, BankNiftyList curNiftyList, BankNiftyList prevNiftyList, BankNiftyList prevNiftyList2) {
+        double mValTBQ = getmVal(curNiftyList.getCalloi(), prevNiftyList.getCalloi(), prevNiftyList2.getCalloi());
+        double mValTSQ = getmVal(curNiftyList.getPutoi(), prevNiftyList.getPutoi(), prevNiftyList2.getPutoi());
+        double mVAlQTS = getmVal(curNiftyList.getBntotalbuyquantity(), prevNiftyList.getBntotalbuyquantity(), prevNiftyList2.getBntotalbuyquantity());
+        double mValDQ = getmVal(curNiftyList.getBntotalsellquantity(), prevNiftyList.getBntotalsellquantity(), prevNiftyList2.getBntotalsellquantity());
+        double mValDP = getmVal(curNiftyList.getUnderlyvalue(), prevNiftyList.getUnderlyvalue(), prevNiftyList2.getUnderlyvalue());
+
+
+        bankNiftyList = new BankNiftyList(curNiftyList.getTimestamp(), oiName + "mval", curNiftyList.getCalloi(),
+                mValTBQ, mValTSQ, mVAlQTS, mValDQ, mValDP);
+        bankNiftyDao.insertBankNiftyData(bankNiftyList);
+    }
+
+    public void saveDbToCSV(String fileName) {
         checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE);
         File exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/StockOps/DBFiles/");
         if (!exportDir.exists()) {
@@ -1503,9 +1488,9 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             file.createNewFile();
             CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
             Cursor curCSV;
-            if(fileName.contains("AllBanks")){
+            if (fileName.contains("AllBanks")) {
                 curCSV = banksDao.getAllDataCSV();//query("SELECT * FROM " + TableName, null);
-            }else{
+            } else {
                 curCSV = bankNiftyDao.getAllDataCSV();
             }
             csvWrite.writeNext(curCSV.getColumnNames());
@@ -1523,17 +1508,24 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         }
     }
 
+//    Runnable mValBankNiftyRTask = new Runnable() {
+//        @RequiresApi(api = Build.VERSION_CODES.N)
+//        @Override
+//        public void run() {
+//            mvlForBankNifty();
+//        }
+//    };
+
     // Function to check and request permission.
-    public void checkPermission(String permission, int requestCode)
-    {
+    public void checkPermission(String permission, int requestCode) {
         if (ContextCompat.checkSelfPermission(BanksListActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
             // Requesting the permission
-            ActivityCompat.requestPermissions(BanksListActivity.this, new String[] { permission }, requestCode);
-        }
-        else {
+            ActivityCompat.requestPermissions(BanksListActivity.this, new String[]{permission}, requestCode);
+        } else {
 //            Toast.makeText(BanksListActivity.this, "Permission already granted", Toast.LENGTH_SHORT).show();
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode,
@@ -1542,13 +1534,11 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 
         if (requestCode == CAMERA_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(BanksListActivity.this, "Camera Permission Granted", Toast.LENGTH_SHORT) .show();
+                Toast.makeText(BanksListActivity.this, "Camera Permission Granted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(BanksListActivity.this, "Camera Permission Denied", Toast.LENGTH_SHORT).show();
             }
-            else {
-                Toast.makeText(BanksListActivity.this, "Camera Permission Denied", Toast.LENGTH_SHORT) .show();
-            }
-        }
-        else if (requestCode == STORAGE_PERMISSION_CODE) {
+        } else if (requestCode == STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 //                Toast.makeText(BanksListActivity.this, "Storage Permission Granted", Toast.LENGTH_SHORT).show();
@@ -1558,6 +1548,89 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         }
 
     }
+
+/*    private void mvlForBankNifty() {
+        movementTrackingNifty("OI History");
+        movementTrackingNifty("CE History");
+        movementTrackingNifty("PE History");
+        try {
+            @SuppressLint("WrongConstant") SharedPreferences shUl = getSharedPreferences("NiftyOILiveDisplaySP", MODE_APPEND);
+            String underlyingValue1 = shUl.getString("underlyingValue", "").substring(0, 5);
+            int underlyingValue = Integer.parseInt(underlyingValue1) / 100;
+            int underlyingValueCE = underlyingValue * 100;
+            int underlyingValuePE = underlyingValueCE - 700;
+            for (int i = 1; i < 8; i++) {
+                movementTrackingNifty("CE" + underlyingValueCE);
+                movementTrackingNifty("PE" + underlyingValuePE);
+                underlyingValueCE += 100;
+                underlyingValuePE += 100;
+            }
+        } catch (Exception e) {
+            Log.v("underlyingValue to int", e.getMessage());
+        }
+    }
+
+    private void movementTrackingBanks(String bankName) {
+
+        BanksList curBanksList = null;
+        BanksList prevBanksList = null;
+        BanksList prevBanksList2 = null;
+
+        try {
+            List<BanksList> banksHistoryPrev = viewModel.getBanksHistory(bankName);
+            int bankHisLen = banksHistoryPrev.size();
+            if (bankHisLen > 2) {
+                curBanksList = banksHistoryPrev.get(bankHisLen - 1);
+                prevBanksList = banksHistoryPrev.get(bankHisLen - 2);
+                prevBanksList2 = banksHistoryPrev.get(bankHisLen - 3);
+                addmValDataBanks(bankName, curBanksList, prevBanksList, prevBanksList2);
+            } else if (bankHisLen > 1) {
+                curBanksList = banksHistoryPrev.get(bankHisLen - 1);
+                prevBanksList = banksHistoryPrev.get(0);
+                prevBanksList2 = banksHistoryPrev.get(0);
+                addmValDataBanks(bankName, curBanksList, prevBanksList, prevBanksList2);
+            } else {
+                curBanksList = banksHistoryPrev.get(0);
+                prevBanksList = banksHistoryPrev.get(0);
+                prevBanksList2 = banksHistoryPrev.get(0);
+                addmValDataBanks(bankName, curBanksList, prevBanksList, prevBanksList2);
+            }
+        } catch (Exception e) {
+            Log.v("movementTrackingBanks", e.getMessage());
+        }
+    }
+
+    private void movementTrackingNifty(String oiName) {
+
+        BankNiftyList curNiftyList = null;
+        BankNiftyList prevNiftyList = null;
+        BankNiftyList prevNiftyList2 = null;
+
+        try {
+            List<BankNiftyList> banksHistoryPrev = viewModel.getOIHistory(oiName);
+            int bankHisLen = banksHistoryPrev.size();
+            if (bankHisLen > 2) {
+                curNiftyList = banksHistoryPrev.get(bankHisLen - 1);
+                prevNiftyList = banksHistoryPrev.get(bankHisLen - 2);
+                prevNiftyList2 = banksHistoryPrev.get(bankHisLen - 3);
+                addmValDataNifty(oiName, curNiftyList, prevNiftyList, prevNiftyList2);
+            } else if (bankHisLen > 1) {
+                curNiftyList = banksHistoryPrev.get(bankHisLen - 1);
+                prevNiftyList = banksHistoryPrev.get(0);
+                prevNiftyList2 = banksHistoryPrev.get(0);
+                addmValDataNifty(oiName, curNiftyList, prevNiftyList, prevNiftyList2);
+            } else {
+                curNiftyList = banksHistoryPrev.get(0);
+                prevNiftyList = banksHistoryPrev.get(0);
+                prevNiftyList2 = banksHistoryPrev.get(0);
+                addmValDataNifty(oiName, curNiftyList, prevNiftyList, prevNiftyList2);
+            }
+        } catch (Exception e) {
+            Log.v("movementTrackingBanks", e.getMessage());
+        }
+    }
+
+*/
 }
 
 

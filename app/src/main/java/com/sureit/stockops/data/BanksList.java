@@ -35,11 +35,11 @@ public class BanksList implements Parcelable {
     @ColumnInfo(name = "quantityTradedsure")
     private long quantityTradedsure;
 
-    @ColumnInfo(name = "deliveryQuantity")
-    private long deliveryQuantity;
+    @ColumnInfo(name = "underlyingValue")
+    private long underlyingValue;
 
-    @ColumnInfo(name = "deliveryPercent")
-    private double deliveryPercent;
+    @ColumnInfo(name = "percentDiff")
+    private double percentDiff;
 
     @NonNull
     @ColumnInfo(name = "TBQmvVal")
@@ -51,20 +51,20 @@ public class BanksList implements Parcelable {
     @ColumnInfo(name = "QTSmvVal")
     private double QTSmvVal;
 
-    @ColumnInfo(name = "DQmvVal")
-    private double DQmvVal;
+    @ColumnInfo(name = "DPmvVal")
+    private double PDmvVal;
 
     private BanksList(Parcel in) {
         bankName =in.readString();
         totalBuyQuantity=in.readLong();
         totalSellQuantity = in.readLong();
         quantityTradedsure = in.readLong();
-        deliveryQuantity = in.readLong();
-        deliveryPercent = in.readDouble();
+        underlyingValue = in.readLong();
+        percentDiff = in.readDouble();
         TBQmvVal = in.readDouble();
         TSQmvVal = in.readDouble();
         QTSmvVal = in.readDouble();
-        DQmvVal = in.readDouble();
+        PDmvVal = in.readDouble();
     }
 
     public static final Creator<BanksList> CREATOR = new Creator<BanksList>() {
@@ -79,26 +79,26 @@ public class BanksList implements Parcelable {
         }
     };
 
-    public BanksList(String bankName, long totalBuyQuantity, long totalSellQuantity, long quantityTradedsure, long deliveryQuantity, double deliveryPercent) {
+    public BanksList(String bankName, long totalBuyQuantity, long totalSellQuantity, long quantityTradedsure, long underlyingValue, double percentDiff) {
         this.bankName = bankName;
         this.totalBuyQuantity =totalBuyQuantity;
         this.totalSellQuantity = totalSellQuantity;
         this.quantityTradedsure = quantityTradedsure;
-        this.deliveryQuantity = deliveryQuantity;
-        this.deliveryPercent = deliveryPercent;
+        this.underlyingValue = underlyingValue;
+        this.percentDiff = percentDiff;
     }
 
-    public BanksList(String timeStampValue, String bankName, long totalBuyQuantity, long totalSellQuantity, long quantityTradedsure, long deliveryQuantity, double deliveryPercent) {
+    public BanksList(String timeStampValue, String bankName, long totalBuyQuantity, long totalSellQuantity, long quantityTradedsure, long underlyingValue, double percentDiff) {
         this.timeStamp = timeStampValue;
         this.bankName = bankName;
         this.totalBuyQuantity =totalBuyQuantity;
         this.totalSellQuantity = totalSellQuantity;
         this.quantityTradedsure = quantityTradedsure;
-        this.deliveryQuantity = deliveryQuantity;
-        this.deliveryPercent = deliveryPercent;
+        this.underlyingValue = underlyingValue;
+        this.percentDiff = percentDiff;
     }
 
-    public BanksList(String currentTime, String bankName,long totalBuyQuantity, long totalSellQuantity, double TBQmvVal, double tSQmvVal, double QTSmvVal, double DQmvVal, double dPmvVal) {
+    public BanksList(String currentTime, String bankName, long totalBuyQuantity, long totalSellQuantity, double TBQmvVal, double tSQmvVal, double QTSmvVal, double PDmvVal, double dPmvVal) {
         this.timeStamp = currentTime;
         this.bankName = bankName;
         this.totalBuyQuantity =totalBuyQuantity;
@@ -106,8 +106,8 @@ public class BanksList implements Parcelable {
         this.TBQmvVal = TBQmvVal;
         this.TSQmvVal = tSQmvVal;
         this.QTSmvVal = QTSmvVal;
-        this.DQmvVal = DQmvVal;
-        this.deliveryPercent = dPmvVal;
+        this.PDmvVal = PDmvVal;
+        this.percentDiff = dPmvVal;
     }
 
     public String getBankName() {
@@ -118,8 +118,8 @@ public class BanksList implements Parcelable {
         return quantityTradedsure;
     }
 
-    public long getDeliveryQuantity() {
-        return deliveryQuantity;
+    public long getUnderlyingValue() {
+        return underlyingValue;
     }
 
     public long getTotalSellQuantity() {
@@ -135,8 +135,8 @@ public class BanksList implements Parcelable {
         return timeStamp;
     }
 
-    public double getDeliveryPercent() {
-        return deliveryPercent;
+    public double getPercentDiff() {
+        return percentDiff;
     }
 
     public long getQuantityTraded() {
@@ -155,8 +155,8 @@ public class BanksList implements Parcelable {
         return QTSmvVal;
     }
 
-    public double getDQmvVal() {
-        return DQmvVal;
+    public double getPDmvVal() {
+        return PDmvVal;
     }
 
 
@@ -168,8 +168,8 @@ public class BanksList implements Parcelable {
         this.quantityTradedsure = quantityTradedsure;
     }
 
-    public void setDeliveryQuantity(long deliveryQuantity) {
-        this.deliveryQuantity = deliveryQuantity;
+    public void setUnderlyingValue(long underlyingValue) {
+        this.underlyingValue = underlyingValue;
     }
 
     public void setTotalSellQuantity(long totalSellQuantity) {
@@ -182,8 +182,8 @@ public class BanksList implements Parcelable {
         this.timeStamp = timeStamp;
     }
 
-    public void setDeliveryPercent(double deliveryPercent) {
-        this.deliveryPercent = deliveryPercent;
+    public void setPercentDiff(double percentDiff) {
+        this.percentDiff = percentDiff;
     }
 
     public void setQuantityTraded(long quantityTraded) {
@@ -203,8 +203,8 @@ public class BanksList implements Parcelable {
         this.QTSmvVal = QTSmvVal;
     }
 
-    public void setDQmvVal(double DQmvVal) {
-        this.DQmvVal = DQmvVal;
+    public void setPDmvVal(double PDmvVal) {
+        this.PDmvVal = PDmvVal;
     }
 
     @Override
@@ -218,12 +218,12 @@ public class BanksList implements Parcelable {
         dest.writeLong(totalBuyQuantity);
         dest.writeLong(totalSellQuantity);
         dest.writeLong(quantityTradedsure);
-        dest.writeLong(deliveryQuantity);
-        dest.writeDouble(deliveryPercent);
+        dest.writeLong(underlyingValue);
+        dest.writeDouble(percentDiff);
         dest.writeDouble(TBQmvVal);
         dest.writeDouble(TSQmvVal);
         dest.writeDouble(QTSmvVal);
-        dest.writeDouble(DQmvVal);
+        dest.writeDouble(PDmvVal);
 
     }
 

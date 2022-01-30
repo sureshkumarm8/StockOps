@@ -56,10 +56,10 @@ public class BankNiftyAdapter extends RecyclerView.Adapter<BankNiftyAdapter.View
         // this method will bind the data to the ViewHolder from whence it'll be shown to other Views
         final BankNiftyList developersList = bankNiftyLists.get(position);
         holder.strikePriceTV.setText(String.valueOf(developersList.getOiname()));
-        holder.totalVolumeCE.setText(String.valueOf(developersList.getCalloi()/1000));
-        holder.totalBuyQuantityCE.setText(String.valueOf(developersList.getPutoi()/1000));
-        holder.totalAskQuantityPE.setText(String.valueOf(developersList.getBntotalbuyquantity()/1000));
-        holder.oiChange.setText(String.valueOf(developersList.getBntotalsellquantity()/1000));
+        holder.totalVolumeCE.setText(String.valueOf(developersList.getCalloi()));
+        holder.totalBuyQuantityCE.setText(String.valueOf(developersList.getPutoi()));
+        holder.totalAskQuantityPE.setText(String.valueOf(developersList.getBntotalbuyquantity()));
+        holder.oiChange.setText(String.valueOf(developersList.getBntotalsellquantity()));
         DecimalFormat df = new DecimalFormat("0.00");
         holder.pOIchange.setText(df.format(developersList.getUnderlyvalue()));
 

@@ -49,9 +49,9 @@ public class BanksAdapter extends RecyclerView.Adapter<BanksAdapter.ViewHolder> 
         holder.bankNameTV.setText(String.valueOf(banksData.getBankName()));
         holder.totalBuyQuantityCE.setText(String.valueOf(banksData.getTotalBuyQuantity()));
         holder.totalAskQuantityPE.setText(String.valueOf(banksData.getTotalSellQuantity()));
-        holder.totalDeliveryTV.setText(String.valueOf(banksData.getDeliveryQuantity()));
+        holder.totalDeliveryTV.setText(String.valueOf(banksData.getUnderlyingValue()));
         holder.totalTradedTV.setText(String.valueOf(banksData.getQuantityTradedsure()));
-        holder.totalDeliveryPCTV.setText(String.valueOf(banksData.getDeliveryPercent()));
+        holder.totalDeliveryPCTV.setText(String.valueOf(banksData.getPercentDiff()));
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +79,13 @@ public class BanksAdapter extends RecyclerView.Adapter<BanksAdapter.ViewHolder> 
             else if(banksData.getTotalSellQuantity()<banksList_1.getTotalSellQuantity()){
                 holder.totalAskQuantityPE.setBackgroundColor(Color.GREEN);
             }else {holder.totalAskQuantityPE.setBackgroundColor(Color.RED);}
+
+            if(banksData.getPercentDiff()==banksList_1.getPercentDiff()){
+                holder.totalDeliveryPCTV.setBackgroundColor(Color.WHITE);
+            }
+            else if(banksData.getPercentDiff()>banksList_1.getPercentDiff()){
+                holder.totalDeliveryPCTV.setBackgroundColor(Color.GREEN);
+            }else {holder.totalDeliveryPCTV.setBackgroundColor(Color.RED);}
 
             if(banksData.getTotalBuyQuantity()>banksList_1.getTotalBuyQuantity()
                     && banksData.getTotalSellQuantity()<banksList_1.getTotalSellQuantity()){

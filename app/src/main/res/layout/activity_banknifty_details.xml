@@ -80,7 +80,7 @@
             android:layout_toLeftOf="@+id/tvVolHistoryTtl"
             android:background="@drawable/border_histheader"
             android:gravity="center"
-            android:text="Delv %"
+            android:text="Diff %"
             android:textStyle="bold" />
 
         <TextView
@@ -112,7 +112,7 @@
             android:layout_marginBottom="1dp"
             android:background="@drawable/border_histheader"
             android:gravity="center"
-            android:text="Tot. Del"
+            android:text="Market"
             android:textStyle="bold" />
 
     </RelativeLayout>

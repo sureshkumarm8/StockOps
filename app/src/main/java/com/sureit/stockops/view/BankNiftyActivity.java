@@ -447,7 +447,6 @@ public class BankNiftyActivity extends AppCompatActivity {
         }
     };
 
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
