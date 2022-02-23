@@ -112,16 +112,16 @@ public class OIHistoryAdapter extends RecyclerView.Adapter<OIHistoryAdapter.View
             }else {holder.offersHistory.setBackgroundColor(Color.RED);}
 
             if(banksList.getNVOLmvVal()==banksList_1.getNVOLmvVal()){
-                holder.bidsHistory.setBackgroundColor(Color.WHITE);
+                holder.delvPercent.setBackgroundColor(Color.WHITE);
             }else if(banksList.getNVOLmvVal()>banksList_1.getNVOLmvVal()){
-                holder.bidsHistory.setBackgroundColor(Color.GREEN);
-            }else {holder.bidsHistory.setBackgroundColor(Color.RED);}
+                holder.delvPercent.setBackgroundColor(Color.GREEN);
+            }else {holder.delvPercent.setBackgroundColor(Color.RED);}
 
             if(banksList.getNOImvVal()==banksList_1.getNOImvVal()){
-                holder.bidsHistory.setBackgroundColor(Color.WHITE);
+                holder.volHistory.setBackgroundColor(Color.WHITE);
             }else if(banksList.getNOImvVal()>banksList_1.getNOImvVal()){
-                holder.bidsHistory.setBackgroundColor(Color.GREEN);
-            }else {holder.bidsHistory.setBackgroundColor(Color.RED);}
+                holder.volHistory.setBackgroundColor(Color.GREEN);
+            }else {holder.volHistory.setBackgroundColor(Color.RED);}
 
             if(banksList.getNBQmvVal()>banksList_1.getNBQmvVal() && banksList.getNSQmvVal()<banksList_1.getNSQmvVal()
                     && banksList.getNVOLmvVal()>banksList_1.getNVOLmvVal() && banksList.getNOImvVal()>banksList_1.getNOImvVal()){
