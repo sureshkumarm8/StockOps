@@ -218,7 +218,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="6dp"
                     android:layout_marginBottom="9dp"
-                    android:background="#DA5146"
+                    android:background="#FF5252"
                     android:fontFamily="sans-serif-black"
                     android:gravity="center"
                     android:text="VolumeCE" />
@@ -231,7 +231,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="6dp"
                     android:layout_marginBottom="39dp"
-                    android:background="#DA5146"
+                    android:background="#FF5252"
                     android:gravity="center"
                     android:text="TotalVolumeCE in K"
                     android:textSize="10sp" />

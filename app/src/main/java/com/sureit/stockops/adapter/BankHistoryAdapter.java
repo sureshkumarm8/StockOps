@@ -12,12 +12,15 @@ import android.widget.TextView;
 import com.sureit.stockops.R;
 import com.sureit.stockops.data.BanksList;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class BankHistoryAdapter extends RecyclerView.Adapter<BankHistoryAdapter.ViewHolder> {
 
     private List<BanksList> banksLists;
     private Context context;
+    private DecimalFormat df = new DecimalFormat("0");
+    private DecimalFormat dff = new DecimalFormat("0.0");
 
     public BankHistoryAdapter(List<BanksList> banksLists, Context context){
         this.banksLists = banksLists;
@@ -40,11 +43,11 @@ public class BankHistoryAdapter extends RecyclerView.Adapter<BankHistoryAdapter.
 
         if(banksList.getBankName().contains("mval") || banksList.getBankName().contains("MStr")){
             holder.timeStampTV.setText(banksList.getTimeStamp());
-            holder.bidsHistory.setText(String.valueOf(banksList.getTBQmvVal()));
-            holder.offersHistory.setText(String.valueOf(banksList.getTSQmvVal()));
-            holder.percentDiff.setText(String.valueOf(banksList.getPercentDiff()));
-            holder.totalVolHistory.setText(String.valueOf(banksList.getQTSmvVal()));
-            holder.underlyingValue.setText(String.valueOf(banksList.getUnderlyingValue()));
+            holder.bidsHistory.setText(dff.format(banksList.getTBQmvVal()));
+            holder.offersHistory.setText(dff.format(banksList.getTSQmvVal()));
+            holder.percentDiff.setText(dff.format(banksList.getPercentDiff()));
+            holder.totalVolHistory.setText(dff.format(banksList.getQTSmvVal()));
+            holder.underlyingValue.setText(df.format(banksList.getPDmvVal()));
         }else {
             holder.timeStampTV.setText(banksList.getTimeStamp());
             holder.bidsHistory.setText(String.valueOf(banksList.getTotalBuyQuantity()));
@@ -58,33 +61,41 @@ public class BankHistoryAdapter extends RecyclerView.Adapter<BankHistoryAdapter.
             BanksList banksList_1 = banksLists.get(position - 1);
             if(banksList.getTotalBuyQuantity()==banksList_1.getTotalBuyQuantity()){
                 holder.percentDiff.setBackgroundColor(Color.WHITE);
-            }
-            else if(banksList.getTotalBuyQuantity()>banksList_1.getTotalBuyQuantity()){
+            }else if(banksList.getTotalBuyQuantity()>banksList_1.getTotalBuyQuantity()){
                 holder.bidsHistory.setBackgroundColor(Color.GREEN);
             }else {holder.bidsHistory.setBackgroundColor(Color.RED);}
 
             if(banksList.getTotalSellQuantity()==banksList_1.getTotalSellQuantity()){
                 holder.percentDiff.setBackgroundColor(Color.WHITE);
-            }
-            else if(banksList.getTotalSellQuantity()<banksList_1.getTotalSellQuantity()){
+            }else if(banksList.getTotalSellQuantity()<banksList_1.getTotalSellQuantity()){
                 holder.offersHistory.setBackgroundColor(Color.GREEN);
             }else {holder.offersHistory.setBackgroundColor(Color.RED);}
 
             if(banksList.getPercentDiff()==banksList_1.getPercentDiff()){
                 holder.percentDiff.setBackgroundColor(Color.WHITE);
-            }
-            else if(banksList.getPercentDiff()>banksList_1.getPercentDiff()) {
+            }else if(banksList.getPercentDiff()>banksList_1.getPercentDiff()) {
                 holder.percentDiff.setBackgroundColor(Color.GREEN);
             }else {holder.percentDiff.setBackgroundColor(Color.RED);}
 
+            if(banksList.getQTSmvVal()==banksList_1.getQTSmvVal()){
+                holder.totalVolHistory.setBackgroundColor(Color.WHITE);
+            }else if(banksList.getQTSmvVal()>banksList_1.getQTSmvVal()) {
+                holder.totalVolHistory.setBackgroundColor(Color.GREEN);
+            }else {holder.totalVolHistory.setBackgroundColor(Color.RED);}
+
             if(banksList.getTotalBuyQuantity()>banksList_1.getTotalBuyQuantity()
-                    && banksList.getTotalSellQuantity()<banksList_1.getTotalSellQuantity()){
+                    && banksList.getTotalSellQuantity()<banksList_1.getTotalSellQuantity()
+                    && banksList.getPercentDiff()>banksList_1.getPercentDiff() && banksList.getQTSmvVal()>banksList_1.getQTSmvVal()){
                 holder.timeStampTV.setBackgroundColor(Color.GREEN);
+                holder.underlyingValue.setBackgroundColor(Color.GREEN);
             }else if(banksList.getTotalBuyQuantity()<banksList_1.getTotalBuyQuantity()
-                    && banksList.getTotalSellQuantity()>banksList_1.getTotalSellQuantity()){
+                    && banksList.getTotalSellQuantity()>banksList_1.getTotalSellQuantity()
+                    && banksList.getPercentDiff()<banksList_1.getPercentDiff() && banksList.getQTSmvVal()<banksList_1.getQTSmvVal()){
                 holder.timeStampTV.setBackgroundColor(Color.RED);
+                holder.underlyingValue.setBackgroundColor(Color.RED);
             }else{
                 holder.timeStampTV.setBackgroundColor(Color.WHITE);
+                holder.underlyingValue.setBackgroundColor(Color.WHITE);
             }
         }
     }

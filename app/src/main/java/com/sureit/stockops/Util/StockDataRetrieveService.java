@@ -15,6 +15,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -97,6 +98,9 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
     private double mStrTSQAllBanks;
     private double mStrQTSAllBanks;
     private double mStrDPAllBanks;
+    private DecimalFormat df = new DecimalFormat("0.00");
+    private double mValDPtoMStr;
+
 
     public StockDataRetrieveService() {
     }
@@ -203,221 +207,263 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
 
     @Override
     public void onSuccessJson(String response, String type) {
-
-        if (type.equals("BankNifty")) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm:ss");
+        String currentTime = dateFormat.format(new Date()).toString();
+        Log.v("TimeStarts",currentTime);
+        if (type.equals("BankNifty") && response.contains("data")) {
             try {
-                JSONObject jsonObject = new JSONObject(response);
-                JSONObject recordDetails = jsonObject.getJSONObject("records");
-                JSONObject filteredDetails = jsonObject.getJSONObject("filtered");
-                JSONArray filteredDataArray = filteredDetails.getJSONArray("data");
-                timeStampValue = recordDetails.get("timestamp").toString();
-                underlyingValue = recordDetails.getDouble("underlyingValue");
-                int ulValue = underlyingValue.intValue();
-                for (int i = 0; i < filteredDataArray.length(); i++) {
-                    JSONObject jo = filteredDataArray.getJSONObject(i);
-
-                    Double strikePrice = null;
-                    int sPrice = 0;
-                    if (strikePrice == null) {
-                        JSONObject usBody = jo.getJSONObject("CE");
-                        strikePrice = Double.valueOf(usBody.getString("strikePrice"));
-                        sPrice = strikePrice.intValue();
+                final JSONObject jsonObject = new JSONObject(response);
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        StockDataRetrieveService.this.bankNiftySuccessJson(jsonObject);
                     }
-                    if (sPrice <= ulValue + 700 && sPrice >= ulValue - 700) {
-                        JSONObject ceBody = jo.getJSONObject("CE");
-                        JSONObject peBody = jo.getJSONObject("PE");
+                });
+                t.start();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        if(type.equals("Banks") && response.contains("data")) {
+            try {
+                final JSONObject jsonObject = new JSONObject(response);
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        StockDataRetrieveService.this.banksSuccessJson(jsonObject);
+                    }
+                });
+                t.start();
 
-                        if (sPrice > ulValue - 200) {
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-                            //Add total values for main top card
-                            ceTotalTradedVolume += (int) ceBody.get("totalTradedVolume");
-                            ceTotalBuyQuantity += (int) ceBody.get("totalBuyQuantity");
-                            ceTotalSellQuantity += (int) ceBody.get("totalSellQuantity");
-                            ceOpenInterest += (int) ceBody.get("openInterest");
+    private void banksSuccessJson(JSONObject jsonObject) {
+        long totalBuyQuantity = 0;
+        long totalSellQuantity = 0;
+        long tradedVolume = 0;
+        long deliveryQuantity = 0;
+        String bankName = "";
 
-                            bankNiftyList = new BankNiftyList(timeStampValue.substring(12, 17),
-                                    ceBody.getString("identifier").substring(25, 32),
-                                    ceBody.getLong("totalTradedVolume")/1000,
-                                    ceBody.getLong("totalBuyQuantity")/1000,
-                                    ceBody.getLong("totalSellQuantity")/1000,
-                                    ceBody.getLong("openInterest")/1000,
-                                    ceBody.getDouble("pchangeinOpenInterest")
-                            );
-                            bankNiftyLists.add(bankNiftyList);
-                            bankNiftyDao.insertBankNiftyData(bankNiftyList);
-                            movementTrackingNifty(ceBody.getString("identifier").substring(25, 32));
-                        }
-                        if (sPrice < ulValue - 200) {
+        try {
+            retrievesDataCompleted++;
+            String currentTime;
 
-                            //Add total values for main top card
-                            peTotalTradedVolume += (int) peBody.get("totalTradedVolume");
-                            peTotalBuyQuantity += (int) peBody.get("totalBuyQuantity");
-                            peTotalSellQuantity += (int) peBody.get("totalSellQuantity");
-                            peOpenInterest += (int) peBody.get("openInterest");
+            currentTime = jsonObject.getString("lastUpdateTime").substring(12, 17);
+            JSONArray banksArr = jsonObject.getJSONArray("data");
 
-                            bankNiftyList = new BankNiftyList(timeStampValue.substring(12, 17),
-                                    peBody.getString("identifier").substring(25, 32),
-                                    peBody.getLong("totalTradedVolume")/1000,
-                                    peBody.getLong("totalBuyQuantity")/1000,
-                                    peBody.getLong("totalSellQuantity")/1000,
-                                    peBody.getLong("openInterest")/1000,
-                                    peBody.getDouble("pchangeinOpenInterest")
-                            );
-                            bankNiftyLists.add(bankNiftyList);
-                            bankNiftyDao.insertBankNiftyData(bankNiftyList);
-                            movementTrackingNifty(peBody.getString("identifier").substring(25, 32));
-                        }
+            JSONObject ul = banksArr.getJSONObject(banksArr.length() - 1);
+            String ulValue = ul.getString("last").substring(0, 6).replaceAll(",", "");
+            long underlyingValue = Long.parseLong(ulValue);
+
+            for (int i = 0; i < banksArr.length() - 1; i++) {
+                JSONObject jo = banksArr.getJSONObject(i);
+                bankName = jo.getString("symbol");
+                String totalBuyQuantityStr = jo.getString("totalBuyQuantity");
+                totalBuyQuantity = parseToLongfrom_(totalBuyQuantityStr.trim());
+                String totalSellQuantityStr = jo.getString("totalSellQuantity");
+                totalSellQuantity = parseToLongfrom_(totalSellQuantityStr.trim());
+
+                String tradedVolumeStr = jo.getString("totalTradedVolume");
+                tradedVolume = parseToLongfrom_(tradedVolumeStr.trim());
+                String deliveryQuantityStr = jo.getString("deliveryQuantity");
+                deliveryQuantity = parseToLongfrom_(deliveryQuantityStr.trim());
+
+                double percentDiff = getPercentDiff(bankName + "MStr");
+
+                //Live display Data
+                banksList = new BanksList(bankName, totalBuyQuantity, totalSellQuantity, tradedVolume, underlyingValue, percentDiff);
+                banksLists.add(banksList);
+
+                allBanksBuyQuantity += totalBuyQuantity;
+                allBanksSellQuantity += totalSellQuantity;
+                allBanksQuantityTraded += tradedVolume;
+                allBanksDeliveryQuantity += deliveryQuantity;
+                allBanksPercentDifference += percentDiff;
+
+                //To store in DB
+                banksList = new BanksList(currentTime, bankName, totalBuyQuantity, totalSellQuantity, tradedVolume, underlyingValue, percentDiff);
+                banksDao.insertBankData(banksList);
+
+                movementTrackingBanks(bankName);
+            }
+//                macFTPfile = false;
+//                if(retrievesDataCompleted==3){
+            banksList = new BanksList(currentTime, "All Banks", allBanksBuyQuantity, allBanksSellQuantity, allBanksQuantityTraded, underlyingValue, allBanksPercentDifference);
+            banksDao.insertBankData(banksList);
+//                    movementTrackingBanks("All Banks");
+
+            mValTBQAllBanks = Double.parseDouble(df.format(mValTBQAllBanks / 12));
+            mValTSQAllBanks = Double.parseDouble(df.format(mValTSQAllBanks / 12));
+            mValDPAllBanks = Double.parseDouble(df.format(mValDPAllBanks / 12));
+            banksList = new BanksList(currentTime, "All Banksmval", allBanksBuyQuantity, allBanksSellQuantity,
+                    mValTBQAllBanks , mValTSQAllBanks , mVAlQTSAllBanks, underlyingValue, mValDPAllBanks );
+            banksDao.insertBankData(banksList);
+
+            mStrTBQAllBanks = Double.parseDouble(df.format(mStrTBQAllBanks / 12));
+            mStrTSQAllBanks = Double.parseDouble(df.format(mStrTSQAllBanks / 12));
+            mStrDPAllBanks = Double.parseDouble(df.format(mStrDPAllBanks / 12));
+            //Added mValDPAllBanks instead of VOl column
+            banksList = new BanksList(currentTime, "All BanksMStr", allBanksBuyQuantity, allBanksSellQuantity,
+                    mStrTBQAllBanks , mStrTSQAllBanks , mValDPAllBanks, underlyingValue, mStrDPAllBanks);
+            banksDao.insertBankData(banksList);
+
+            mValTBQAllBanks = 0;
+            mValTSQAllBanks = 0;
+            mVAlQTSAllBanks = 0;
+            mValDPAllBanks = 0;
+            mStrTBQAllBanks = 0;
+            mStrTSQAllBanks = 0;
+            mStrQTSAllBanks = 0;
+            mStrDPAllBanks = 0;
+
+            // Storing data into SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("AllBanksLiveDisplaySP", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("All Banks", "All Banks");
+            editor.putString("allBanksBuyQuantity", String.valueOf(allBanksBuyQuantity));
+            editor.putString("allBanksSellQuantity", String.valueOf(allBanksSellQuantity));
+            editor.putString("allBanksQuantityTraded", String.valueOf(allBanksQuantityTraded));
+            editor.putString("underlyingValue", String.valueOf(underlyingValue));
+            editor.putFloat("allBanksDeliveryPercent", Float.parseFloat(df.format(allBanksPercentDifference/12)));
+            Gson gson = new Gson();
+            String json = gson.toJson(banksLists);
+            editor.putString("BanksLiveDisplayData", json);
+            editor.commit();
+
+            allBanksBuyQuantity = 0;
+            allBanksSellQuantity = 0;
+            allBanksQuantityTraded = 0;
+            allBanksDeliveryQuantity = 0;
+            allBanksPercentDifference = 0.0;
+            retrievesDataCompleted = 0;
+            banksLists.clear();
+//                }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, e.getMessage(), e);
+        }
+    }
+
+    private void bankNiftySuccessJson(JSONObject jsonObject) {
+        try {
+            JSONObject recordDetails = jsonObject.getJSONObject("records");
+            JSONObject filteredDetails = jsonObject.getJSONObject("filtered");
+            JSONArray filteredDataArray = filteredDetails.getJSONArray("data");
+            timeStampValue = recordDetails.get("timestamp").toString();
+            underlyingValue = recordDetails.getDouble("underlyingValue");
+            int ulValue = underlyingValue.intValue();
+            for (int i = 0; i < filteredDataArray.length(); i++) {
+                JSONObject jo = filteredDataArray.getJSONObject(i);
+
+                Double strikePrice = null;
+                int sPrice = 0;
+                if (strikePrice == null) {
+                    JSONObject usBody = jo.getJSONObject("CE");
+                    strikePrice = Double.valueOf(usBody.getString("strikePrice"));
+                    sPrice = strikePrice.intValue();
+                }
+                if (sPrice <= ulValue + 700 && sPrice >= ulValue - 700) {
+                    JSONObject ceBody = jo.getJSONObject("CE");
+                    JSONObject peBody = jo.getJSONObject("PE");
+
+                    if (sPrice > ulValue - 200) {
+
+                        //Add total values for main top card
+                        ceTotalTradedVolume += (int) ceBody.get("totalTradedVolume");
+                        ceTotalBuyQuantity += (int) ceBody.get("totalBuyQuantity");
+                        ceTotalSellQuantity += (int) ceBody.get("totalSellQuantity");
+                        ceOpenInterest += (int) ceBody.get("openInterest");
+
+                        bankNiftyList = new BankNiftyList(timeStampValue.substring(12, 17),
+                                ceBody.getString("identifier").substring(25, 32),
+                                ceBody.getLong("totalTradedVolume")/1000,
+                                ceBody.getLong("totalBuyQuantity")/1000,
+                                ceBody.getLong("totalSellQuantity")/1000,
+                                ceBody.getLong("openInterest")/1000,
+                                ceBody.getDouble("pchangeinOpenInterest")
+                        );
+                        bankNiftyLists.add(bankNiftyList);
+                        bankNiftyDao.insertBankNiftyData(bankNiftyList);
+                        movementTrackingNifty(ceBody.getString("identifier").substring(25, 32));
+                    }
+                    if (sPrice < ulValue - 200) {
+
+                        //Add total values for main top card
+                        peTotalTradedVolume += (int) peBody.get("totalTradedVolume");
+                        peTotalBuyQuantity += (int) peBody.get("totalBuyQuantity");
+                        peTotalSellQuantity += (int) peBody.get("totalSellQuantity");
+                        peOpenInterest += (int) peBody.get("openInterest");
+
+                        bankNiftyList = new BankNiftyList(timeStampValue.substring(12, 17),
+                                peBody.getString("identifier").substring(25, 32),
+                                peBody.getLong("totalTradedVolume")/1000,
+                                peBody.getLong("totalBuyQuantity")/1000,
+                                peBody.getLong("totalSellQuantity")/1000,
+                                peBody.getLong("openInterest")/1000,
+                                peBody.getDouble("pchangeinOpenInterest")
+                        );
+                        bankNiftyLists.add(bankNiftyList);
+                        bankNiftyDao.insertBankNiftyData(bankNiftyList);
+                        movementTrackingNifty(peBody.getString("identifier").substring(25, 32));
                     }
                 }
+            }
 
-                //Add data for "OI History"
-                bankNiftyList = new BankNiftyList(timeStampValue.substring(12, 17), "OI History", (long) (ceOpenInterest / 1000), (long) (peOpenInterest / 1000), (long) (ceTotalTradedVolume / 1000), (long) (peTotalTradedVolume / 1000), Double.valueOf(underlyingValue));
-                bankNiftyDao.insertBankNiftyData(bankNiftyList);
-                movementTrackingNifty("OI History");
+            //Add data for "OI History"
+            bankNiftyList = new BankNiftyList(timeStampValue.substring(12, 17), "OI History", (long) (ceOpenInterest / 1000), (long) (peOpenInterest / 1000), (long) (ceTotalTradedVolume / 1000), (long) (peTotalTradedVolume / 1000), Double.valueOf(underlyingValue));
+            bankNiftyDao.insertBankNiftyData(bankNiftyList);
+            movementTrackingNifty("OI History");
 
-                //Add data for "CE History"
-                bankNiftyList = new BankNiftyList(timeStampValue.substring(12, 17), "CE History", (long) (ceTotalBuyQuantity / 1000), (long) (ceTotalSellQuantity / 1000), (long) (ceTotalTradedVolume / 1000), (long) (ceOpenInterest / 1000), Double.valueOf(underlyingValue));
-                bankNiftyDao.insertBankNiftyData(bankNiftyList);
-                movementTrackingNifty("CE History");
+            //Add data for "CE History"
+            bankNiftyList = new BankNiftyList(timeStampValue.substring(12, 17), "CE History", (long) (ceTotalBuyQuantity / 1000), (long) (ceTotalSellQuantity / 1000), (long) (ceTotalTradedVolume / 1000), (long) (ceOpenInterest / 1000), Double.valueOf(underlyingValue));
+            bankNiftyDao.insertBankNiftyData(bankNiftyList);
+            movementTrackingNifty("CE History");
 
-                //Add data for "PE History"
-                bankNiftyList = new BankNiftyList(timeStampValue.substring(12, 17), "PE History", (long) (peTotalBuyQuantity / 1000), (long) (peTotalSellQuantity / 1000), (long) (peTotalTradedVolume / 1000), (long) (peOpenInterest / 1000), Double.valueOf(underlyingValue));
-                bankNiftyDao.insertBankNiftyData(bankNiftyList);
-                movementTrackingNifty("PE History");
+            //Add data for "PE History"
+            bankNiftyList = new BankNiftyList(timeStampValue.substring(12, 17), "PE History", (long) (peTotalBuyQuantity / 1000), (long) (peTotalSellQuantity / 1000), (long) (peTotalTradedVolume / 1000), (long) (peOpenInterest / 1000), Double.valueOf(underlyingValue));
+            bankNiftyDao.insertBankNiftyData(bankNiftyList);
+            movementTrackingNifty("PE History");
 
 
-                // Storing data into SharedPreferences
-                SharedPreferences sharedPreferences = getSharedPreferences("NiftyOILiveDisplaySP", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("timeStampValue", timeStampValue);
-                editor.putString("underlyingValue", String.valueOf(underlyingValue));
-                editor.putString("ceTotalTradedVolume", String.valueOf(ceTotalTradedVolume / 1000));
-                editor.putString("peTotalTradedVolume", String.valueOf(peTotalTradedVolume / 1000));
-                editor.putString("ceTotalBuyQuantity", String.valueOf(ceTotalBuyQuantity / 1000));
-                editor.putString("ceTotalSellQuantity", String.valueOf(ceTotalSellQuantity / 1000));
-                editor.putString("peTotalBuyQuantity", String.valueOf(peTotalBuyQuantity / 1000));
-                editor.putString("peTotalSellQuantity", String.valueOf(peTotalSellQuantity / 1000));
-                editor.putString("ceOpenInterest", String.valueOf(ceOpenInterest / 1000));
-                editor.putString("peOpenInterest", String.valueOf(peOpenInterest / 1000));
-                Gson gson = new Gson();
+            // Storing data into SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("NiftyOILiveDisplaySP", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("timeStampValue", timeStampValue);
+            editor.putString("underlyingValue", String.valueOf(underlyingValue));
+            editor.putString("ceTotalTradedVolume", String.valueOf(ceTotalTradedVolume / 1000));
+            editor.putString("peTotalTradedVolume", String.valueOf(peTotalTradedVolume / 1000));
+            editor.putString("ceTotalBuyQuantity", String.valueOf(ceTotalBuyQuantity / 1000));
+            editor.putString("ceTotalSellQuantity", String.valueOf(ceTotalSellQuantity / 1000));
+            editor.putString("peTotalBuyQuantity", String.valueOf(peTotalBuyQuantity / 1000));
+            editor.putString("peTotalSellQuantity", String.valueOf(peTotalSellQuantity / 1000));
+            editor.putString("ceOpenInterest", String.valueOf(ceOpenInterest / 1000));
+            editor.putString("peOpenInterest", String.valueOf(peOpenInterest / 1000));
+            Gson gson = new Gson();
+            try{
                 String json = gson.toJson(bankNiftyLists);
                 editor.putString("bankNiftyData", json);
                 editor.commit();
-
-                ceTotalTradedVolume = 0;
-                peTotalTradedVolume = 0;
-                ceTotalBuyQuantity = 0;
-                ceTotalSellQuantity = 0;
-                peTotalBuyQuantity = 0;
-                peTotalSellQuantity = 0;
-                ceOpenInterest = 0;
-                peOpenInterest = 0;
-                bankNiftyLists.clear();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(StockDataRetrieveService.this, "BankNifty Main Data Error: " + e.toString(), Toast.LENGTH_SHORT).show();
-                Log.e(LOG_TAG, e.getMessage(), e);
+            }catch (Exception e){
+                Log.v("JSON Exception","ConcurrentModificationException");
             }
 
-        } else {
-            long totalBuyQuantity = 0;
-            long totalSellQuantity = 0;
-            long tradedVolume = 0;
-            long deliveryQuantity = 0;
-
-            String bankName = "";
-
-            try {
-                retrievesDataCompleted++;
-                String currentTime;
-
-                JSONObject jsonObject = new JSONObject(response);
-                currentTime = jsonObject.getString("lastUpdateTime").substring(12, 17);
-                JSONArray banksArr = jsonObject.getJSONArray("data");
-
-                JSONObject ul = banksArr.getJSONObject(banksArr.length() - 1);
-                String ulValue = ul.getString("last").substring(0, 6).replaceAll(",", "");
-                long underlyingValue = Long.parseLong(ulValue);
-
-                for (int i = 0; i < banksArr.length() - 1; i++) {
-                    JSONObject jo = banksArr.getJSONObject(i);
-                    bankName = jo.getString("symbol");
-                    String totalBuyQuantityStr = jo.getString("totalBuyQuantity");
-                    totalBuyQuantity = parseToLongfrom_(totalBuyQuantityStr.trim());
-                    String totalSellQuantityStr = jo.getString("totalSellQuantity");
-                    totalSellQuantity = parseToLongfrom_(totalSellQuantityStr.trim());
-
-                    String tradedVolumeStr = jo.getString("totalTradedVolume");
-                    tradedVolume = parseToLongfrom_(tradedVolumeStr.trim());
-                    String deliveryQuantityStr = jo.getString("deliveryQuantity");
-                    deliveryQuantity = parseToLongfrom_(deliveryQuantityStr.trim());
-
-                    double percentDiff = getPercentDiff(bankName + "MStr");
-
-                    //Live display Data
-                    banksList = new BanksList(bankName, totalBuyQuantity, totalSellQuantity, tradedVolume, underlyingValue, percentDiff);
-                    banksLists.add(banksList);
-
-                    allBanksBuyQuantity += totalBuyQuantity;
-                    allBanksSellQuantity += totalSellQuantity;
-                    allBanksQuantityTraded += tradedVolume;
-                    allBanksDeliveryQuantity += deliveryQuantity;
-                    allBanksPercentDifference += percentDiff;
-
-                    //To store in DB
-                    banksList = new BanksList(currentTime, bankName, totalBuyQuantity, totalSellQuantity, tradedVolume, underlyingValue, percentDiff);
-                    banksDao.insertBankData(banksList);
-
-                    movementTrackingBanks(bankName);
-                }
-//                macFTPfile = false;
-//                if(retrievesDataCompleted==3){
-                banksList = new BanksList(currentTime, "All Banks", allBanksBuyQuantity, allBanksSellQuantity, allBanksQuantityTraded, underlyingValue, allBanksPercentDifference);
-                banksDao.insertBankData(banksList);
-//                    movementTrackingBanks("All Banks");
-                banksList = new BanksList(currentTime, "All Banksmval", allBanksBuyQuantity, allBanksSellQuantity,
-                        mValTBQAllBanks / 12, mValTSQAllBanks / 12, mVAlQTSAllBanks, underlyingValue, mValDPAllBanks / 12);
-                banksDao.insertBankData(banksList);
-                banksList = new BanksList(currentTime, "All BanksMStr", allBanksBuyQuantity, allBanksSellQuantity,
-                        mStrTBQAllBanks / 12, mStrTSQAllBanks / 12, mStrQTSAllBanks, underlyingValue, mStrDPAllBanks / 12);
-                banksDao.insertBankData(banksList);
-
-                mValTBQAllBanks = 0;
-                mValTSQAllBanks = 0;
-                mVAlQTSAllBanks = 0;
-                mValDPAllBanks = 0;
-                mStrTBQAllBanks = 0;
-                mStrTSQAllBanks = 0;
-                mStrQTSAllBanks = 0;
-                mStrDPAllBanks = 0;
-
-                // Storing data into SharedPreferences
-                SharedPreferences sharedPreferences = getSharedPreferences("AllBanksLiveDisplaySP", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("All Banks", "All Banks");
-                editor.putString("allBanksBuyQuantity", String.valueOf(allBanksBuyQuantity));
-                editor.putString("allBanksSellQuantity", String.valueOf(allBanksSellQuantity));
-                editor.putString("allBanksQuantityTraded", String.valueOf(allBanksQuantityTraded));
-                editor.putString("underlyingValue", String.valueOf(underlyingValue));
-                editor.putFloat("allBanksDeliveryPercent", (float) allBanksPercentDifference);
-                Gson gson = new Gson();
-                String json = gson.toJson(banksLists);
-                editor.putString("BanksLiveDisplayData", json);
-                editor.commit();
-
-                allBanksBuyQuantity = 0;
-                allBanksSellQuantity = 0;
-                allBanksQuantityTraded = 0;
-                allBanksDeliveryQuantity = 0;
-                allBanksPercentDifference = 0.0;
-                retrievesDataCompleted = 0;
-                banksLists.clear();
-//                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Log.e(LOG_TAG, e.getMessage(), e);
-            }
-//        }
+            ceTotalTradedVolume = 0;
+            peTotalTradedVolume = 0;
+            ceTotalBuyQuantity = 0;
+            ceTotalSellQuantity = 0;
+            peTotalBuyQuantity = 0;
+            peTotalSellQuantity = 0;
+            ceOpenInterest = 0;
+            peOpenInterest = 0;
+            bankNiftyLists.clear();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(StockDataRetrieveService.this, "BankNifty Main Data Error: " + e.toString(), Toast.LENGTH_SHORT).show();
+            Log.e(LOG_TAG, e.getMessage(), e);
         }
     }
 
@@ -425,7 +471,7 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
         List<BanksList> banksHistoryPrev = banksDao.getBankHistory(bankName);
         int bankHisLen = banksHistoryPrev.size();
         if (bankHisLen > 0) {
-            return banksHistoryPrev.get(bankHisLen - 1).getPercentDiff();
+            return Double.parseDouble(df.format(banksHistoryPrev.get(bankHisLen - 1).getPercentDiff()));
         } else {
             return 0.0;
         }
@@ -528,6 +574,7 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
         double mValTSQ = getMVal(curBanksList.getTotalSellQuantity(), prevBanksList.getTotalSellQuantity());
         mValTSQAllBanks += mValTSQ;
         double mValDP = mValTBQ - mValTSQ;
+        mValDPtoMStr = mValDP;
         mValDPAllBanks += mValDP;
         double mVAlQTS = getMVal(curBanksList.getQuantityTradedsure(), prevBanksList.getQuantityTradedsure());
         mVAlQTSAllBanks += mVAlQTS;
@@ -546,7 +593,9 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
         mStrTSQAllBanks += mStrTSQ;
         double mStrDP = mStrTBQ - mStrTSQ;
         mStrDPAllBanks += mStrDP;
-        double mStrQTS = getMVal(curBanksList.getQuantityTradedsure(), prevBanksList.getQuantityTradedsure());
+//        double mStrQTS = getMVal(curBanksList.getQuantityTradedsure(), prevBanksList.getQuantityTradedsure());
+        //Showing  mValPercentDiff in MStr Vol column
+        double mStrQTS = mValDPtoMStr;
         mStrQTSAllBanks += mStrQTS;
         double mStrUL = curBanksList.getUnderlyingValue();
 
@@ -588,9 +637,10 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
     private void addmValDataNifty(String oiName, BankNiftyList curNiftyList, BankNiftyList prevNiftyList) {
         double mValTBQ = getMVal(curNiftyList.getCalloi(), prevNiftyList.getCalloi());
         double mValTSQ = getMVal(curNiftyList.getPutoi(), prevNiftyList.getPutoi());
-        double mVAlQTS = getMVal(curNiftyList.getBntotalbuyquantity(), prevNiftyList.getBntotalbuyquantity());
+        double mVAlQTS = mValTBQ - mValTSQ;
+        mValDPtoMStr = mVAlQTS;
         double mValDQ = getMVal(curNiftyList.getBntotalsellquantity(), prevNiftyList.getBntotalsellquantity());
-        double mValDP = getMVal(curNiftyList.getUnderlyvalue(), prevNiftyList.getUnderlyvalue());
+        double mValDP = curNiftyList.getUnderlyvalue();
 
 
         bankNiftyList = new BankNiftyList(curNiftyList.getTimestamp(), oiName + "mval", curNiftyList.getCalloi(),
@@ -601,9 +651,9 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
     private void addMStrDataNifty(String oiName, BankNiftyList curNiftyList, BankNiftyList prevNiftyList) {
         double mStrTBQ = getMVal(curNiftyList.getCalloi(), prevNiftyList.getCalloi());
         double mStrTSQ = getMVal(curNiftyList.getPutoi(), prevNiftyList.getPutoi());
-        double mStrQTS = getMVal(curNiftyList.getBntotalbuyquantity(), prevNiftyList.getBntotalbuyquantity());
-        double mStrDQ = getMVal(curNiftyList.getBntotalsellquantity(), prevNiftyList.getBntotalsellquantity());
-        double mStrDP = getMVal(curNiftyList.getUnderlyvalue(), prevNiftyList.getUnderlyvalue());
+        double mStrQTS = mStrTBQ - mStrTSQ;
+        double mStrDQ = mValDPtoMStr;
+        double mStrDP = curNiftyList.getUnderlyvalue();
 
         bankNiftyList = new BankNiftyList(curNiftyList.getTimestamp(), oiName + "MStr", curNiftyList.getCalloi(),
                 mStrTBQ, mStrTSQ, mStrQTS, mStrDQ, mStrDP);
@@ -615,7 +665,6 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
             if (prevVal == 0.0) {
                 return 0.0;
             } else {
-                DecimalFormat df = new DecimalFormat("0.00");
                 double val = (curVal / prevVal);
                 val = val * 100;
                 double mValD = Double.parseDouble(df.format(val));

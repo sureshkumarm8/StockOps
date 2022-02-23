@@ -3,14 +3,18 @@ package com.sureit.stockops.view;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.arch.persistence.room.Room;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,11 +57,14 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
     private String getBankName;
     private BanksViewModel viewModel;
     private String allBanksName;
+    private String[] banks;
+    private Handler historyHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_banknifty_details);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         banksDatabase = Room.databaseBuilder(this, BanksDatabase.class, DB_NAME)
                 .allowMainThreadQueries()   //Allows room to do operation on main thread
@@ -83,8 +90,75 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getBankName);
         viewModel = ViewModelProviders.of(this).get(BanksViewModel.class);
 
-        final String[] banks = {"AUBANK", "RBLBANK", "BANDHANBNK", "FEDERALBNK", "IDFCFIRSTB", "PNB", "INDUSINDBK", "AXISBANK", "SBIN", "KOTAKBANK", "ICICIBANK", "HDFCBANK", "All Banks"};
+        banks = new String[]{"AUBANK", "RBLBANK", "BANDHANBNK", "FEDERALBNK", "IDFCFIRSTB", "PNB", "INDUSINDBK", "AXISBANK", "SBIN", "KOTAKBANK", "ICICIBANK", "HDFCBANK", "All Banks"};
 
+//        filterByNormalMarket(banks);
+        getBankName = getBankName+"MStr";
+        filterByMSTR();
+        historyHandler.postDelayed(mRunnableTask, (5 * 1000));
+    }
+
+    Runnable mRunnableTask = new Runnable() {
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public void run() {
+            filterByMSTR();
+            // this will repeat this task again at specified time interval
+            historyHandler.postDelayed(this, (45 * 1000));
+        }
+    };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.mins_history_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.mvVal:
+                if (getBankName.contains("MStr"))
+                    getBankName = getBankName.replace("MStr","mval");
+                if (!getBankName.contains("mval"))
+                    getBankName = getBankName + "mval";
+                filterByMval();
+                return (true);
+
+            case R.id.marketStrength:
+                if (getBankName.contains("mval"))
+                    getBankName = getBankName.replace("mval","MStr");
+                if (!getBankName.contains("MStr"))
+                    getBankName = getBankName + "MStr";
+                filterByMSTR();
+                return (true);
+            case R.id.marketNormal:
+                if (getBankName.contains("mval"))
+                    getBankName = getBankName.replace("mval","");
+                if (getBankName.contains("MStr"))
+                getBankName = getBankName.replace("MStr","");
+                filterByNormalMarket(banks);
+                return (true);
+
+            case R.id.min1:
+                filterByMins(1);
+                return (true);
+            case R.id.min5:
+                filterByMins(5);
+                return (true);
+            case R.id.min10:
+                filterByMins(10);
+                return (true);
+            case R.id.min15:
+                filterByMins(15);
+                return (true);
+        }
+        return (super.onOptionsItemSelected(item));
+    }
+
+    private void filterByNormalMarket(String[] banks) {
         int position;
         switch (getBankName) {
             case "OI History":
@@ -118,6 +192,7 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
 
             default:
                 if (Arrays.asList(banks).contains(getBankName)) {
+                    sellqty.setText("Tot. Vol");
                     adapterHistory = new BankHistoryAdapter(viewModel.getBanksHistory(getBankName), getApplicationContext());
                     recycleViewBankHistory.setAdapter(adapterHistory);
                     position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
@@ -139,45 +214,6 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
                 }
                 break;
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.mins_history_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case R.id.mvVal:
-                if (!getBankName.contains("mval"))
-                    getBankName = getBankName + "mval";
-                filterByMval();
-                return (true);
-
-            case R.id.marketStrength:
-                if (!getBankName.contains("MStr"))
-                    getBankName = getBankName + "MStr";
-                filterByMSTR();
-                return (true);
-
-            case R.id.min1:
-                filterByMins(1);
-                return (true);
-            case R.id.min5:
-                filterByMins(5);
-                return (true);
-            case R.id.min10:
-                filterByMins(10);
-                return (true);
-            case R.id.min15:
-                filterByMins(15);
-                return (true);
-        }
-        return (super.onOptionsItemSelected(item));
     }
 
     public void filterByMval() {
@@ -255,6 +291,7 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
             }
         } else {
 
+            sellqty.setText("Tot. Vol");
             List<BanksList> banksHistoryFiltered = viewModel.getBanksHistory(getBankName);
             List<BanksList> banksHistoryFilteredNew = new ArrayList<>();
             for (int i = 0; i < banksHistoryFiltered.size(); i++) {
@@ -432,6 +469,7 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
             }
         } else {
 
+            sellqty.setText("MVal");
             List<BanksList> banksHistoryFiltered = viewModel.getBanksHistory(getBankName);
             List<BanksList> banksHistoryFilteredNew = new ArrayList<>();
             for (int i = 0; i < banksHistoryFiltered.size(); i++) {
@@ -455,5 +493,6 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         noInternetDialog.onDestroy();
+        historyHandler.removeCallbacksAndMessages(null);
     }
 }

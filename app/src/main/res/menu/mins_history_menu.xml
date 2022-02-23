@@ -13,6 +13,11 @@
         app:showAsAction="always"
         android:title="Market Strength"/>
     <item
+        android:id="@+id/marketNormal"
+        android:icon="@android:drawable/stat_notify_sync"
+        app:showAsAction="always"
+        android:title="Market Strength"/>
+    <item
         android:id="@+id/min1"
         android:icon="@drawable/min1"
         app:showAsAction="never"
@@ -20,7 +25,7 @@
     <item
         android:id="@+id/min5"
         android:icon="@drawable/min5"
-        app:showAsAction="always|withText"
+        app:showAsAction="never"
         android:title="5 min"/>
     <item
         android:id="@+id/min10"

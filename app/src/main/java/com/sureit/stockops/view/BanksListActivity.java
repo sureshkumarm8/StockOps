@@ -327,13 +327,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 //        checkNseUrl(URL_NSE);
 //        loadBankNiftyUrlData(URL_BankNifty);
 //        loadBanksTradeInfo();
-        checkFTPURL(URL_FTP);
-        Intent intent = new Intent(getApplicationContext(), StockDataRetrieveService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            getApplicationContext().startForegroundService(intent);
-        } else {
-            getApplicationContext().startService(intent);
-        }
+
         progressDialogFTP = new ProgressDialog(this);
         progressDialogFTP.setMessage("Downloading data from FTP ...");
         progressDialogFTP.show();
@@ -342,6 +336,13 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 //        liveDisplayUI();
         // Call this to start the task first time
         if (!isMarketClosed()) {
+            checkFTPURL(URL_FTP);
+            Intent intent = new Intent(getApplicationContext(), StockDataRetrieveService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                getApplicationContext().startForegroundService(intent);
+            } else {
+                getApplicationContext().startService(intent);
+            }
             mHandler.postDelayed(mRunnableTask, (5 * 1000));
         } else {
             progressDialogFTP.setMessage("Market Closed, FTP Refresh Stopped");
@@ -428,8 +429,8 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 
             case R.id.exportCSV:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("DD_MM_YYYY_HH_mm_");
-                    String currentTime = dateFormat.format(new Date()).toString();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd_MM_YYYY_HH_mm_");
+                    String currentTime = dateFormat.format(new Date());
                     saveDbToCSV(currentTime + "BankNifty");
                     saveDbToCSV(currentTime + "AllBanks");
                 }
@@ -1287,7 +1288,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 
                 adapter = new BanksAdapter(banksLists, getApplicationContext());
                 recyclerView.setAdapter(adapter);
-                int position = recyclerView.getAdapter().getItemCount() - 1;
+                int position = recyclerView.getAdapter().getItemCount() - 5;
                 recyclerView.smoothScrollToPosition(position);
                 adapter.notifyDataSetChanged();
 
@@ -1479,7 +1480,12 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 
     public void saveDbToCSV(String fileName) {
         checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE);
-        File exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/StockOps/DBFiles/");
+        File exportDir;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            exportDir = new File(getApplicationContext().getExternalFilesDir(null).getAbsolutePath() + "/DBFiles/");
+        }else{
+        exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/StockOps/DBFiles/");}
+
         if (!exportDir.exists()) {
             exportDir.mkdirs();
         }
