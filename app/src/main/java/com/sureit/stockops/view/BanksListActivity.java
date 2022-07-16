@@ -157,6 +157,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
     private BanksViewModel viewModel;
 
 
+
     @SuppressLint("InvalidWakeLockTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,6 +165,8 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         setContentView(R.layout.activity_bankslist);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE);
+
+
 
         bankNiftyLists = new ArrayList<>();
         banksLists = new ArrayList<>();
@@ -192,8 +195,8 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         totalBuyQuantityCEAllTV = findViewById(R.id.tvTotalBuyQuantityBankAll);
         totalAskQuantityPEAllTV = findViewById(R.id.tvpTotalSellQuantityBankAll);
         totalTradedAllTV = findViewById(R.id.tvQuantityTradedBankAll);
-        totalDeliveryAllTV = findViewById(R.id.tvDeliveryQtyBankAll);
-        totalDeliveryAllPCTV = findViewById(R.id.tvDeliveryPCTAll);
+//        totalDeliveryAllTV = findViewById(R.id.tvDeliveryQtyBankAll);
+//        totalDeliveryAllPCTV = findViewById(R.id.tvDeliveryPCTAll);
 
         recyclerView = findViewById(R.id.recyclerViewBanks);
         recyclerView.setHasFixedSize(true);
@@ -335,14 +338,17 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 //        downloadBanksLiveDataFromMAC_FTP();
 //        liveDisplayUI();
         // Call this to start the task first time
+        //Run on service, get the data from FTP, Refines the data, calculates all data and stores in DB
         if (!isMarketClosed()) {
             checkFTPURL(URL_FTP);
+            //Service will be run in background for every min
             Intent intent = new Intent(getApplicationContext(), StockDataRetrieveService.class);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 getApplicationContext().startForegroundService(intent);
             } else {
                 getApplicationContext().startService(intent);
             }
+            //Run a thread to refresh live Data, every 45 seconds
             mHandler.postDelayed(mRunnableTask, (5 * 1000));
         } else {
             progressDialogFTP.setMessage("Market Closed, FTP Refresh Stopped");
@@ -358,16 +364,17 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
             progressDialogFTP.dismiss();
             bankNiftyLists.clear();
             banksLists.clear();
+            //Live data update on UI using sharedPreferences
             liveDisplayUI();
             // this will repeat this task again at specified time interval
             mHandler.postDelayed(this, (45 * 1000));
         }
     };
 
-    private boolean isMarketClosed() {
+    public boolean isMarketClosed() {
         String start = "08:55";
         Date marketOpen = null;
-        String limit = "15:35";
+        String limit = "15:30";
         Date marketClose = null;
         Date now = null;
         SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm");
@@ -414,6 +421,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         int id = item.getItemId();
         switch (id) {
 
@@ -1280,9 +1288,9 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
                 totalBuyQuantityCEAllTV.setText(sh.getString("allBanksBuyQuantity", ""));
                 totalAskQuantityPEAllTV.setText(sh.getString("allBanksSellQuantity", ""));
                 totalTradedAllTV.setText(sh.getString("allBanksQuantityTraded", ""));
-                totalDeliveryAllTV.setText(sh.getString("underlyingValue", ""));
+//                totalDeliveryAllTV.setText(sh.getString("underlyingValue", ""));
                 allBanksDeliveryPercent = sh.getFloat("allBanksDeliveryPercent", 0);
-                totalDeliveryAllPCTV.setText(df.format(allBanksDeliveryPercent / 12) + "%");
+//                totalDeliveryAllPCTV.setText(df.format(allBanksDeliveryPercent / 12) + "%");
                 strikePriceTVBanks.setText(sh.getString("underlyingValue", ""));
                 setSentimentColorsBanksTotal();
 

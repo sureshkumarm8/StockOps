@@ -117,7 +117,7 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
         bankNiftyDao = BanksDatabase.getInstance(getApplicationContext()).getBankNiftyCP();
 
 
-        //Calling NiftyOI 1st time
+        //Calling NiftyOI 1st time, uses PostVolleyJsonRequest API in background for converting file to JSON data
         downloadBankNiftyOIDataFromMAC_FTP();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -139,6 +139,7 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
                 mTimer.cancel();
             else
                 mTimer = new Timer();   //recreate new
+            //TimerTask will run every Min. downloads Banks data files from FTP
             mTimer.scheduleAtFixedRate(new TimeDisplay(), 0, interval_min);   //Schedule task
 
             startForeground(1, notification);
@@ -210,6 +211,7 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
         SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm:ss");
         String currentTime = dateFormat.format(new Date()).toString();
         Log.v("TimeStarts",currentTime);
+        //Process the BankNifty JsonObject
         if (type.equals("BankNifty") && response.contains("data")) {
             try {
                 final JSONObject jsonObject = new JSONObject(response);
@@ -224,6 +226,7 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
                 e.printStackTrace();
             }
         }
+        //Process the AllBanks JsonObject
         if(type.equals("Banks") && response.contains("data")) {
             try {
                 final JSONObject jsonObject = new JSONObject(response);

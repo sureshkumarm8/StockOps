@@ -4,6 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/StockOps.iml" filepath="$PROJECT_DIR$/.idea/modules/StockOps.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/StockOps.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/StockOps.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/StockOps.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/StockOps.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/StockOps.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/StockOps.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/StockOps.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/StockOps.app.unitTest.iml" />
     </modules>
   </component>
 </project>

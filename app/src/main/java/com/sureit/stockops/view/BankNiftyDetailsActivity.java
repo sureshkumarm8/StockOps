@@ -3,6 +3,7 @@ package com.sureit.stockops.view;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.arch.persistence.room.Room;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.sureit.stockops.R;
 import com.sureit.stockops.Util.Constants;
+import com.sureit.stockops.Util.StockDataRetrieveService;
 import com.sureit.stockops.adapter.BankHistoryAdapter;
 import com.sureit.stockops.adapter.OIHistoryAdapter;
 import com.sureit.stockops.data.BankNiftyList;
@@ -95,7 +97,10 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
 //        filterByNormalMarket(banks);
         getBankName = getBankName+"MStr";
         filterByMSTR();
-        historyHandler.postDelayed(mRunnableTask, (5 * 1000));
+        BanksListActivity objBLAct = new BanksListActivity();
+        if (!objBLAct.isMarketClosed()) {
+            historyHandler.postDelayed(mRunnableTask, (5 * 1000));
+        }
     }
 
     Runnable mRunnableTask = new Runnable() {

@@ -31,9 +31,10 @@
                 android:layout_marginBottom="50dp"
                 android:layout_toStartOf="@+id/tvVolumeCE3"
                 android:layout_toLeftOf="@+id/tvVolumeCE3"
-                android:background="#FFFFFF"
+                android:background="@drawable/trading"
                 android:gravity="center"
                 android:text="Diff %"
+                android:textColor="#07F8F0"
                 android:textSize="10sp" />
 
             <TextView
@@ -113,9 +114,10 @@
                 android:layout_marginEnd="7dp"
                 android:layout_marginRight="7dp"
                 android:layout_marginBottom="50dp"
-                android:background="#FFFFFF"
+                android:background="@drawable/trading"
                 android:gravity="center"
                 android:text="Market"
+                android:textColor="#07F8F0"
                 android:textSize="10sp" />
 
             <TextView
@@ -128,9 +130,10 @@
                 android:layout_marginBottom="50dp"
                 android:layout_toStartOf="@+id/tvVolumePE3"
                 android:layout_toLeftOf="@+id/tvVolumePE3"
-                android:background="#FFFFFF"
+                android:background="@drawable/trading"
                 android:gravity="center"
                 android:text="Tot Vol in K"
+                android:textColor="#07F8F0"
                 android:textSize="10sp" />
 
             <TextView
@@ -158,9 +161,10 @@
                 android:layout_marginBottom="50dp"
                 android:layout_toStartOf="@+id/tvVolumePE2"
                 android:layout_toLeftOf="@+id/tvVolumePE2"
-                android:background="#FFFFFF"
+                android:background="@drawable/trading"
                 android:gravity="center"
                 android:text="Offers in K"
+                android:textColor="#07F8F0"
                 android:textSize="10sp" />
 
             <TextView
@@ -188,9 +192,10 @@
                 android:layout_marginBottom="50dp"
                 android:layout_toStartOf="@+id/tvStrikePrice3"
                 android:layout_toLeftOf="@+id/tvStrikePrice3"
-                android:background="#FFFFFF"
+                android:background="@drawable/trading"
                 android:gravity="center"
                 android:text="Bids in K"
+                android:textColor="#07F8F0"
                 android:textSize="10sp" />
 
         </RelativeLayout>
