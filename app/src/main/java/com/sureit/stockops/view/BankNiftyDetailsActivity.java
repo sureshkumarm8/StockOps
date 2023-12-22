@@ -1,23 +1,27 @@
 package com.sureit.stockops.view;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
-import android.arch.persistence.room.Room;
+import static com.sureit.stockops.Util.Constants.DB_NAME;
+import static com.sureit.stockops.Util.Constants.mValConst;
+
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.sureit.stockops.R;
 import com.sureit.stockops.Util.Constants;
@@ -34,14 +38,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import am.appwise.components.ni.NoInternetDialog;
-
-import static com.sureit.stockops.Util.Constants.DB_NAME;
-import static com.sureit.stockops.Util.Constants.mValConst;
-
 public class BankNiftyDetailsActivity extends AppCompatActivity {
     private static final String LOG_TAG = "MovieDetailsActivity";
-    NoInternetDialog noInternetDialog;
+
 
     private BanksDatabase banksDatabase;
     private BanksDao banksDao;
@@ -76,8 +75,6 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
         recycleViewBankHistory = findViewById(R.id.rVBankHistory);
         recycleViewBankHistory.setHasFixedSize(true);
         recycleViewBankHistory.setLayoutManager(new LinearLayoutManager(this));
-
-        noInternetDialog = new NoInternetDialog.Builder(this).build();
 
         timeStampOI = findViewById(R.id.tvTimeStampTtl);
         ceoi = findViewById(R.id.tvBidsHistoryTtl);
@@ -124,6 +121,11 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
+            case R.id.syncLive:
+                liveRefreshData();
+                filterByMSTR();
+                return (true);
+
             case R.id.mvVal:
                 if (getBankName.contains("MStr"))
                     getBankName = getBankName.replace("MStr","mval");
@@ -163,6 +165,13 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
         return (super.onOptionsItemSelected(item));
     }
 
+    public void liveRefreshData() {
+        if (stockDataRetrieveService != null) {
+            stockDataRetrieveService.paytmBanksLiveData();
+            stockDataRetrieveService.paytmNiftyBankLiveData();
+        }
+    }
+
     private void filterByNormalMarket(String[] banks) {
         int position;
         switch (getBankName) {
@@ -197,7 +206,7 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
 
             default:
                 if (Arrays.asList(banks).contains(getBankName)) {
-                    sellqty.setText("Tot. Vol");
+                    sellqty.setText("Pts diff");
                     adapterHistory = new BankHistoryAdapter(viewModel.getBanksHistory(getBankName), getApplicationContext());
                     recycleViewBankHistory.setAdapter(adapterHistory);
                     position = recycleViewBankHistory.getAdapter().getItemCount() - 1;
@@ -497,7 +506,32 @@ public class BankNiftyDetailsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        noInternetDialog.onDestroy();
         historyHandler.removeCallbacksAndMessages(null);
+    }
+
+    private StockDataRetrieveService stockDataRetrieveService;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder iBinder) {
+            stockDataRetrieveService = ((StockDataRetrieveService.LocalBinder) iBinder).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            stockDataRetrieveService = null;
+        }
+    };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, StockDataRetrieveService.class);
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unbindService(serviceConnection);
     }
 }

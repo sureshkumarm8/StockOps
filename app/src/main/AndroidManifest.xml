@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -19,6 +20,11 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:theme"
         tools:targetApi="m" >
+        <activity
+            android:name=".view.NiftyOPsListActivity"
+            android:exported="false"
+            android:label="@string/title_activity_options_list"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".Util.StockDataRetrieveService"
@@ -41,6 +47,9 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity
             android:name=".view.BankNiftyActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".view.BanksListOnlyActivity"
             android:theme="@style/AppTheme" />
 
         <uses-library

@@ -1,9 +1,10 @@
 package com.sureit.stockops.view;
 
+import static com.sureit.stockops.Util.Constants.access_token_pm;
+
 import android.app.Activity;
 import android.app.Service;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
@@ -18,7 +19,6 @@ import com.sureit.stockops.data.BanksList;
 
 import org.json.JSONObject;
 
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +34,8 @@ public class PostVolleyJsonRequest {
     private String params;
     private BanksList banksList;
     private List<BanksList> banksLists = new ArrayList<>();
+
+
     public PostVolleyJsonRequest(Activity act, VolleyJsonRespondsListener volleyJsonRespondsListener,String  type, String netnetworkUrl, String params) {
         this.act = act;
         this.volleyJsonRespondsListener = volleyJsonRespondsListener;
@@ -97,6 +99,9 @@ public class PostVolleyJsonRequest {
                     params.put("Accept-Encoding", "none");
                     params.put("Accept-Language", "en-GB,en-US;q=0.9,en;q=0.8");
                     params.put("Connection", "keep-alive");
+                    params.put("X-RapidAPI-Key", "cf343bd455msh93db07b852efe93p1ec08cjsn0f087b576377");
+                    params.put("X-RapidAPI-Host", "latest-stock-price.p.rapidapi.com");
+                    params.put("x-jwt-token", access_token_pm);
                     params.put("cookie", String.valueOf(params));
                     return params;
                 }};

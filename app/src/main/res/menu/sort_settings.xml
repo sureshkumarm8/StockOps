@@ -9,9 +9,9 @@
         android:title="Movement"/>
     <item
         android:id="@+id/newIP"
-        android:icon="@drawable/ic_wifi_white"
-        app:showAsAction="always|withText"
-        android:title="1 Min"/>
+        android:icon="@drawable/trading"
+        android:title="1 Min"
+        app:showAsAction="withText" />
     <item
         android:id="@+id/exportCSV"
         android:icon="@android:drawable/stat_sys_download_done"

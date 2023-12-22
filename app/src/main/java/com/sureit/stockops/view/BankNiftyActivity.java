@@ -1,4 +1,10 @@
+
 package com.sureit.stockops.view;
+
+import static com.sureit.stockops.Util.Constants.FAV_ROT;
+import static com.sureit.stockops.Util.Constants.PARCEL_KEY;
+import static com.sureit.stockops.Util.Constants.POPULAR_MOVIES_URL;
+import static com.sureit.stockops.Util.Constants.TOP_RATED_MOVIES_URL;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -7,11 +13,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +22,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -29,12 +34,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sureit.stockops.R;
 import com.sureit.stockops.adapter.BankNiftyAdapter;
 import com.sureit.stockops.data.BankNiftyList;
-import com.sureit.stockops.data.BanksList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,17 +54,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import am.appwise.components.ni.NoInternetDialog;
-
-import static com.sureit.stockops.Util.Constants.FAV_ROT;
-import static com.sureit.stockops.Util.Constants.PARCEL_KEY;
-import static com.sureit.stockops.Util.Constants.POPULAR_MOVIES_URL;
-import static com.sureit.stockops.Util.Constants.TOP_RATED_MOVIES_URL;
-
 public class BankNiftyActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "MainActivity";
-    NoInternetDialog noInternetDialog;
 
     private RecyclerView recyclerView;
     private BankNiftyAdapter adapter;
@@ -133,7 +131,7 @@ public class BankNiftyActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         }
         bankNiftyLists = new ArrayList<>();
-        noInternetDialog = new NoInternetDialog.Builder(this).build();
+
 
         if(savedInstanceState!=null){
             if(savedInstanceState.containsKey(PARCEL_KEY)) {
@@ -166,7 +164,7 @@ public class BankNiftyActivity extends AppCompatActivity {
         String json = shOI.getString("bankNiftyData", "");
         Type type = new TypeToken<List<BankNiftyList>>() {}.getType();
         bankNiftyLists = gson.fromJson(json, type);
-        if(shOI.getString("timeStampValue","").length()>5) {
+//        if(shOI.getString("timeStampValue","").length()>5) {
             timeStampMain.setText(shOI.getString("timeStampValue", ""));
             strikePriceTVMain.setText(shOI.getString("underlyingValue", ""));
             totalVolumeCEMain.setText(shOI.getString("ceTotalTradedVolume", ""));
@@ -177,7 +175,7 @@ public class BankNiftyActivity extends AppCompatActivity {
             totalAskQuantityPEMain.setText(shOI.getString("peTotalSellQuantity", ""));
             ceOpenInterestMain.setText(shOI.getString("ceOpenInterest", ""));
             peOpenInterestMain.setText(shOI.getString("peOpenInterest", ""));
-        }
+//        }
         //sort the cards
         Collections.sort(bankNiftyLists, new Comparator<BankNiftyList>() {
             @Override
@@ -210,7 +208,6 @@ public class BankNiftyActivity extends AppCompatActivity {
 
             case R.id.banknifty:
                 item.setChecked(true);
-                noInternetDialog = new NoInternetDialog.Builder(this).build();
                 bankNiftyLists.clear();
                 FAV_ROT = false;
                 loadUrlData(POPULAR_MOVIES_URL);
@@ -218,7 +215,6 @@ public class BankNiftyActivity extends AppCompatActivity {
 
             case R.id.banks:
                 item.setChecked(true);
-                noInternetDialog = new NoInternetDialog.Builder(this).build();
                 bankNiftyLists.clear();
                 FAV_ROT = false;
                 loadUrlData(TOP_RATED_MOVIES_URL);
@@ -484,7 +480,6 @@ public class BankNiftyActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        noInternetDialog.onDestroy();
         mHandler.removeCallbacksAndMessages(null);
     }
 }

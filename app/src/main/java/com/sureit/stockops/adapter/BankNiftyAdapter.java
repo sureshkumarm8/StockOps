@@ -3,18 +3,20 @@ package com.sureit.stockops.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.sureit.stockops.Util.Constants;
-import com.sureit.stockops.view.BankNiftyDetailsActivity;
-import com.sureit.stockops.data.BankNiftyList;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.sureit.stockops.R;
+import com.sureit.stockops.Util.Constants;
+import com.sureit.stockops.data.BankNiftyList;
+import com.sureit.stockops.view.BankNiftyDetailsActivity;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -73,6 +75,40 @@ public class BankNiftyAdapter extends RecyclerView.Adapter<BankNiftyAdapter.View
             }
         });
 
+        //set color for bullish or bearish
+        if(position>=1){
+            BankNiftyList banksList_1 = bankNiftyLists.get(position - 1);
+            if(developersList.getPutoi()==banksList_1.getPutoi()){
+                holder.totalBuyQuantityCE.setBackgroundColor(Color.WHITE);
+            }
+            else if(developersList.getPutoi()>banksList_1.getPutoi()){
+                holder.totalBuyQuantityCE.setBackgroundColor(Color.GREEN);
+            }else {holder.totalBuyQuantityCE.setBackgroundColor(Color.RED);}
+
+            if(developersList.getBntotalbuyquantity()==banksList_1.getBntotalbuyquantity()){
+                holder.totalAskQuantityPE.setBackgroundColor(Color.WHITE);
+            }
+            else if(developersList.getBntotalbuyquantity()<banksList_1.getBntotalbuyquantity()){
+                holder.totalAskQuantityPE.setBackgroundColor(Color.GREEN);
+            }else {holder.totalAskQuantityPE.setBackgroundColor(Color.RED);}
+
+            if(developersList.getBntotalsellquantity()==banksList_1.getBntotalsellquantity()){
+                holder.oiChange.setBackgroundColor(Color.WHITE);
+            }
+            else if(developersList.getBntotalsellquantity()>banksList_1.getBntotalsellquantity()){
+                holder.oiChange.setBackgroundColor(Color.GREEN);
+            }else {holder.oiChange.setBackgroundColor(Color.RED);}
+
+            if(developersList.getPutoi()>banksList_1.getPutoi()
+                    && developersList.getBntotalbuyquantity()<banksList_1.getBntotalbuyquantity()){
+                holder.strikePriceTV.setBackgroundColor(Color.GREEN);
+            }else if(developersList.getPutoi()<banksList_1.getPutoi()
+                    && developersList.getBntotalbuyquantity()>banksList_1.getBntotalbuyquantity()){
+                holder.strikePriceTV.setBackgroundColor(Color.RED);
+            }else{
+                holder.strikePriceTV.setBackgroundColor(Color.WHITE);
+            }
+        }
     }
 
     @Override

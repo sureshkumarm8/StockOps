@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/my_drawer_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/wood"
     android:fitsSystemWindows="true"
     tools:context=".view.BankNiftyActivity">
 
-
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <RelativeLayout
             android:id="@+id/relativeLayoutRVbanks"
             android:layout_width="match_parent"
@@ -19,7 +22,7 @@
 
                 <TextView
                     android:id="@+id/tvStrikePriceBank"
-                    android:layout_width="116dp"
+                    android:layout_width="135dp"
                     android:layout_height="45dp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginStart="1dp"
@@ -105,7 +108,7 @@
 
                 <TextView
                     android:id="@+id/tvStrikePrice3banks"
-                    android:layout_width="116dp"
+                    android:layout_width="125dp"
                     android:layout_height="45dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
@@ -123,7 +126,7 @@
 
                 <TextView
                     android:id="@+id/tvStrikePrice2banks"
-                    android:layout_width="116dp"
+                    android:layout_width="125dp"
                     android:layout_height="45dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
@@ -492,7 +495,6 @@
                 </RelativeLayout>
         </RelativeLayout>
 
-
         <RelativeLayout
             android:id="@+id/allPETotalRV"
             android:layout_width="match_parent"
@@ -589,16 +591,35 @@
                 </RelativeLayout>
         </RelativeLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewBanks"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewBanks"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/allPETotalRV"
+                    android:layout_marginTop="3dp"
+                    android:scrollbars="vertical"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        </RelativeLayout>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/allPETotalRV"
-            android:layout_marginTop="3dp"
-            android:scrollbars="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:layout_gravity="start"
+            android:paddingVertical="20dp"
+            app:headerLayout="@layout/nav_header"
+            app:menu="@menu/navigation_menu_drawer"
+            app:itemHorizontalPadding="40dp"
+            app:itemIconPadding="30dp"
+            app:itemIconSize="20dp"
+            android:fitsSystemWindows="true"
+            android:background="@android:color/background_dark"
+            android:theme="@style/AppTheme"
+            app:itemBackground="@android:color/holo_blue_dark"
+            app:itemTextAppearance="?android:attr/textAppearanceSmallInverse"/>
 
-        <android.support.design.widget.FloatingActionButton
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -613,4 +634,4 @@
             android:src="@android:drawable/ic_popup_sync"
             app:backgroundTint="@android:color/holo_blue_light" />
 
-</RelativeLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
