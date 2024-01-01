@@ -207,7 +207,7 @@ public class StockDataRetrieveService extends Service implements VolleyJsonRespo
     public StockDataRetrieveService importKeysFromFTP() {
         File importDir;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            importDir = new File(getApplicationContext().getExternalFilesDir(null).getAbsolutePath() + "/DBFiles/");
+            importDir = new File(getExternalFilesDir(null), "/StockOps/DBFiles/");
         }else{
             importDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/StockOps/DBFiles/");}
 

@@ -1523,7 +1523,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE);
         File exportDir;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            exportDir = new File(getApplicationContext().getExternalFilesDir(null).getAbsolutePath() + "/DBFiles/");
+            exportDir = new File(getExternalFilesDir(null), "/StockOps/DBFiles/");
         }else{
         exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/StockOps/DBFiles/");}
 
@@ -1573,7 +1573,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
         }
         File exportDir;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            exportDir = new File(getApplicationContext().getExternalFilesDir(null).getAbsolutePath() + "/DBFiles/");
+            exportDir = new File(getExternalFilesDir(null), "/StockOps/DBFiles/");
         }else{
             exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/StockOps/DBFiles/");}
 
@@ -1646,7 +1646,7 @@ public class BanksListActivity extends AppCompatActivity implements VolleyJsonRe
     public StockDataRetrieveService importKeysFromFTP() {
         File importDir;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            importDir = new File(getApplicationContext().getExternalFilesDir(null).getAbsolutePath() + "/DBFiles/");
+            importDir = new File(getExternalFilesDir(null), "/StockOps/DBFiles/");
         }else{
             importDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/StockOps/DBFiles/");}
 
